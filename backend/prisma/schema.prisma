@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String         @id @default(cuid())
+  email            String         @unique
+  hashedPassword   String
+  profile          Profile?
+  name             String
+  reactions        Reaction[]
+  online           Boolean        @default(false)
+  lastSeen         DateTime       @default(now())
+  conversations    Conversation[]
+  messages         Message[]
+  sentRequests     Request[]      @relation(name: "SentRequests")
+  receivedRequests Request[]      @relation(name: "ReceivedRequests")
+  friends          FriendList?    @relation("ownerOfFriendList")
+  friendOf         FriendList[]   @relation("friends")
+}
+
+model Profile {
+  id            String  @id
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String  @unique
+  darkMode      Boolean
+  showOnline    Boolean
+  allowRequests Boolean
+}
+
+model FriendList {
+  id      String @id
+  owner   User   @relation(name: "ownerOfFriendList", fields: [ownerId], references: [id])
+  ownerId String @unique
+  friends User[] @relation(name: "friends")
+}
+
+model Request {
+  id         String @id
+  sender     User   @relation(name: "SentRequests", fields: [senderId], references: [id])
+  senderId   String
+  receiver   User   @relation(name: "ReceivedRequests", fields: [receiverId], references: [id])
+  receiverId String
+
+  @@unique([senderId, receiverId])
+}
+
+model Conversation {
+  id           String    @id
+  participants User[]
+  messages     Message[]
+}
+
+model Message {
+  id             String       @id
+  content        String
+  readBy         String[]
+  timestamp      DateTime     @default(now())
+  reactions      Reaction[]
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
+  sender         User         @relation(fields: [senderId], references: [id])
+  senderId       String
+}
+
+model Reaction {
+  id        Int     @id
+  type      String
+  message   Message @relation(fields: [messageId], references: [id])
+  messageId String
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+}
