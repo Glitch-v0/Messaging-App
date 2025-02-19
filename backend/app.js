@@ -1,11 +1,11 @@
 import express, { json, urlencoded } from "express";
 // import { initialize } from "passport";
-import router from "./router.js";
+import router from "./routers/router.js";
 
 const app = express();
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use("/api", router);
+app.use("/", router);
 
 export default app;
