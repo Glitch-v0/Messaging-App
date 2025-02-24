@@ -1,17 +1,34 @@
-import prisma from "../prisma.js";
-import bcrypt from "bcryptjs";
+import { createToken } from "../utils/tokenUtils.js";
+import { createHash, comparePasswords } from "../hashFunctions.js";
+import userQueries from "../queries/userQueries.js";
 
 const userController = {
-  createUser: async (req, res) => {
-    const user = await prisma.user.create({
-      data: {
-        name: req.body.name,
-        email: req.body.email,
-        hashedPassword: bcrypt,
-      },
-    });
-    res.json(user);
+  handleRegister: async (req, res) => {
+    const password = await createHash(req.body.password);
+    const user = await userQueries.createUser(req, password);
+    res.json({ name: user.name });
   },
 
   getUser: async (req, res) => {},
+
+  handleLogin: async (req, res) => {
+    const user = await userQueries.getUser(req);
+    //Check password
+    const passwordHash = await createHash(req.body.password);
+
+    const isMatch = await comparePasswords(req.body.password, passwordHash);
+    if (!isMatch) {
+      return res.sendStatus(401);
+    }
+    const newJWT = createToken(user.id);
+    console.log({ user, passwordHash, isMatch, newJWT });
+
+    res.json({ token: newJWT });
+  },
+
+  getConversations: async (req, res) => {
+    res.json("Conversations fetched!");
+  },
 };
+
+export default userController;

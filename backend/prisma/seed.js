@@ -1,35 +1,14 @@
-import { prisma } from "prisma.js";
+import prisma from "./prisma.js";
 
-const deleteScript = async () => {
-  const tables = await prisma.$queryRawUnsafe(
-    `SELECT tablename FROM pg_tables WHERE schemaname = 'public'`
-  );
-
-  // Convert table names to Prisma model names (if necessary)
-  const modelNames = tables.map((t) => t.tablename);
-
-  console.log("Deleting data from tables:", modelNames);
-
-  // Disable foreign key constraints temporarily
-  await prisma.$executeRawUnsafe(`SET session_replication_role = 'replica';`);
-
-  // Delete data from each table
-  for (const table of modelNames) {
-    try {
-      await prisma.$executeRawUnsafe(`DELETE FROM "${table}";`);
-      console.log(`Cleared table: ${table}`);
-    } catch (error) {
-      console.error(`Error clearing table ${table}:`, error);
-    }
-  }
-
-  // Re-enable foreign key constraints
-  await prisma.$executeRawUnsafe(`SET session_replication_role = 'origin';`);
-
+export default deleteScript = async () => {
+  const users = await prisma.user.findMany();
+  await prisma.user.deleteMany({
+    where: { id: { in: users.map((u) => u.id) } },
+  });
   console.log("Database reset complete.");
 };
 
-const createScript = async () => {
+export const createScript = async () => {
   //Create three users
 
   await prisma.user.createMany({
