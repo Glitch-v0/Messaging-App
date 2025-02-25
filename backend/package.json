@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "node": "NODE_ENV=development && node --watch index.js",
+    "dev": "NODE_ENV=development && node --watch index.js",
     "test": "NODE_ENV=test && node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "migrate": "npx prisma migrate dev --name init --schema=./prisma/schema.prisma && npx prisma migrate dev --name init --schema=./prisma/schema.test.prisma",
     "generate": "npx prisma generate --schema=./prisma/schema.prisma && npx prisma generate --schema=./prisma/schema.test.prisma",

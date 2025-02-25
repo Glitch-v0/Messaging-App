@@ -1,6 +1,7 @@
 import prisma from "./prisma.js";
+import { createHash } from "../hashFunctions.js";
 
-export default deleteScript = async () => {
+export const deleteScript = async () => {
   const users = await prisma.user.findMany();
   await prisma.user.deleteMany({
     where: { id: { in: users.map((u) => u.id) } },
@@ -11,22 +12,26 @@ export default deleteScript = async () => {
 export const createScript = async () => {
   //Create three users
 
+  const hash1 = await createHash("test1");
+  const hash2 = await createHash("test2");
+  const hash3 = await createHash("test3");
+
   await prisma.user.createMany({
     data: [
       {
         name: "test1",
         email: "test1@gmail.com",
-        hashedPassword: "test1",
+        hashedPassword: hash1,
       },
       {
         name: "tes2",
         email: "tes2@gmail.com",
-        hashedPassword: "test2",
+        hashedPassword: hash2,
       },
       {
         name: "test3",
         email: "test3@gmail.com",
-        hashedPassword: "test3",
+        hashedPassword: hash3,
       },
     ],
   });

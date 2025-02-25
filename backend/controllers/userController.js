@@ -20,14 +20,14 @@ const userController = {
     if (!isMatch) {
       return res.sendStatus(401);
     }
-    const newJWT = createToken(user.id);
-    console.log({ user, passwordHash, isMatch, newJWT });
+    const newJWT = createToken(user);
 
     res.json({ token: newJWT });
   },
 
   getConversations: async (req, res) => {
-    res.json("Conversations fetched!");
+    const conversations = await userQueries.getConversations(req.user);
+    res.json({ conversations });
   },
 };
 

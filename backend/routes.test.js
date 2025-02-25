@@ -1,8 +1,13 @@
 import app from "./app";
 import request from "supertest";
-import deleteScript from "./prisma/seed";
+import { createScript, deleteScript } from "./prisma/seed";
+import { decodeToken } from "./utils/tokenUtils";
 
-deleteScript();
+await deleteScript();
+await createScript();
+let token;
+let userId;
+
 test("Ping route", (done) => {
   request(app)
     .get("/ping")
@@ -39,7 +44,7 @@ test("register creates a user receives the name back", async () => {
 }, 500);
 
 test("login returns a valid JWT", async () => {
-  await request(app)
+  const response = await request(app)
     .post("/api/login")
     .type("form")
     .send({
@@ -48,4 +53,26 @@ test("login returns a valid JWT", async () => {
     })
     .expect("Content-Type", /json/)
     .expect(200);
+  token = response.body.token;
+  userId = decodeToken(token).id;
 }, 1500);
+
+test("user can get conversations", async () => {
+  // console.log({ token, userId });
+  const response = await request(app)
+    .get(`/api/${userId}/conversations`)
+    .set("Authorization", `Bearer ${token}`);
+  console.log(response.body.conversations);
+  expect(response.body.conversations.length);
+}, 1000);
+
+test("user cannot access other user's routes", async () => {
+  await request(app)
+    .get(`/api/1/conversations`)
+    .set("Authorization", `Bearer ${token}`)
+    .expect(403);
+});
+
+test("user cannot access protected routes without token", async () => {
+  await request(app).get(`/api/${userId}/conversations`).expect(401);
+});
