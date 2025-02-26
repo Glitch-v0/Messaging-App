@@ -2,7 +2,10 @@ import express, { json, urlencoded } from "express";
 import router from "./routers/router.js";
 const app = express();
 
+//Parses json
 app.use(json());
+
+//Parses form data
 app.use(urlencoded({ extended: true }));
 
 app.use((req, res, next) => {

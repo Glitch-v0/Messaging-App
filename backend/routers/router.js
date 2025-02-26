@@ -1,5 +1,6 @@
 import { Router } from "express";
 import userRouter from "./userRouter.js";
+import requestRouter from "./requestRouter.js";
 
 const router = Router();
 
@@ -7,6 +8,8 @@ router.get("/ping", (req, res) => {
   res.json("pong");
 });
 router.use("/api", userRouter);
+
+router.use("/api/request", requestRouter);
 
 router.get("/", (req, res) => {
   const routes = [];

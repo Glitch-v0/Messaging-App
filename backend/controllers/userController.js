@@ -6,7 +6,7 @@ const userController = {
   handleRegister: async (req, res) => {
     const password = await createHash(req.body.password);
     const user = await userQueries.createUser(req, password);
-    res.json({ name: user.name });
+    res.json({ name: user.name, id: user.id });
   },
 
   getUser: async (req, res) => {},
@@ -26,7 +26,7 @@ const userController = {
   },
 
   getConversations: async (req, res) => {
-    const conversations = await userQueries.getConversations(req.user);
+    const conversations = await userQueries.getConversations(req.userId);
     res.json({ conversations });
   },
 };

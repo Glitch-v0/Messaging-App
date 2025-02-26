@@ -17,10 +17,7 @@ export function verifyToken(req, res, next) {
       if (err) {
         return res.sendStatus(401);
       }
-      if (req.params.userId !== authData.id) {
-        return res.sendStatus(403);
-      }
-      req.user = authData.id;
+      req.userId = authData.id;
       next();
     });
   } else {

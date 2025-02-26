@@ -1,0 +1,12 @@
+User Routes
+/register
+/login
+/:id/conversation
+
+Request Routes (/request)
+GET     /               all received requests (names, ids)
+GET     /sent           all sent requests
+GET     /:requestId     one request's details
+POST    /               sends a request (userId in body)
+POST    /:requestId     confirms
+DELETE  /:requestId     rejects request

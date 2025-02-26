@@ -22,10 +22,11 @@ model User {
   sentRequests     Request[]      @relation("SentRequests")
   conversations    Conversation[] @relation("ConversationToUser")
   friendOf         FriendList[]   @relation("friends")
+  blockedBy        FriendList[]   @relation("blocked")
 }
 
 model Profile {
-  id            String  @id
+  id            String  @id @default(cuid())
   userId        String  @unique
   darkMode      Boolean
   showOnline    Boolean
@@ -34,30 +35,32 @@ model Profile {
 }
 
 model FriendList {
-  id      String @id
+  id      String @id @default(cuid())
   ownerId String @unique
   owner   User   @relation("ownerOfFriendList", fields: [ownerId], references: [id])
   friends User[] @relation("friends")
+  blocked User[] @relation("blocked")
 }
 
 model Request {
-  id         String @id
+  id         String   @id @default(cuid())
   senderId   String
   receiverId String
-  receiver   User   @relation("ReceivedRequests", fields: [receiverId], references: [id])
-  sender     User   @relation("SentRequests", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender     User     @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  dateSent   DateTime @default(now())
 
   @@unique([senderId, receiverId])
 }
 
 model Conversation {
-  id           String    @id
+  id           String    @id @default(cuid())
   messages     Message[]
   participants User[]    @relation("ConversationToUser")
 }
 
 model Message {
-  id             String       @id
+  id             String       @id @default(cuid())
   content        String
   readBy         String[]
   timestamp      DateTime     @default(now())
@@ -69,10 +72,10 @@ model Message {
 }
 
 model Reaction {
-  id        Int     @id
+  id        Int     @id @default(autoincrement())
   type      String
   messageId String
   userId    String
-  message   Message @relation(fields: [messageId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

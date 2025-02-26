@@ -1,5 +1,4 @@
 import prisma from "../prisma/prisma.js";
-import { decodeToken } from "../utils/tokenUtils.js";
 
 const userQueries = {
   createUser: async (req, hashedPassword) => {
