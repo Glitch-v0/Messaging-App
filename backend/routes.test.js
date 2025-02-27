@@ -193,3 +193,23 @@ test("user can get friend requests, async", async () => {
       );
     });
 }, 1000);
+
+test("user can see all sent requests", async () => {
+  await request(app)
+    .get(`/api/request/sent`)
+    .set("Authorization", `Bearer ${token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.anything(),
+            senderId: userId,
+            receiverId: user2Id,
+            dateSent: expect.anything(),
+          }),
+        ])
+      );
+    });
+}, 1000);

@@ -2,13 +2,18 @@ import prisma from "../prisma/prisma.js";
 
 const requestQueries = {
   getRequests: async (req) => {
-    const hm = await prisma.request.findMany({
+    return await prisma.request.findMany({
       where: {
         receiverId: req.userId,
       },
     });
-    console.log({ hm });
-    return hm;
+  },
+  getSentRequests: async (req) => {
+    return await prisma.request.findMany({
+      where: {
+        senderId: req.userId,
+      },
+    });
   },
   sendFriendRequest: async (req) => {
     return await prisma.request.create({

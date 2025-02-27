@@ -20,4 +20,8 @@ router.get("/", verifyToken, async (req, res) => {
   await requestController.getRequests(req, res);
 });
 
+router.get("/sent", verifyToken, async (req, res) => {
+  await requestController.getSentRequests(req, res);
+});
+
 export default router;
