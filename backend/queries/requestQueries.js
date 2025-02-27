@@ -2,14 +2,15 @@ import prisma from "../prisma/prisma.js";
 
 const requestQueries = {
   getRequests: async (req) => {
-    return await prisma.request.findMany({
+    const hm = await prisma.request.findMany({
       where: {
-        receiverId: req.user.id,
+        receiverId: req.userId,
       },
     });
+    console.log({ hm });
+    return hm;
   },
   sendFriendRequest: async (req) => {
-    console.log(req.user);
     return await prisma.request.create({
       data: {
         senderId: req.userId,
@@ -28,7 +29,7 @@ const requestQueries = {
     // Add friend
     await prisma.friendList.update({
       where: {
-        ownerId: req.user.id,
+        ownerId: req.userId,
       },
       data: {
         friends: {

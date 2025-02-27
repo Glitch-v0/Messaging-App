@@ -109,11 +109,10 @@ test("login returns a valid JWT", async () => {
 }, 1500);
 
 test("user can get conversations", async () => {
-  // console.log({ token, userId });
   const response = await request(app)
     .get(`/api/conversation`)
     .set("Authorization", `Bearer ${token}`);
-  console.log(response.body.conversations);
+  // console.log(response.body.conversations);
   expect(response.body.conversations.length);
 }, 1000);
 
@@ -128,7 +127,7 @@ test("user can get conversations", async () => {
 //   request(app).get(`/api/${userId}/conversation`).expect(401, done);
 // });
 
-test("user can send friend request", async () => {
+test("users can send friend requests", async () => {
   await request(app)
     .post(`/api/request`)
     .set("Authorization", `Bearer ${token}`)
@@ -148,6 +147,49 @@ test("user can send friend request", async () => {
         })
       );
     });
+  await request(app)
+    .post(`/api/request`)
+    .set("Authorization", `Bearer ${token3}`)
+    .type("form")
+    .send({
+      receiverId: user2Id,
+    })
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          id: expect.anything(),
+          senderId: user3Id,
+          receiverId: user2Id,
+          dateSent: expect.anything(),
+        })
+      );
+    });
 }, 1000);
 
-// test("user can get friend request, async", async () => {});
+test("user can get friend requests, async", async () => {
+  await request(app)
+    .get(`/api/request`)
+    .set("Authorization", `Bearer ${token2}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.anything(),
+            senderId: userId,
+            receiverId: user2Id,
+            dateSent: expect.anything(),
+          }),
+          expect.objectContaining({
+            id: expect.anything(),
+            senderId: user3Id,
+            receiverId: user2Id,
+            dateSent: expect.anything(),
+          }),
+        ])
+      );
+    });
+}, 1000);

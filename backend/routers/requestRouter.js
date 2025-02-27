@@ -16,4 +16,8 @@ router.post("/", verifyToken, async (req, res) => {
   await requestController.sendFriendRequest(req, res);
 });
 
+router.get("/", verifyToken, async (req, res) => {
+  await requestController.getRequests(req, res);
+});
+
 export default router;
