@@ -1,48 +1,48 @@
 import prisma from "../prisma/prisma.js";
 
 const requestQueries = {
-  getAllRequests: async (req) => {
+  getAllRequests: async (userId) => {
     return await prisma.request.findMany({
       where: {
-        receiverId: req.userId,
+        receiverId: userId,
       },
     });
   },
-  getSingleRequest: async (req) => {
+  getSingleRequest: async (requestId) => {
     return await prisma.request.findUnique({
       where: {
-        id: req.params.requestId,
+        id: requestId,
       },
     });
   },
-  getSentRequests: async (req) => {
+  getSentRequests: async (userId) => {
     return await prisma.request.findMany({
       where: {
-        senderId: req.userId,
+        senderId: userId,
       },
     });
   },
-  sendFriendRequest: async (req) => {
+  sendFriendRequest: async (userId, receiverId) => {
     return await prisma.request.create({
       data: {
-        senderId: req.userId,
-        receiverId: req.body.receiverId,
+        senderId: userId,
+        receiverId: receiverId,
       },
     });
   },
-  deleteFriendRequest: async (req) => {
+  deleteFriendRequest: async (requestId) => {
     return await prisma.request.delete({
       where: {
-        id: req.params.id,
+        id: requestId,
       },
     });
   },
-  acceptFriendRequest: async (req) => {
+  acceptFriendRequest: async (requestId) => {
     return await prisma.$transaction(async (prisma) => {
       // Delete the request
       const deletedRequest = await prisma.request.delete({
         where: {
-          id: req.params.requestId,
+          id: requestId,
         },
       });
 
@@ -81,16 +81,16 @@ const requestQueries = {
     });
   },
 
-  rejectFriendRequest: async (req) => {
+  rejectFriendRequest: async (userId, requestId) => {
     return await prisma.$transaction(async (prisma) => {
       const deletedRequest = await prisma.request.delete({
         where: {
-          id: req.params.requestId,
+          id: requestId,
         },
       });
 
       const blockedUser = await prisma.friendList.update({
-        where: { ownerId: req.userId },
+        where: { ownerId: userId },
         data: {
           blocked: {
             connect: { id: deletedRequest.senderId },

@@ -1,11 +1,14 @@
 import app from "./app";
 import request from "supertest";
-import { createScript, deleteScript } from "./prisma/seed";
+import { createScript, deleteScript } from "./queries/testScripts";
 import { decodeToken } from "./utils/tokenUtils";
-import { response } from "express";
+
+// beforeEach(async () => {
+//   await deleteScript();
+//   await createScript();
+// });
 
 await deleteScript();
-// await createScript();
 let token;
 let token2;
 let token3;
