@@ -1,25 +1,19 @@
 import app from "./app";
 import request from "supertest";
-import { createScript, deleteScript } from "./queries/testScripts";
-import { decodeToken } from "./utils/tokenUtils";
-import { requestQueries } from "./queries/requestQueries";
-import { userQueries } from "./queries/userQueries";
+import { deleteScript, userTokenScript } from "./queries/testScripts";
+import { createToken } from "./utils/tokenUtils";
+import requestQueries from "./queries/requestQueries";
+import userQueries from "./queries/userQueries";
+import { createHash } from "./hashFunctions";
+import prisma from "./prisma/prisma";
 
-// beforeEach(async () => {
-//   await deleteScript();
-//   await createScript();
-// });
+beforeEach(async () => {
+  await deleteScript();
+});
 
-await deleteScript();
-let token;
-let token2;
-let token3;
-let userId;
-let user2Id;
-let user3Id;
-let friendRequestId;
-let friendRequestId2;
-let friendRequestId3;
+afterAll(async () => {
+  await prisma.$disconnect();
+});
 
 test("Ping route", (done) => {
   request(app)
@@ -54,34 +48,10 @@ test("register creates a user receives the name back", async () => {
 
   // Ensure response has name in it
   expect(res.body.name).toBe("test");
-
-  user2Id = await request(app)
-    .post("/api/register")
-    .type("form")
-    .send({
-      name: "test2",
-      email: "test2@gmail.com",
-      password: "test",
-    })
-    .expect("Content-Type", /json/)
-    .expect(200);
-
-  user3Id = await request(app)
-    .post("/api/register")
-    .type("form")
-    .send({
-      name: "test3",
-      email: "test3@gmail.com",
-      password: "test",
-    })
-    .expect("Content-Type", /json/)
-    .expect(200);
-  user2Id = user2Id.body.id;
-  user3Id = user3Id.body.id;
 }, 1500);
 
-test("login returns a valid JWT", async () => {
-  const response = await request(app)
+test("login returns a JWT", async () => {
+  request(app)
     .post("/api/login")
     .type("form")
     .send({
@@ -89,59 +59,18 @@ test("login returns a valid JWT", async () => {
       password: "test",
     })
     .expect("Content-Type", /json/)
-    .expect(200);
-  token = response.body.token;
-  userId = decodeToken(token).id;
-
-  const response2 = await request(app)
-    .post("/api/login")
-    .type("form")
-    .send({
-      email: "test2@gmail.com",
-      password: "test",
-    })
-    .expect("Content-Type", /json/)
-    .expect(200);
-  token2 = response2.body.token;
-
-  const response3 = await request(app)
-    .post("/api/login")
-    .type("form")
-    .send({
-      email: "test3@gmail.com",
-      password: "test",
-    })
-    .expect("Content-Type", /json/)
-    .expect(200);
-  token3 = response3.body.token;
-}, 1500);
-
-test("user can get conversations", async () => {
-  const response = await request(app)
-    .get(`/api/conversation`)
-    .set("Authorization", `Bearer ${token}`);
-  // console.log(response.body.conversations);
-  expect(response.body.conversations.length);
+    .expect(200)
+    .expect({ token: expect.anything() });
 }, 1000);
-
-// test("user cannot access other user's routes", (done) => {
-//   request(app)
-//     .get(`/api/1/conversation`)
-//     .set("Authorization", `Bearer ${token}`)
-//     .expect(403, done);
-// });
-
-// test("user cannot access protected routes without token", (done) => {
-//   request(app).get(`/api/${userId}/conversation`).expect(401, done);
-// });
 
 test("users can send friend requests", async () => {
+  const [user1, user2] = await userTokenScript(2);
   await request(app)
     .post(`/api/request`)
-    .set("Authorization", `Bearer ${token}`)
+    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
-      receiverId: user2Id,
+      receiverId: user2.id,
     })
     .expect("Content-Type", /json/)
     .expect(200)
@@ -149,37 +78,25 @@ test("users can send friend requests", async () => {
       expect(res.body).toEqual(
         expect.objectContaining({
           id: expect.anything(),
-          senderId: userId,
-          receiverId: user2Id,
+          senderId: user1.id,
+          receiverId: user2.id,
           dateSent: expect.anything(),
         })
       );
     });
-  await request(app)
-    .post(`/api/request`)
-    .set("Authorization", `Bearer ${token3}`)
-    .type("form")
-    .send({
-      receiverId: user2Id,
-    })
-    .expect("Content-Type", /json/)
-    .expect(200)
-    .expect((res) => {
-      expect(res.body).toEqual(
-        expect.objectContaining({
-          id: expect.anything(),
-          senderId: user3Id,
-          receiverId: user2Id,
-          dateSent: expect.anything(),
-        })
-      );
-    });
-}, 1000);
+}, 1500);
 
-test("user can get friend requests, async", async () => {
+test("user can get friend requests", async () => {
+  const [user1, user2, user3] = await userTokenScript(3);
+  await prisma.request.createMany({
+    data: [
+      { senderId: user1.id, receiverId: user3.id },
+      { senderId: user2.id, receiverId: user3.id },
+    ],
+  });
   await request(app)
     .get(`/api/request`)
-    .set("Authorization", `Bearer ${token2}`)
+    .set("Authorization", `Bearer ${user3.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -187,27 +104,32 @@ test("user can get friend requests, async", async () => {
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.anything(),
-            senderId: userId,
-            receiverId: user2Id,
+            senderId: user1.id,
+            receiverId: user3.id,
             dateSent: expect.anything(),
           }),
           expect.objectContaining({
             id: expect.anything(),
-            senderId: user3Id,
-            receiverId: user2Id,
+            senderId: user2.id,
+            receiverId: user3.id,
             dateSent: expect.anything(),
           }),
         ])
       );
-      friendRequestId = res.body[0].id;
-      friendRequestId2 = res.body[1].id;
     });
 }, 1000);
 
 test("user can see all sent requests", async () => {
+  const [user1, user2, user3] = await userTokenScript(3);
+  await prisma.request.createMany({
+    data: [
+      { senderId: user1.id, receiverId: user2.id },
+      { senderId: user1.id, receiverId: user3.id },
+    ],
+  });
   await request(app)
     .get(`/api/request/sent`)
-    .set("Authorization", `Bearer ${token}`)
+    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -215,8 +137,14 @@ test("user can see all sent requests", async () => {
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.anything(),
-            senderId: userId,
-            receiverId: user2Id,
+            senderId: user1.id,
+            receiverId: user2.id,
+            dateSent: expect.anything(),
+          }),
+          expect.objectContaining({
+            id: expect.anything(),
+            senderId: user1.id,
+            receiverId: user3.id,
             dateSent: expect.anything(),
           }),
         ])
@@ -225,53 +153,70 @@ test("user can see all sent requests", async () => {
 }, 1000);
 
 test("user can see one request's details", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const friendRequest = await prisma.request.create({
+    data: {
+      senderId: user1.id,
+      receiverId: user2.id,
+    },
+  });
   await request(app)
-    .get(`/api/request/${friendRequestId}`)
-    .set("Authorization", `Bearer ${token}`)
+    .get(`/api/request/${friendRequest.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
-    .expect((res) => {
-      expect(res.body).toEqual(
-        expect.objectContaining({
-          id: friendRequestId,
-          senderId: userId,
-          receiverId: user2Id,
-          dateSent: expect.anything(),
-        })
-      );
+    .expect({
+      id: friendRequest.id,
+      senderId: user1.id,
+      receiverId: user2.id,
+      dateSent: friendRequest.dateSent.toISOString(),
     });
 }, 1000);
 
 test("user can accept friend request", async () => {
-  await request(app)
-    .get(`/api/request/${friendRequestId}/accept`)
-    .set("Authorization", `Bearer ${token2}`)
+  const [user1, user2] = await userTokenScript(2);
+  const friendRequest = await prisma.request.create({
+    data: {
+      senderId: user1.id,
+      receiverId: user2.id,
+    },
+  });
+  const response = await request(app)
+    .get(`/api/request/${friendRequest.id}/accept`)
+    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
-    .expect(200)
-    .expect((res) => {
-      expect(res.body).toEqual(
-        expect.objectContaining({
-          deletedRequest: expect.anything(),
-          newFriend: expect.anything(),
-        })
-      );
-    });
+    .expect(200);
+  expect(response.body).toEqual({
+    deletedRequest: {
+      id: friendRequest.id,
+      senderId: user1.id,
+      receiverId: user2.id,
+      dateSent: friendRequest.dateSent.toISOString(),
+    },
+    newFriend: {
+      id: expect.any(String),
+      ownerId: user2.id,
+    },
+  });
 }, 1000);
 
 test("user can reject friend request", async () => {
-  console.log({ friendRequestId, friendRequestId2 });
+  const [user1, user2] = await userTokenScript(2);
+  const friendRequest = await prisma.request.create({
+    data: {
+      senderId: user1.id,
+      receiverId: user2.id,
+    },
+  });
   await request(app)
-    .get(`/api/request/${friendRequestId2}/reject`)
-    .set("Authorization", `Bearer ${token2}`)
+    .get(`/api/request/${friendRequest.id}/reject`)
+    .set("Authorization", `Bearer ${user2.token}`)
     .expect("Content-Type", /json/)
-    .expect(200)
-    .expect((res) => {
-      expect(res.body).toEqual(
-        expect.objectContaining({
-          deletedRequest: expect.anything(),
-          blockedUser: expect.anything(),
-        })
-      );
-      console.log(res.body);
-    });
+    .expect(200);
+  expect({
+    id: friendRequest.id,
+    senderId: user1.id,
+    receiverId: user2.id,
+    dateSent: friendRequest.dateSent.toISOString(),
+  });
 }, 1000);

@@ -89,9 +89,15 @@ const requestQueries = {
         },
       });
 
-      const blockedUser = await prisma.friendList.update({
+      const blockedUser = await prisma.friendList.upsert({
         where: { ownerId: userId },
-        data: {
+        update: {
+          blocked: {
+            connect: { id: deletedRequest.senderId },
+          },
+        },
+        create: {
+          ownerId: userId,
           blocked: {
             connect: { id: deletedRequest.senderId },
           },

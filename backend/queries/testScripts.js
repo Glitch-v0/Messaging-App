@@ -1,4 +1,5 @@
 import prisma from "../prisma/prisma.js";
+import { createToken } from "../utils/tokenUtils.js";
 
 export const deleteScript = async () => {
   // Delete reactions first
@@ -22,7 +23,7 @@ export const deleteScript = async () => {
   // Finally, delete users
   await prisma.user.deleteMany();
 
-  console.log("Database reset complete.");
+  // console.log("Database reset complete.");
 };
 
 export const createScript = async () => {
@@ -51,4 +52,34 @@ export const createScript = async () => {
       },
     ],
   });
+};
+
+export const userTokenScript = async (numberOfUsers) => {
+  let users = [];
+  for (let i = 0; i < numberOfUsers; i++) {
+    const user = await prisma.user.create({
+      data: {
+        name: `test${i}`,
+        email: `test${i}@gmail.com`,
+        hashedPassword: `test${i}`,
+      },
+    });
+    const token = createToken(user);
+
+    if (numberOfUsers === 1) {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token: token,
+      };
+    }
+    users.push({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      token: token,
+    });
+  }
+  return users;
 };
