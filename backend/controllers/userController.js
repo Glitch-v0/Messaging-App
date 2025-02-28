@@ -5,11 +5,18 @@ import userQueries from "../queries/userQueries.js";
 const userController = {
   handleRegister: async (req, res) => {
     const password = await createHash(req.body.password);
-    const user = await userQueries.createUser(req, password);
+    const user = await userQueries.createUser(
+      req.body.name,
+      req.body.email,
+      password
+    );
     res.json({ name: user.name, id: user.id });
   },
 
-  getUser: async (req, res) => {},
+  getUser: async (req, res) => {
+    const user = await userQueries.getUser(req.userId);
+    res.json({ name: user.name, id: user.id });
+  },
 
   handleLogin: async (req, res) => {
     const user = await userQueries.getUser(req);

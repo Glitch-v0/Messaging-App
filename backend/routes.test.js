@@ -2,6 +2,8 @@ import app from "./app";
 import request from "supertest";
 import { createScript, deleteScript } from "./queries/testScripts";
 import { decodeToken } from "./utils/tokenUtils";
+import { requestQueries } from "./queries/requestQueries";
+import { userQueries } from "./queries/userQueries";
 
 // beforeEach(async () => {
 //   await deleteScript();

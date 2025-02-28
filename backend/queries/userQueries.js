@@ -1,30 +1,30 @@
 import prisma from "../prisma/prisma.js";
 
 const userQueries = {
-  createUser: async (req, hashedPassword) => {
+  createUser: async (name, email, hashedPassword) => {
     return await prisma.user.create({
       data: {
-        name: req.body.name,
-        email: req.body.email,
+        name: name,
+        email: email,
         hashedPassword: hashedPassword,
       },
     });
   },
 
-  getUser: async (req) => {
+  getUser: async (userId) => {
     return await prisma.user.findUnique({
       where: {
-        email: req.body.email,
+        id: userId,
       },
     });
   },
 
-  getConversations: async (user) => {
+  getConversations: async (userId) => {
     return await prisma.conversation.findMany({
       where: {
         participants: {
           some: {
-            userId: user.id,
+            userId: userId,
           },
         },
       },
