@@ -37,7 +37,7 @@ model Profile {
 model FriendList {
   id      String @id @default(cuid())
   ownerId String @unique
-  owner   User   @relation("ownerOfFriendList", fields: [ownerId], references: [id])
+  owner   User   @relation("ownerOfFriendList", fields: [ownerId], references: [id], onDelete: Cascade)
   friends User[] @relation("friends")
   blocked User[] @relation("blocked")
 }

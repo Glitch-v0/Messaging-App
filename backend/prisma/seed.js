@@ -2,10 +2,27 @@ import prisma from "./prisma.js";
 import { createHash } from "../hashFunctions.js";
 
 export const deleteScript = async () => {
-  const users = await prisma.user.findMany();
-  await prisma.user.deleteMany({
-    where: { id: { in: users.map((u) => u.id) } },
-  });
+  // Delete reactions first
+  await prisma.reaction.deleteMany();
+
+  // Delete messages
+  await prisma.message.deleteMany();
+
+  // Delete conversations
+  await prisma.conversation.deleteMany();
+
+  // Delete requests
+  await prisma.request.deleteMany();
+
+  // Delete profiles
+  await prisma.profile.deleteMany();
+
+  // Delete friend lists
+  await prisma.friendList.deleteMany();
+
+  // Finally, delete users
+  await prisma.user.deleteMany();
+
   console.log("Database reset complete.");
 };
 

@@ -17,11 +17,23 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 router.get("/", verifyToken, async (req, res) => {
-  await requestController.getRequests(req, res);
+  await requestController.getAllRequests(req, res);
 });
 
 router.get("/sent", verifyToken, async (req, res) => {
   await requestController.getSentRequests(req, res);
+});
+
+router.get("/:requestId", verifyToken, async (req, res) => {
+  await requestController.getSingleRequest(req, res);
+});
+
+router.get("/:requestId/accept", verifyToken, async (req, res) => {
+  await requestController.acceptFriendRequest(req, res);
+});
+
+router.get("/:requestId/reject", verifyToken, async (req, res) => {
+  await requestController.rejectFriendRequest(req, res);
 });
 
 export default router;

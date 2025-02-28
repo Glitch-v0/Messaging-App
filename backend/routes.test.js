@@ -12,6 +12,9 @@ let token3;
 let userId;
 let user2Id;
 let user3Id;
+let friendRequestId;
+let friendRequestId2;
+let friendRequestId3;
 
 test("Ping route", (done) => {
   request(app)
@@ -191,6 +194,8 @@ test("user can get friend requests, async", async () => {
           }),
         ])
       );
+      friendRequestId = res.body[0].id;
+      friendRequestId2 = res.body[1].id;
     });
 }, 1000);
 
@@ -211,5 +216,57 @@ test("user can see all sent requests", async () => {
           }),
         ])
       );
+    });
+}, 1000);
+
+test("user can see one request's details", async () => {
+  await request(app)
+    .get(`/api/request/${friendRequestId}`)
+    .set("Authorization", `Bearer ${token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          id: friendRequestId,
+          senderId: userId,
+          receiverId: user2Id,
+          dateSent: expect.anything(),
+        })
+      );
+    });
+}, 1000);
+
+test("user can accept friend request", async () => {
+  await request(app)
+    .get(`/api/request/${friendRequestId}/accept`)
+    .set("Authorization", `Bearer ${token2}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          deletedRequest: expect.anything(),
+          newFriend: expect.anything(),
+        })
+      );
+    });
+}, 1000);
+
+test("user can reject friend request", async () => {
+  console.log({ friendRequestId, friendRequestId2 });
+  await request(app)
+    .get(`/api/request/${friendRequestId2}/reject`)
+    .set("Authorization", `Bearer ${token2}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          deletedRequest: expect.anything(),
+          blockedUser: expect.anything(),
+        })
+      );
+      console.log(res.body);
     });
 }, 1000);
