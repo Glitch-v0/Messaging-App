@@ -1,9 +1,6 @@
 import app from "../app";
 import request from "supertest";
-import { deleteScript, userTokenScript } from "../queries/testScripts";
-import { createToken } from "../utils/tokenUtils";
-import requestQueries from "../queries/requestQueries";
-import userQueries from "../queries/userQueries";
+import { deleteScript } from "../queries/testScripts";
 import prisma from "../prisma/prisma";
 
 beforeEach(async () => {
