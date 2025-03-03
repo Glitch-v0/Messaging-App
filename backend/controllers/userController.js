@@ -32,6 +32,16 @@ const userController = {
     res.json({ token: newJWT });
   },
 
+  getFriends: async (req, res) => {
+    const friends = await userQueries.getFriends(req.userId);
+    res.json({ friends });
+  },
+
+  getBlocked: async (req, res) => {
+    const blocked = await userQueries.getBlockedUsers(req.userId);
+    res.json({ blocked });
+  },
+
   getConversations: async (req, res) => {
     const conversations = await userQueries.getConversations(req.userId);
     res.json({ conversations });

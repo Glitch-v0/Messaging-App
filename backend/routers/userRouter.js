@@ -16,6 +16,14 @@ router.post("/login", async (req, res) => {
   await userController.handleLogin(req, res);
 });
 
+router.get("/friends", verifyToken, async (req, res) => {
+  await userController.getFriends(req, res);
+});
+
+router.get("/blocked", verifyToken, async (req, res) => {
+  await userController.getBlockedUsers(req, res);
+});
+
 router.get("/conversation", verifyToken, async (req, res) => {
   await userController.getConversations(req, res);
 });

@@ -19,6 +19,33 @@ const userQueries = {
     });
   },
 
+  getFriends: async (userId) => {
+    return await prisma.friendList.findUnique({
+      where: {
+        ownerId: userId,
+      },
+      select: {
+        friends: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+  },
+
+  getBlocked: async (userId) => {
+    return await prisma.friendList.findUnique({
+      where: {
+        ownerId: userId,
+      },
+      select: {
+        blocked: true,
+      },
+    });
+  },
+
   getConversations: async (userId) => {
     return await prisma.conversation.findMany({
       where: {
