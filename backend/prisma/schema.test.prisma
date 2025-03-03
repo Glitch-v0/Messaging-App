@@ -20,7 +20,7 @@ model User {
   reactions        Reaction[]
   receivedRequests Request[]      @relation("ReceivedRequests")
   sentRequests     Request[]      @relation("SentRequests")
-  conversations    Conversation[] @relation("ConversationToUser")
+  conversations    Conversation[] @relation("Conversations")
   friendOf         FriendList[]   @relation("friends")
   blockedBy        FriendList[]   @relation("blocked")
 }
@@ -28,9 +28,9 @@ model User {
 model Profile {
   id            String  @id @default(cuid())
   userId        String  @unique
-  darkMode      Boolean
-  showOnline    Boolean
-  allowRequests Boolean
+  darkMode      Boolean @default(false)
+  showOnline    Boolean @default(false)
+  allowRequests Boolean @default(false)
   user          User    @relation(fields: [userId], references: [id])
 }
 
@@ -56,19 +56,18 @@ model Request {
 model Conversation {
   id           String    @id @default(cuid())
   messages     Message[]
-  participants User[]    @relation("ConversationToUser")
+  participants User[]    @relation("Conversations")
 }
 
 model Message {
-  id             String       @id @default(cuid())
-  content        String
-  readBy         String[]
-  timestamp      DateTime     @default(now())
-  conversationId String
-  senderId       String
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  sender         User         @relation(fields: [senderId], references: [id])
-  reactions      Reaction[]
+  id           String       @id @default(cuid())
+  content      String
+  readBy       String[]
+  timestamp    DateTime     @default(now())
+  conversation Conversation @relation(fields: [id], references: [id])
+  senderId     String
+  sender       User         @relation(fields: [senderId], references: [id])
+  reactions    Reaction[]
 }
 
 model Reaction {

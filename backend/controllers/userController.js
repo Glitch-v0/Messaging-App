@@ -33,18 +33,25 @@ const userController = {
   },
 
   getFriends: async (req, res) => {
-    const friends = await userQueries.getFriends(req.userId);
-    res.json({ friends });
+    res.json(await userQueries.getFriends(req.userId));
   },
 
   getBlocked: async (req, res) => {
-    const blocked = await userQueries.getBlockedUsers(req.userId);
-    res.json({ blocked });
+    res.json(await userQueries.getBlockedUsers(req.userId));
   },
 
   getConversations: async (req, res) => {
-    const conversations = await userQueries.getConversations(req.userId);
-    res.json({ conversations });
+    res.json(await userQueries.getConversations(req.userId));
+  },
+
+  createConversation: async (req, res) => {
+    res.json(
+      await userQueries.createConversation(
+        req.body.participants,
+        req.userId,
+        req.body.message
+      )
+    );
   },
 };
 

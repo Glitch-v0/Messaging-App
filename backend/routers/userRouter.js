@@ -24,8 +24,12 @@ router.get("/blocked", verifyToken, async (req, res) => {
   await userController.getBlockedUsers(req, res);
 });
 
-router.get("/conversation", verifyToken, async (req, res) => {
+router.get("/conversations", verifyToken, async (req, res) => {
   await userController.getConversations(req, res);
+});
+
+router.post("/conversations", verifyToken, async (req, res) => {
+  await userController.createConversation(req, res);
 });
 
 export default router;
