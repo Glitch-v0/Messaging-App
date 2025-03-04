@@ -64,6 +64,15 @@ const userController = {
     );
   },
 
+  deleteConversation: async (req, res) => {
+    res.json(
+      await userQueries.deleteConversation(
+        req.params.conversationId,
+        req.userId
+      )
+    );
+  },
+
   sendMessage: async (req, res) => {
     res.json(
       await userQueries.sendMessage(

@@ -36,4 +36,12 @@ router.post("/conversations/:conversationId", verifyToken, async (req, res) => {
   await userController.sendMessage(req, res);
 });
 
+router.delete(
+  "/conversations/:conversationId",
+  verifyToken,
+  async (req, res) => {
+    await userController.deleteConversation(req, res);
+  }
+);
+
 export default router;

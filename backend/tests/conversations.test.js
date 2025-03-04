@@ -98,3 +98,25 @@ test("users can send a message", async () => {
       );
     });
 });
+
+test("users can delete a conversation", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  await request(app)
+    .delete(`/api/conversations/${conversation.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          id: conversation.id,
+          participants: [expect.objectContaining({ id: user2.id })],
+        })
+      );
+    });
+});

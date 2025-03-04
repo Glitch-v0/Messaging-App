@@ -113,6 +113,39 @@ const userQueries = {
     });
   },
 
+  deleteConversation: async (conversationId, userId) => {
+    const conversation = await prisma.conversation.update({
+      where: {
+        id: conversationId,
+      },
+      data: {
+        participants: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        participants: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (conversation.participants.length === 0) {
+      return await prisma.conversation.delete({
+        where: {
+          id: conversationId,
+        },
+      });
+    }
+
+    return conversation;
+  },
+
   sendMessage: async (conversationId, senderId, message) => {
     return await prisma.message.create({
       data: {
