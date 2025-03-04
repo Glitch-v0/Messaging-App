@@ -120,3 +120,20 @@ test("users can delete a conversation", async () => {
       );
     });
 });
+
+test("conversations are deleted if both users delete it", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  userQueries.deleteConversation(conversation.id, user1.id);
+  userQueries.deleteConversation(conversation.id, user2.id);
+
+  await request(app)
+    .get(`/api/conversations/${conversation.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect(404);
+});

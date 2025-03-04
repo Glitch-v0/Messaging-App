@@ -64,7 +64,7 @@ model Message {
   content        String
   readBy         String[]
   timestamp      DateTime     @default(now())
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String
   senderId       String
   sender         User         @relation(fields: [senderId], references: [id])
