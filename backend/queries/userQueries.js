@@ -71,7 +71,15 @@ const userQueries = {
       where: {
         participants: {
           some: {
-            userId: userId,
+            id: userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        participants: {
+          select: {
+            name: true,
           },
         },
       },

@@ -35,6 +35,41 @@ test("users can create a conversation", async () => {
     });
 });
 
+test("users can get all their conversations", async () => {
+  const [user1, user2, user3] = await userTokenScript(3);
+  const conversation1 = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  const conversation2 = await userQueries.createConversation(
+    [user1.id, user3.id],
+    user1.id,
+    "hello"
+  );
+
+  await request(app)
+    .get(`/api/conversations`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: conversation1.id,
+            participants: [{ name: user1.name }, { name: user2.name }],
+          }),
+          expect.objectContaining({
+            id: conversation2.id,
+            participants: [{ name: user1.name }, { name: user3.name }],
+          }),
+        ])
+      );
+    });
+});
+
 test("users can send a message", async () => {
   const [user1, user2] = await userTokenScript(2);
   const conversation = await userQueries.createConversation(
