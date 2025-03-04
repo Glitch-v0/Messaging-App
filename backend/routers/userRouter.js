@@ -32,4 +32,8 @@ router.post("/conversations", verifyToken, async (req, res) => {
   await userController.createConversation(req, res);
 });
 
+router.post("/conversations/:conversationId", verifyToken, async (req, res) => {
+  await userController.sendMessage(req, res);
+});
+
 export default router;

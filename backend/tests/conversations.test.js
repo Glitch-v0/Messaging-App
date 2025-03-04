@@ -2,6 +2,7 @@ import app from "../app";
 import request from "supertest";
 import { deleteScript, userTokenScript } from "../queries/testScripts";
 import prisma from "../prisma/prisma";
+import userQueries from "../queries/userQueries";
 
 beforeEach(async () => {
   await deleteScript();
@@ -29,6 +30,35 @@ test("users can create a conversation", async () => {
           id: expect.any(String),
           messages: expect.anything(),
           participants: expect.anything(),
+        })
+      );
+    });
+});
+
+test("users can send a message", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  await request(app)
+    .post(`/api/conversations/${conversation.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .type("form")
+    .send({
+      message: "test",
+    })
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          content: "test",
+          id: expect.any(String),
+          sender: expect.objectContaining({ name: "test0" }),
+          timestamp: expect.any(String),
         })
       );
     });

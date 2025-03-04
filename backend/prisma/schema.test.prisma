@@ -60,14 +60,15 @@ model Conversation {
 }
 
 model Message {
-  id           String       @id @default(cuid())
-  content      String
-  readBy       String[]
-  timestamp    DateTime     @default(now())
-  conversation Conversation @relation(fields: [id], references: [id])
-  senderId     String
-  sender       User         @relation(fields: [senderId], references: [id])
-  reactions    Reaction[]
+  id             String       @id @default(cuid())
+  content        String
+  readBy         String[]
+  timestamp      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id])
+  reactions      Reaction[]
 }
 
 model Reaction {

@@ -45,9 +45,29 @@ const userController = {
   },
 
   createConversation: async (req, res) => {
+    // Check if participants are on either's blocklist
+    const blocked = await userQueries.checkIfParticipantsAreBlocked(
+      req.body.participants
+    );
+
+    if (blocked) {
+      res.status(403).json({
+        error: "All users must be friends to create a group conversation",
+      });
+    }
     res.json(
       await userQueries.createConversation(
         req.body.participants,
+        req.userId,
+        req.body.message
+      )
+    );
+  },
+
+  sendMessage: async (req, res) => {
+    res.json(
+      await userQueries.sendMessage(
+        req.params.conversationId,
         req.userId,
         req.body.message
       )

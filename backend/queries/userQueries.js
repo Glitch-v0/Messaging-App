@@ -46,6 +46,26 @@ const userQueries = {
     });
   },
 
+  checkIfParticipantsAreBlocked: async (participantsIds) => {
+    const blocked = await prisma.friendList.findMany({
+      where: {
+        ownerId: {
+          in: participantsIds,
+        },
+        blocked: {
+          some: {
+            id: {
+              in: participantsIds,
+            },
+          },
+        },
+      },
+    });
+
+    // True if any participant is blocked on the other's list
+    return blocked.length > 0;
+  },
+
   getConversations: async (userId) => {
     return await prisma.conversation.findMany({
       where: {
@@ -81,6 +101,26 @@ const userQueries = {
             name: true,
           },
         },
+      },
+    });
+  },
+
+  sendMessage: async (conversationId, senderId, message) => {
+    return await prisma.message.create({
+      data: {
+        content: message,
+        sender: { connect: { id: senderId } },
+        conversation: { connect: { id: conversationId } },
+      },
+      select: {
+        id: true,
+        content: true,
+        sender: {
+          select: {
+            name: true,
+          },
+        },
+        timestamp: true,
       },
     });
   },
