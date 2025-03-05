@@ -92,6 +92,16 @@ const userController = {
       )
     );
   },
+
+  reactToMessage: async (req, res) => {
+    res.json(
+      await userQueries.reactToMessage(
+        req.userId,
+        req.params.messageId,
+        req.body.reactionType
+      )
+    );
+  },
 };
 
 export default userController;

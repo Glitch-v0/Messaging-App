@@ -25,4 +25,8 @@ router.delete("/:conversationId", verifyToken, async (req, res) => {
   await userController.deleteConversation(req, res);
 });
 
+router.patch("/:conversationId/:messageId", verifyToken, async (req, res) => {
+  await userController.reactToMessage(req, res);
+});
+
 export default router;

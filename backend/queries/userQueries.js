@@ -193,6 +193,46 @@ const userQueries = {
       },
     });
   },
+
+  deleteMessage: async (messageId) => {
+    await prisma.message.delete({
+      where: {
+        id: messageId,
+      },
+    });
+  },
+
+  reactToMessage: async (userId, messageId, reactionType) => {
+    return await prisma.reaction.upsert({
+      where: {
+        messageId_userId: {
+          messageId: messageId,
+          userId: userId,
+        },
+      },
+      create: {
+        type: reactionType,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+        message: {
+          connect: {
+            id: messageId,
+          },
+        },
+      },
+      update: {
+        type: reactionType,
+      },
+      select: {
+        type: true,
+        messageId: true,
+        userId: true,
+      },
+    });
+  },
 };
 
 export default userQueries;

@@ -185,11 +185,55 @@ test("conversations are deleted if both users delete it", async () => {
     .expect(404);
 });
 
-// test("user can react to a message", async () => {
-//   const [user1, user2] = await userTokenScript(2);
-//   const conversation = await userQueries.createConversation(
-//     [user1.id, user2.id],
-//     user1.id,
-//     "hello"
-//   );
-// });
+test("users can delete a message", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  const message = conversation.messages[0];
+  await userQueries.deleteMessage(message.id);
+
+  await request(app)
+    .get(`/api/conversations/${conversation.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          messages: expect.arrayContaining([]),
+        })
+      );
+    });
+});
+
+test("user can react to a message", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  const message = conversation.messages[0];
+
+  await request(app)
+    .patch(`/api/conversations/${conversation.id}/${message.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .type("form")
+    .send({ reactionType: "like" })
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          type: "like",
+          messageId: message.id,
+          userId: user1.id,
+        })
+      );
+    });
+});
