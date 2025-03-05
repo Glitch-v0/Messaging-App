@@ -99,6 +99,53 @@ test("users can send a message", async () => {
     });
 });
 
+test("users can get a conversation", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "test1"
+  );
+
+  const message1 = await userQueries.sendMessage(
+    conversation.id,
+    user1.id,
+    "test2"
+  );
+  const message2 = await userQueries.sendMessage(
+    conversation.id,
+    user2.id,
+    "test3"
+  );
+
+  await request(app)
+    .get(`/api/conversations/${conversation.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          id: conversation.id,
+          messages: expect.arrayContaining([
+            expect.objectContaining({
+              content: message1.content,
+              id: message1.id,
+              sender: expect.objectContaining({ name: user1.name }),
+              timestamp: expect.any(String),
+            }),
+            expect.objectContaining({
+              content: message2.content,
+              id: message2.id,
+              sender: expect.objectContaining({ name: user2.name }),
+              timestamp: expect.any(String),
+            }),
+          ]),
+        })
+      );
+    });
+});
+
 test("users can delete a conversation", async () => {
   const [user1, user2] = await userTokenScript(2);
   const conversation = await userQueries.createConversation(
@@ -129,11 +176,20 @@ test("conversations are deleted if both users delete it", async () => {
     "hello"
   );
 
-  userQueries.deleteConversation(conversation.id, user1.id);
-  userQueries.deleteConversation(conversation.id, user2.id);
+  await userQueries.deleteConversation(conversation.id, user1.id);
+  await userQueries.deleteConversation(conversation.id, user2.id);
 
   await request(app)
     .get(`/api/conversations/${conversation.id}`)
     .set("Authorization", `Bearer ${user1.token}`)
     .expect(404);
 });
+
+// test("user can react to a message", async () => {
+//   const [user1, user2] = await userTokenScript(2);
+//   const conversation = await userQueries.createConversation(
+//     [user1.id, user2.id],
+//     user1.id,
+//     "hello"
+//   );
+// });

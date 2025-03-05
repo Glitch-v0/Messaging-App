@@ -86,6 +86,34 @@ const userQueries = {
     });
   },
 
+  getConversation: async (conversationId) => {
+    return await prisma.conversation.findUnique({
+      where: {
+        id: conversationId,
+      },
+      select: {
+        id: true,
+        messages: {
+          select: {
+            id: true,
+            content: true,
+            sender: {
+              select: {
+                name: true,
+              },
+            },
+            timestamp: true,
+          },
+        },
+        participants: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  },
+
   createConversation: async (participants, senderId, message) => {
     return await prisma.conversation.create({
       data: {
@@ -114,7 +142,7 @@ const userQueries = {
   },
 
   deleteConversation: async (conversationId, userId) => {
-    const conversation = await prisma.conversation.update({
+    let conversation = await prisma.conversation.update({
       where: {
         id: conversationId,
       },
@@ -138,7 +166,7 @@ const userQueries = {
     if (conversation.participants.length === 0) {
       return await prisma.conversation.delete({
         where: {
-          id: conversationId,
+          id: conversation.id,
         },
       });
     }

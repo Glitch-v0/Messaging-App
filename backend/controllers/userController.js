@@ -40,6 +40,16 @@ const userController = {
     res.json(await userQueries.getBlockedUsers(req.userId));
   },
 
+  getConversation: async (req, res) => {
+    const conversation = await userQueries.getConversation(
+      req.params.conversationId
+    );
+    if (!conversation) {
+      return res.sendStatus(404);
+    }
+    res.json(conversation);
+  },
+
   getConversations: async (req, res) => {
     res.json(await userQueries.getConversations(req.userId));
   },

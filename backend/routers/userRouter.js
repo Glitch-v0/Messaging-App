@@ -24,24 +24,4 @@ router.get("/blocked", verifyToken, async (req, res) => {
   await userController.getBlockedUsers(req, res);
 });
 
-router.get("/conversations", verifyToken, async (req, res) => {
-  await userController.getConversations(req, res);
-});
-
-router.post("/conversations", verifyToken, async (req, res) => {
-  await userController.createConversation(req, res);
-});
-
-router.post("/conversations/:conversationId", verifyToken, async (req, res) => {
-  await userController.sendMessage(req, res);
-});
-
-router.delete(
-  "/conversations/:conversationId",
-  verifyToken,
-  async (req, res) => {
-    await userController.deleteConversation(req, res);
-  }
-);
-
 export default router;
