@@ -93,6 +93,16 @@ const userController = {
     );
   },
 
+  updateMessage: async (req, res) => {
+    res.json(
+      await userQueries.updateMessage(
+        req.params.messageId,
+        req.userId,
+        req.body.message
+      )
+    );
+  },
+
   deleteMessage: async (req, res) => {
     res.json(await userQueries.deleteMessage(req.params.messageId, req.userId));
   },

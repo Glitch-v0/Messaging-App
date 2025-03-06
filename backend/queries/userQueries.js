@@ -194,6 +194,18 @@ const userQueries = {
     });
   },
 
+  updateMessage: async (messageId, senderId, message) => {
+    return await prisma.message.update({
+      where: {
+        id: messageId,
+        senderId: senderId,
+      },
+      data: {
+        content: message,
+      },
+    });
+  },
+
   deleteMessage: async (messageId, senderId) => {
     const hm = await prisma.message.delete({
       where: {

@@ -17,9 +17,21 @@ router.post("/", verifyToken, async (req, res) => {
   await userController.createConversation(req, res);
 });
 
+router.delete("/:conversationId", verifyToken, async (req, res) => {
+  await userController.deleteConversation(req, res);
+});
+
 router.post("/:conversationId/messages", verifyToken, async (req, res) => {
   await userController.sendMessage(req, res);
 });
+
+router.put(
+  "/:conversationId/messages/:messageId",
+  verifyToken,
+  async (req, res) => {
+    await userController.updateMessage(req, res);
+  }
+);
 
 router.delete(
   "/:conversationId/messages/:messageId",
@@ -28,10 +40,6 @@ router.delete(
     await userController.deleteMessage(req, res);
   }
 );
-
-router.delete("/:conversationId", verifyToken, async (req, res) => {
-  await userController.deleteConversation(req, res);
-});
 
 router.patch(
   "/:conversationId/messages/:messageId/reaction",

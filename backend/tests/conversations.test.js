@@ -185,6 +185,34 @@ test("conversations are deleted if both users delete it", async () => {
     .expect(404);
 });
 
+test("users can edit a message", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  const message = conversation.messages[0];
+
+  await request(app)
+    .put(`/api/conversations/${conversation.id}/messages/${message.id}`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .type("form")
+    .send({
+      message: "test",
+    })
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          content: "test",
+        })
+      );
+    });
+});
+
 test("users can delete a message", async () => {
   const [user1, user2] = await userTokenScript(2);
   const conversation = await userQueries.createConversation(
@@ -239,6 +267,36 @@ test("user can react to a message", async () => {
     });
 });
 
+test("user can change their message reaction", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  const conversation = await userQueries.createConversation(
+    [user1.id, user2.id],
+    user1.id,
+    "hello"
+  );
+
+  const message = conversation.messages[0];
+  await userQueries.reactToMessage(user1.id, message.id, "like");
+  await request(app)
+    .patch(
+      `/api/conversations/${conversation.id}/messages/${message.id}/reaction`
+    )
+    .set("Authorization", `Bearer ${user1.token}`)
+    .type("form")
+    .send({ reactionType: "dislike" })
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          type: "dislike",
+          messageId: message.id,
+          userId: user1.id,
+        })
+      );
+    });
+});
+
 test("user can remove message reaction", async () => {
   const [user1, user2] = await userTokenScript(2);
   const conversation = await userQueries.createConversation(
@@ -259,7 +317,7 @@ test("user can remove message reaction", async () => {
     .expect((res) => {
       expect(res.body).toEqual(
         expect.objectContaining({
-          type: expect.any(String),
+          type: "like",
           id: expect.any(Number),
           messageId: message.id,
           userId: user1.id,
