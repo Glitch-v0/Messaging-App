@@ -194,12 +194,15 @@ const userQueries = {
     });
   },
 
-  deleteMessage: async (messageId) => {
-    await prisma.message.delete({
+  deleteMessage: async (messageId, senderId) => {
+    const hm = await prisma.message.delete({
       where: {
         id: messageId,
+        senderId: senderId,
       },
     });
+
+    return hm;
   },
 
   reactToMessage: async (userId, messageId, reactionType) => {
@@ -232,6 +235,18 @@ const userQueries = {
         userId: true,
       },
     });
+  },
+
+  removeReaction: async (userId, messageId) => {
+    const res = await prisma.reaction.delete({
+      where: {
+        messageId_userId: {
+          messageId: messageId,
+          userId: userId,
+        },
+      },
+    });
+    return res;
   },
 };
 

@@ -93,6 +93,10 @@ const userController = {
     );
   },
 
+  deleteMessage: async (req, res) => {
+    res.json(await userQueries.deleteMessage(req.params.messageId, req.userId));
+  },
+
   reactToMessage: async (req, res) => {
     res.json(
       await userQueries.reactToMessage(
@@ -100,6 +104,12 @@ const userController = {
         req.params.messageId,
         req.body.reactionType
       )
+    );
+  },
+
+  removeReaction: async (req, res) => {
+    res.json(
+      await userQueries.removeReaction(req.userId, req.params.messageId)
     );
   },
 };
