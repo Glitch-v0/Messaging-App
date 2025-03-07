@@ -10,7 +10,7 @@ router.get("/ping", (req, res) => {
 });
 router.use("/api", userRouter);
 
-router.use("/api/request", requestRouter);
+router.use("/api/requests", requestRouter);
 
 router.use("/api/conversations", conversationRouter);
 

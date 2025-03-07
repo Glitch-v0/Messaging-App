@@ -14,22 +14,51 @@ const userController = {
   },
 
   getUser: async (req, res) => {
-    const user = await userQueries.getUser(req.userId);
+    const user = await userQueries.getUserById(req.userId);
     res.json({ name: user.name, id: user.id });
   },
 
-  handleLogin: async (req, res) => {
-    const user = await userQueries.getUser(req);
-    //Check password
-    const passwordHash = await createHash(req.body.password);
-
-    const isMatch = await comparePasswords(req.body.password, passwordHash);
+  deleteUser: async (req, res) => {
+    const user = await userQueries.getUserById(req.userId);
+    const isMatch = await comparePasswords(
+      req.body.password,
+      user.hashedPassword
+    );
     if (!isMatch) {
       return res.sendStatus(401);
+    }
+    res.json(await userQueries.deleteUser(req.userId));
+  },
+
+  handleLogin: async (req, res) => {
+    const user = await userQueries.getUserHashByEmail(req.body.email);
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ error: "Credentials do not match any user" });
+    }
+
+    const isMatch = await comparePasswords(
+      req.body.password,
+      user.hashedPassword
+    );
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ error: "Credentials do not match any user" });
     }
     const newJWT = createToken(user);
 
     res.json({ token: newJWT });
+  },
+
+  getProfile: async (req, res) => {
+    res.json(await userQueries.getProfile(req.userId));
+  },
+
+  updateProfile: async (req, res) => {
+    res.json(await userQueries.updateProfile(req.userId, req.body));
   },
 
   getFriends: async (req, res) => {
@@ -37,7 +66,7 @@ const userController = {
   },
 
   getBlocked: async (req, res) => {
-    res.json(await userQueries.getBlockedUsers(req.userId));
+    res.json(await userQueries.getBlocked(req.userId));
   },
 
   getConversation: async (req, res) => {
@@ -56,12 +85,12 @@ const userController = {
 
   createConversation: async (req, res) => {
     // Check if participants are on either's blocklist
-    const blocked = await userQueries.checkIfParticipantsAreBlocked(
+    const friends = await userQueries.checkIfParticipantsAreFriends(
       req.body.participants
     );
 
-    if (blocked) {
-      res.status(403).json({
+    if (!friends) {
+      return res.status(403).json({
         error: "All users must be friends to create a group conversation",
       });
     }

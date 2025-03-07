@@ -30,7 +30,7 @@ test("user can get friends", async () => {
     .expect({
       friends: [user2, user3],
     });
-}, 1000);
+});
 
 test("user can get blocked users", async () => {
   const [user1, user2, user3] = await userTokenScript(3);
@@ -51,4 +51,4 @@ test("user can get blocked users", async () => {
     .expect({
       blocked: [user2, user3],
     });
-}, 1000);
+});

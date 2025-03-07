@@ -2,6 +2,8 @@ import app from "../app";
 import request from "supertest";
 import { deleteScript, userTokenScript } from "../queries/testScripts";
 import prisma from "../prisma/prisma";
+import userQueries from "../queries/userQueries";
+import requestQueries from "../queries/requestQueries";
 
 beforeEach(async () => {
   await deleteScript();
@@ -14,7 +16,7 @@ afterAll(async () => {
 test("users can send friend requests", async () => {
   const [user1, user2] = await userTokenScript(2);
   await request(app)
-    .post(`/api/request`)
+    .post(`/api/requests`)
     .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
@@ -32,7 +34,7 @@ test("users can send friend requests", async () => {
         })
       );
     });
-}, 1500);
+});
 
 test("user can get friend requests", async () => {
   const [user1, user2, user3] = await userTokenScript(3);
@@ -43,7 +45,7 @@ test("user can get friend requests", async () => {
     ],
   });
   await request(app)
-    .get(`/api/request`)
+    .get(`/api/requests`)
     .set("Authorization", `Bearer ${user3.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
@@ -65,7 +67,7 @@ test("user can get friend requests", async () => {
         ])
       );
     });
-}, 1000);
+});
 
 test("user can see all sent requests", async () => {
   const [user1, user2, user3] = await userTokenScript(3);
@@ -76,7 +78,7 @@ test("user can see all sent requests", async () => {
     ],
   });
   await request(app)
-    .get(`/api/request/sent`)
+    .get(`/api/requests/sent`)
     .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
@@ -98,7 +100,7 @@ test("user can see all sent requests", async () => {
         ])
       );
     });
-}, 1000);
+});
 
 test("user can see one request's details", async () => {
   const [user1, user2] = await userTokenScript(2);
@@ -109,7 +111,7 @@ test("user can see one request's details", async () => {
     },
   });
   await request(app)
-    .get(`/api/request/${friendRequest.id}`)
+    .get(`/api/requests/${friendRequest.id}`)
     .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
@@ -119,7 +121,20 @@ test("user can see one request's details", async () => {
       receiverId: user2.id,
       dateSent: friendRequest.dateSent.toISOString(),
     });
-}, 1000);
+});
+
+test("users don't see requests from blocked users", async () => {
+  const [user1, user2] = await userTokenScript(2);
+  await userQueries.addBlocked(user1.id, user2.id);
+  await requestQueries.sendFriendRequest(user2.id, user1.id);
+
+  await request(app)
+    .get(`/api/requests`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect([]);
+});
 
 test("user can accept friend request", async () => {
   const [user1, user2] = await userTokenScript(2);
@@ -130,7 +145,7 @@ test("user can accept friend request", async () => {
     },
   });
   const response = await request(app)
-    .get(`/api/request/${friendRequest.id}/accept`)
+    .get(`/api/requests/${friendRequest.id}/accept`)
     .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200);
@@ -146,7 +161,7 @@ test("user can accept friend request", async () => {
       ownerId: user2.id,
     },
   });
-}, 1000);
+});
 
 test("user can reject friend request", async () => {
   const [user1, user2] = await userTokenScript(2);
@@ -157,7 +172,7 @@ test("user can reject friend request", async () => {
     },
   });
   await request(app)
-    .get(`/api/request/${friendRequest.id}/reject`)
+    .get(`/api/requests/${friendRequest.id}/reject`)
     .set("Authorization", `Bearer ${user2.token}`)
     .expect("Content-Type", /json/)
     .expect(200);
@@ -167,4 +182,4 @@ test("user can reject friend request", async () => {
     receiverId: user2.id,
     dateSent: friendRequest.dateSent.toISOString(),
   });
-}, 1000);
+});

@@ -2,10 +2,34 @@ import prisma from "../prisma/prisma.js";
 
 const requestQueries = {
   getAllRequests: async (userId) => {
-    return await prisma.request.findMany({
-      where: {
-        receiverId: userId,
-      },
+    return await prisma.$transaction(async (prisma) => {
+      //get Blocked list
+      const blocked = await prisma.friendList.findMany({
+        where: {
+          ownerId: userId,
+        },
+        select: {
+          blocked: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      const blockedUserIds = blocked.flatMap((entry) =>
+        entry.blocked.map((user) => user.id)
+      );
+
+      // Get requests from users not on block list
+      return await prisma.request.findMany({
+        where: {
+          receiverId: userId,
+          senderId: {
+            notIn: blockedUserIds,
+          },
+        },
+      });
     });
   },
   getSingleRequest: async (requestId) => {

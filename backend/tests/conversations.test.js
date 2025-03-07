@@ -12,14 +12,18 @@ afterAll(async () => {
   await prisma.$disconnect();
 });
 
-test("users can create a conversation", async () => {
+test("users can create a conversation with friends", async () => {
   const [user1, user2, user3] = await userTokenScript(3);
+  await userQueries.addFriend(user1.id, user2.id);
+  await userQueries.addFriend(user1.id, user3.id);
+  await userQueries.addFriend(user2.id, user3.id);
+
   await request(app)
     .post(`/api/conversations`)
     .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
-      participants: [user2.id, user3.id],
+      participants: [user1.id, user2.id, user3.id],
       message: "hello",
     })
     .expect("Content-Type", /json/)
@@ -30,6 +34,28 @@ test("users can create a conversation", async () => {
           id: expect.any(String),
           messages: expect.anything(),
           participants: expect.anything(),
+        })
+      );
+    });
+});
+
+test("users can't create conversations if all participants are not friends", async () => {
+  const [user1, user2, user3] = await userTokenScript(3);
+  await userQueries.addFriend(user1.id, user2.id);
+  await request(app)
+    .post(`/api/conversations`)
+    .set("Authorization", `Bearer ${user1.token}`)
+    .type("form")
+    .send({
+      participants: [user2.id, user3.id],
+      message: "hello",
+    })
+    .expect("Content-Type", /json/)
+    .expect(403)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          error: "All users must be friends to create a group conversation",
         })
       );
     });

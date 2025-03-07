@@ -7,14 +7,103 @@ const userQueries = {
         name: name,
         email: email,
         hashedPassword: hashedPassword,
+        profile: {
+          create: {},
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
       },
     });
   },
 
-  getUser: async (userId) => {
+  getUserById: async (userId) => {
     return await prisma.user.findUnique({
       where: {
         id: userId,
+      },
+    });
+  },
+
+  getUserHashByEmail: async (email) => {
+    return await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        email: true,
+        hashedPassword: true,
+      },
+    });
+  },
+
+  deleteUser: async (userId) => {
+    return await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+  },
+
+  getProfile: async (userId) => {
+    return await prisma.profile.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+  },
+
+  updateProfile: async (userId, body) => {
+    return await prisma.profile.update({
+      where: {
+        userId,
+      },
+      data: {
+        darkMode: body.darkMode === "true",
+        showOnline: body.showOnline === "true",
+        allowRequests: body.allowRequests === "true",
+      },
+    });
+  },
+
+  addFriend: async (userId, friendId) => {
+    //Connect friends from both directions
+    return await prisma.$transaction([
+      prisma.friendList.upsert({
+        where: { ownerId: userId },
+        update: {
+          friends: { connect: { id: friendId } },
+        },
+        create: {
+          ownerId: userId,
+          friends: { connect: { id: friendId } },
+        },
+      }),
+      prisma.friendList.upsert({
+        where: { ownerId: friendId },
+        update: {
+          friends: { connect: { id: userId } },
+        },
+        create: {
+          ownerId: friendId,
+          friends: { connect: { id: userId } },
+        },
+      }),
+    ]);
+  },
+
+  addBlocked: async (userId, blockedId) => {
+    return await prisma.friendList.upsert({
+      where: { ownerId: userId },
+      update: {
+        blocked: { connect: { id: blockedId } },
+      },
+      create: {
+        ownerId: userId,
+        blocked: { connect: { id: blockedId } },
       },
     });
   },
@@ -64,6 +153,26 @@ const userQueries = {
 
     // True if any participant is blocked on the other's list
     return blocked.length > 0;
+  },
+
+  checkIfParticipantsAreFriends: async (participantsIds) => {
+    const friends = await prisma.friendList.findMany({
+      where: {
+        ownerId: {
+          in: participantsIds,
+        },
+        friends: {
+          some: {
+            id: {
+              in: participantsIds,
+            },
+          },
+        },
+      },
+    });
+
+    // True if any participant is friends on the other's list
+    return friends.length === participantsIds.length;
   },
 
   getConversations: async (userId) => {

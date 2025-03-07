@@ -1,5 +1,6 @@
 import prisma from "../prisma/prisma.js";
 import { createToken } from "../utils/tokenUtils.js";
+import { createHash } from "../hashFunctions.js";
 
 export const deleteScript = async () => {
   // Delete reactions first
@@ -22,8 +23,6 @@ export const deleteScript = async () => {
 
   // Finally, delete users
   await prisma.user.deleteMany();
-
-  // console.log("Database reset complete.");
 };
 
 export const createScript = async () => {
@@ -57,11 +56,15 @@ export const createScript = async () => {
 export const userTokenScript = async (numberOfUsers) => {
   let users = [];
   for (let i = 0; i < numberOfUsers; i++) {
+    const hashedPassword = await createHash(`test${i}`);
     const user = await prisma.user.create({
       data: {
         name: `test${i}`,
         email: `test${i}@gmail.com`,
-        hashedPassword: `test${i}`,
+        hashedPassword: hashedPassword,
+        profile: {
+          create: {},
+        },
       },
     });
     const token = createToken(user);

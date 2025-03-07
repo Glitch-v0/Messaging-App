@@ -31,7 +31,7 @@ model Profile {
   darkMode      Boolean @default(false)
   showOnline    Boolean @default(false)
   allowRequests Boolean @default(false)
-  user          User    @relation(fields: [userId], references: [id])
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model FriendList {

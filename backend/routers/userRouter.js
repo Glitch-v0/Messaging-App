@@ -21,7 +21,19 @@ router.get("/friends", verifyToken, async (req, res) => {
 });
 
 router.get("/blocked", verifyToken, async (req, res) => {
-  await userController.getBlockedUsers(req, res);
+  await userController.getBlocked(req, res);
+});
+
+router.get("/profile", verifyToken, async (req, res) => {
+  await userController.getProfile(req, res);
+});
+
+router.put("/profile", verifyToken, async (req, res) => {
+  await userController.updateProfile(req, res);
+});
+
+router.delete("/profile", verifyToken, async (req, res) => {
+  await userController.deleteUser(req, res);
 });
 
 export default router;

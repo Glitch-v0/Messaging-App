@@ -12,7 +12,7 @@ afterAll(async () => {
 });
 
 test("register creates a user receives the name back", async () => {
-  const res = await request(app)
+  await request(app)
     .post("/api/register")
     .type("form")
     .send({
@@ -28,17 +28,39 @@ test("register creates a user receives the name back", async () => {
         id: expect.any(String),
       });
     });
-}, 1500);
+});
 
 test("login returns a JWT", async () => {
-  request(app)
+  await userTokenScript(1);
+  await request(app)
     .post("/api/login")
     .type("form")
     .send({
-      email: "test@gmail.com",
-      password: "test",
+      email: "test0@gmail.com",
+      password: "test0",
     })
     .expect("Content-Type", /json/)
     .expect(200)
-    .expect({ token: expect.any(String) });
-}, 1000);
+    .expect((res) => {
+      expect(res.body).toEqual({
+        token: expect.any(String),
+      });
+    });
+});
+
+test("cannot login to account that doesn't exist", async () => {
+  await request(app)
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("Content-Type", /json/)
+    .expect(401)
+    .expect((res) => {
+      expect(res.body).toEqual({
+        error: "Credentials do not match any user",
+      });
+    });
+});
