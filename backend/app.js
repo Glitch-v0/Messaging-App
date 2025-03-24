@@ -1,5 +1,8 @@
 import express, { json, urlencoded } from "express";
 import router from "./routers/router.js";
+import cors from "cors";
+import "dotenv/config";
+
 const app = express();
 
 //Parses json
@@ -8,9 +11,14 @@ app.use(json());
 //Parses form data
 app.use(urlencoded({ extended: true }));
 
+const corsOptions = {
+  origin: [process.env.FRONTEND_URL],
+};
+
+app.use(cors(corsOptions));
 app.use((req, res, next) => {
-  // console.log(`Route called: ${req.method} ${req.originalUrl}`);
-  // console.log(`From origin: ${req.get("origin")}`);
+  console.log(`Route called: ${req.method} ${req.originalUrl}`);
+  console.log(`From origin: ${req.get("origin")}`);
   next();
 });
 

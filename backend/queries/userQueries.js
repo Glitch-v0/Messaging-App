@@ -62,6 +62,7 @@ const userQueries = {
         userId,
       },
       data: {
+        // Making boolean values out of string inputs from json object
         darkMode: body.darkMode === "true",
         showOnline: body.showOnline === "true",
         allowRequests: body.allowRequests === "true",
