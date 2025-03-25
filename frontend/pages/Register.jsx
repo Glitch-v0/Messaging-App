@@ -1,0 +1,38 @@
+const Register = () => {
+  const handleSubmit = async (event) => {
+    console.log({ event });
+    event.preventDefault();
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: event.target.name.value,
+          email: event.target.email.value,
+          password: event.target.password.value,
+        }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  };
+  return (
+    <main>
+      <form onSubmit={handleSubmit}>
+        <h1>Sign up now!</h1>
+        <label htmlFor="name">Name</label>
+        <input type="text" name="name" id="name" />
+        <label htmlFor="email">Email</label>
+        <input type="email" name="email" id="email" />
+        <label htmlFor="password">Password</label>
+        <input type="password" name="password" id="password" />
+        <button type="submit">Register</button>
+      </form>
+    </main>
+  );
+};
+
+export default Register;
