@@ -58,4 +58,56 @@ test("blocked user cannot see the blocker", async () => {
 
   await userQueries.updateProfile(user2.id, updateData);
   await userQueries.updateProfile(user3.id, updateData);
+
+  await userQueries.addBlocked(user2.id, user1.id);
+
+  await request(app)
+    .get("/api/online")
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.not.arrayContaining([
+          expect.objectContaining({
+            id: user2.id,
+            name: user2.name,
+            lastSeen: expect.any(String),
+          }),
+        ])
+      );
+    });
+});
+
+test("blocker cannot see the blocked user", async () => {
+  const [user1, user2, user3] = await userTokenScript(3);
+
+  const updateData = {
+    darkMode: false,
+    showOnline: true,
+    allowRequests: true,
+  };
+
+  await userQueries.updateProfile(user1.id, updateData);
+  await userQueries.updateProfile(user2.id, updateData);
+  await userQueries.updateProfile(user3.id, updateData);
+
+  await userQueries.addBlocked(user1.id, user2.id);
+
+  await request(app)
+    .get("/api/online")
+    .set("Authorization", `Bearer ${user1.token}`)
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toEqual(
+        expect.not.arrayContaining([
+          expect.objectContaining({
+            id: user2.id,
+            name: user2.name,
+            lastSeen: expect.any(String),
+          }),
+        ])
+      );
+    });
 });

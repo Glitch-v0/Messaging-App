@@ -41,12 +41,12 @@ const userQueries = {
   },
 
   getUserByOnline: async (userId) => {
-    //Make sure to exclude users that have blocker userId
     return await prisma.user.findMany({
       where: {
         profile: {
           showOnline: true,
         },
+        // Exclude users who have blocked you
         NOT: {
           friends: {
             blocked: {
@@ -54,6 +54,12 @@ const userQueries = {
                 id: userId,
               },
             },
+          },
+        },
+        // Exclude users you have blocked
+        blockedBy: {
+          none: {
+            ownerId: userId,
           },
         },
       },
