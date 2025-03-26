@@ -18,6 +18,10 @@ const userController = {
     res.json({ name: user.name, id: user.id });
   },
 
+  getOnline: async (req, res) => {
+    res.json(await userQueries.getUserByOnline(req.userId));
+  },
+
   deleteUser: async (req, res) => {
     const user = await userQueries.getUserById(req.userId);
     const isMatch = await comparePasswords(

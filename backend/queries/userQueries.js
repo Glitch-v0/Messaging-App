@@ -40,6 +40,31 @@ const userQueries = {
     });
   },
 
+  getUserByOnline: async (userId) => {
+    //Make sure to exclude users that have blocker userId
+    return await prisma.user.findMany({
+      where: {
+        profile: {
+          showOnline: true,
+        },
+        NOT: {
+          friends: {
+            blocked: {
+              some: {
+                id: userId,
+              },
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        lastSeen: true,
+      },
+    });
+  },
+
   deleteUser: async (userId) => {
     return await prisma.user.delete({
       where: {
@@ -63,9 +88,9 @@ const userQueries = {
       },
       data: {
         // Making boolean values out of string inputs from json object
-        darkMode: body.darkMode === "true",
-        showOnline: body.showOnline === "true",
-        allowRequests: body.allowRequests === "true",
+        darkMode: body.darkMode,
+        showOnline: body.showOnline,
+        allowRequests: body.allowRequests,
       },
     });
   },

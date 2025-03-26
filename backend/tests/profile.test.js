@@ -38,7 +38,7 @@ test("users can update their profile", async () => {
   await request(app)
     .put("/api/profile")
     .set("Authorization", `Bearer ${user1.token}`)
-    .type("form")
+    .set("Content-Type", "application/json")
     .send({
       darkMode: true,
       showOnline: true,

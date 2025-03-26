@@ -20,6 +20,10 @@ router.get("/friends", verifyToken, async (req, res) => {
   await userController.getFriends(req, res);
 });
 
+router.get("/online", verifyToken, async (req, res) => {
+  await userController.getOnline(req, res);
+});
+
 router.get("/blocked", verifyToken, async (req, res) => {
   await userController.getBlocked(req, res);
 });
