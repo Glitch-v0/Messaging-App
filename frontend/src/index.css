@@ -4,6 +4,7 @@
   --main-color: #38195e;
   --nav-background-color: #2a1346;
   --font-color: rgb(253, 226, 255);
+  font-size: 2dvw;
 }
 
 body {
@@ -12,10 +13,10 @@ body {
 
 #root {
   display: grid;
-  height: 100dvh;
-  width: 100dvw;
   grid-template-areas: "nav main";
   grid-template-columns: 1fr 12fr;
+  height: 100dvh;
+  width: 100dvw;
 }
 
 main,
@@ -24,6 +25,7 @@ nav {
   flex-direction: column;
   place-items: center;
   place-content: center;
+  text-align: center;
   padding: 1rem;
   border-radius: 1.5rem;
   background-color: var(--main-color);
@@ -55,6 +57,12 @@ main {
 form {
   display: flex;
   flex-direction: column;
+  text-align: start;
+  width: 50%;
   gap: 1rem;
-  font-size: 2rem;
+}
+
+.profileSection {
+  display: flex;
+  gap: 1rem;
 }

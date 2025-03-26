@@ -8,9 +8,11 @@ const Profile = () => {
   });
 
   const handleProfileUpdate = (update) => {
-    console.log(`Sending request to update ${update} to ${!profile[update]}`);
-    setProfile({ ...profile, [update]: !profile[update] }); //updates profile with the toggled value
-    console.log(`Sending these values: ${JSON.stringify(profile)}`);
+    const updatedValue = !profile[update];
+    const updatedProfile = { ...profile, [update]: updatedValue };
+    console.log(`Sending request to update ${update} to ${updatedValue}`);
+    setProfile(updatedProfile); //updates profile with the toggled value
+    console.log(`Sending these values: ${JSON.stringify(updatedProfile)}`);
     fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
       method: "PUT",
       headers: {
@@ -18,9 +20,9 @@ const Profile = () => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
-        darkMode: profile.darkMode,
-        showOnline: profile.showOnline,
-        allowRequests: profile.allowRequests,
+        darkMode: updatedProfile.darkMode,
+        showOnline: updatedProfile.showOnline,
+        allowRequests: updatedProfile.allowRequests,
       }),
     })
       .then((res) => res.json())
@@ -42,18 +44,18 @@ const Profile = () => {
   return (
     <main>
       <h1>Profile Settings</h1>
-      <p>
-        Dark Mode: {profile.darkMode}{" "}
+      <p className="profileSection">
+        Dark Mode: {String(profile.darkMode)}
         <button onClick={() => handleProfileUpdate("darkMode")}>Toggle</button>
       </p>
-      <p>
-        Show Online: {profile.showOnline}{" "}
+      <p className="profileSection">
+        Show Online: {String(profile.showOnline)}
         <button onClick={() => handleProfileUpdate("showOnline")}>
           Toggle
         </button>
       </p>
-      <p>
-        Allow Requests: {profile.allowRequests}{" "}
+      <p className="profileSection">
+        Allow Requests: {String(profile.allowRequests)}
         <button onClick={() => handleProfileUpdate("allowRequests")}>
           Toggle
         </button>

@@ -21,8 +21,9 @@ const Register = () => {
   };
   return (
     <main>
+      <h1>Messaging for champions</h1>
+      <p>Sign up today!</p>
       <form onSubmit={handleSubmit}>
-        <h1>Sign up now!</h1>
         <label htmlFor="name">Name</label>
         <input type="text" name="name" id="name" />
         <label htmlFor="email">Email</label>
