@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { formatRelativeTime } from "../utils/time.js";
 
 const Online = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -25,7 +26,25 @@ const Online = () => {
   ) : (
     <main>
       <h1>Online</h1>
-      <p>{JSON.stringify(onlineUsers)}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Last Seen</th>
+          </tr>
+        </thead>
+        <tbody className="onlineUsers">
+          {onlineUsers.map((user) => (
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>{formatRelativeTime(user.lastSeen)}</td>
+              <td>
+                <button>Add Friend</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </main>
   );
 };

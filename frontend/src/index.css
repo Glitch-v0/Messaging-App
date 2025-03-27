@@ -66,3 +66,11 @@ form {
   display: flex;
   gap: 1rem;
 }
+
+.onlineUsers {
+  tr {
+    td {
+      padding: 0.5rem;
+    }
+  }
+}
