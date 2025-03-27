@@ -29,6 +29,22 @@ const Profile = () => {
       .then((data) => console.log(data));
   };
 
+  const handleDeleteProfile = async () => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        password: document.getElementById("password").value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .then(() => (window.location.href = "/"));
+  };
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
       method: "GET",
@@ -60,6 +76,12 @@ const Profile = () => {
           Toggle
         </button>
       </p>
+      <h2>Delete Account</h2>
+      <p>You may delete your account by clicking the button below.</p>
+      <p>This is permanent and cannot be undone!</p>
+      <p>Please re-enter your password to verify this destructive action.</p>
+      <input type="password" name="password" id="password" />
+      <button onClick={() => handleDeleteProfile()}>Delete Account</button>
     </main>
   );
 };
