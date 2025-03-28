@@ -18,7 +18,11 @@ const Requests = () => {
         console.log(data);
       });
   }, [updateRequestData]);
-  return requestData.length === 0 ? (
+  return !requestData ? (
+    <main>
+      <h1>Loading...</h1>
+    </main>
+  ) : requestData.length === 0 ? (
     <main>
       <h1>You currently have no friend requests!</h1>
     </main>

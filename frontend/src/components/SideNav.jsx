@@ -1,12 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { AppContext } from "../context.jsx";
 
 const SideNav = () => {
-  const [hasToken, setHasToken] = useState(false);
-
-  useEffect(() => {
-    setHasToken(!!localStorage.getItem("token")); // Convert to boolean
-  }, []);
+  const { hasToken } = useContext(AppContext);
 
   const links = [
     { path: "/profile", label: "Profile", protected: true },

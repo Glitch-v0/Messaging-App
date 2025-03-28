@@ -57,7 +57,11 @@ const Profile = () => {
       .then((data) => setProfile(data));
   }, [setProfile]);
 
-  return (
+  return !profile ? (
+    <main>
+      <h1>Loading...</h1>
+    </main>
+  ) : (
     <main>
       <h1>Profile Settings</h1>
       <p className="profileSection">

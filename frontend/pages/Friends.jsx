@@ -20,11 +20,20 @@ const Friends = () => {
   }, [updateFriendsData]);
   return !friendsData ? (
     <main>
+      <h1>Loading...</h1>
+    </main>
+  ) : friendsData.length === 0 ? (
+    <main>
       <h1>You currently have no friends.</h1>
     </main>
   ) : (
     <main>
       <h1>Friends</h1>
+      <ul>
+        {friendsData.friends.map((friend) => (
+          <li key={friend.id}>{friend.name}</li>
+        ))}
+      </ul>
     </main>
   );
 };

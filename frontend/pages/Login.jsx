@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../src/context.jsx";
 
 const Login = () => {
+  const { setHasToken } = useContext(AppContext);
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     console.log({ event });
@@ -19,6 +22,7 @@ const Login = () => {
     const data = await response.json();
     //save the token
     localStorage.setItem("token", data.token);
+    setHasToken(true);
     console.log(data);
     //redirect to home
     navigate("/conversations");

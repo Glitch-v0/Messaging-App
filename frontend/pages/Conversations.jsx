@@ -20,7 +20,11 @@ const Conversations = () => {
       });
   }, [updateConversationData]);
 
-  return conversationData.length === 0 ? (
+  return !conversationData ? (
+    <main>
+      <h1>Loading...</h1>
+    </main>
+  ) : conversationData.length === 0 ? (
     <main>
       <h1>No conversations</h1>
       <p>You should start one!</p>
@@ -28,7 +32,18 @@ const Conversations = () => {
   ) : (
     <main>
       <h1>Conversations</h1>
-      <p>{JSON.stringify(conversationData)}</p>
+      {conversationData.map((conversation) => (
+        // List of participants
+        <a key={conversation.id} href={`/conversations/${conversation.id}`}>
+          <ul>
+            {conversation.participants.map((participant) => (
+              <li key={participant.id}>{participant.name}</li>
+            ))}
+            <p>{conversation.messages[0].content}</p>
+          </ul>
+        </a>
+        // Message
+      ))}
     </main>
   );
 };

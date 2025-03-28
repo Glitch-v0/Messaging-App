@@ -6,15 +6,17 @@ import routes from "./routes.jsx";
 const router = createBrowserRouter(routes);
 
 function App() {
-  const [conversationData, updateConversationData] = useState([]);
-  const [friendsData, updateFriendsData] = useState([]);
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  const [profile, setProfile] = useState({
-    darkMode: null,
-    showOnline: null,
-    allowRequests: null,
-  });
-  const [requestData, updateRequestData] = useState([]);
+  const [conversationData, updateConversationData] = useState(null);
+  const [friendsData, updateFriendsData] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [requestData, updateRequestData] = useState(null);
+
+  const [hasToken, setHasToken] = useState(false);
+
+  useEffect(() => {
+    setHasToken(!!localStorage.getItem("token")); // Convert to boolean
+  }, []);
 
   return (
     <AppContext.Provider
@@ -29,6 +31,8 @@ function App() {
         setProfile,
         requestData,
         updateRequestData,
+        hasToken,
+        setHasToken,
       }}
     >
       <RouterProvider router={router} />
