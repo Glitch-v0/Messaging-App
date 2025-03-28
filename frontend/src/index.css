@@ -74,3 +74,14 @@ form {
     }
   }
 }
+
+.errorButton {
+  background-color: var(--nav-background-color);
+  color: var(--font-color);
+  border: none;
+  font-size: 1rem;
+}
+
+.errorButton:hover {
+  cursor: pointer;
+}

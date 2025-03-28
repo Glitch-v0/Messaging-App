@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     console.log({ event });
     event.preventDefault();
@@ -18,7 +21,7 @@ const Login = () => {
     localStorage.setItem("token", data.token);
     console.log(data);
     //redirect to home
-    window.location.href = "/conversations";
+    navigate("/conversations");
   };
 
   return (

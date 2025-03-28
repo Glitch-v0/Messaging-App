@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AppContext } from "../src/context.jsx";
 
 const Friends = () => {
-  const [friendsData, updateFriendsData] = useState([]);
+  const { friendsData, updateFriendsData } = useContext(AppContext);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/friends`, {
@@ -16,7 +17,7 @@ const Friends = () => {
         updateFriendsData(data);
         console.log(data);
       });
-  }, []);
+  }, [updateFriendsData]);
   return !friendsData ? (
     <main>
       <h1>You currently have no friends.</h1>

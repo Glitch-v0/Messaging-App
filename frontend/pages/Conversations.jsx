@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
+import { AppContext } from "../src/context.jsx";
 
 const Conversations = () => {
-  const [conversationData, updateConversationData] = useState([]);
+  const { conversationData, updateConversationData } = useContext(AppContext);
 
   useEffect(() => {
     //load messages
@@ -17,7 +18,7 @@ const Conversations = () => {
         updateConversationData(data);
         console.log(data);
       });
-  }, []);
+  }, [updateConversationData]);
 
   return conversationData.length === 0 ? (
     <main>

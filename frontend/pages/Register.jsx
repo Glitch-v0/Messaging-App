@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 const Register = () => {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     console.log({ event });
     event.preventDefault();
@@ -18,7 +21,7 @@ const Register = () => {
     );
     const data = await response.json();
     console.log(data);
-    window.location.href = "/login";
+    navigate("/login");
   };
   return (
     <main>

@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { formatRelativeTime } from "../utils/time.js";
+import { AppContext } from "../src/context.jsx";
 
 const Online = () => {
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  const { onlineUsers, setOnlineUsers } = useContext(AppContext);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/online`, {
@@ -17,7 +18,7 @@ const Online = () => {
         setOnlineUsers(data);
         console.log(data);
       });
-  }, []);
+  }, [setOnlineUsers]);
 
   return !onlineUsers ? (
     <main>

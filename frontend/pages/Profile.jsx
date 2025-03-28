@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../src/context.jsx";
 
 const Profile = () => {
-  const [profile, setProfile] = useState({
-    darkMode: null,
-    showOnline: null,
-    allowRequests: null,
-  });
+  const { profile, setProfile } = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   const handleProfileUpdate = (update) => {
     const updatedValue = !profile[update];
@@ -42,7 +42,7 @@ const Profile = () => {
     })
       .then((res) => res.json())
       .then((data) => console.log(data))
-      .then(() => (window.location.href = "/"));
+      .then(() => navigate("/"));
   };
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Profile = () => {
     })
       .then((res) => res.json())
       .then((data) => setProfile(data));
-  }, []);
+  }, [setProfile]);
 
   return (
     <main>

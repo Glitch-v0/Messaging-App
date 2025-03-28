@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AppContext } from "../src/context.jsx";
 
 const Requests = () => {
-  const [requestData, updateRequestData] = useState([]);
+  const { requestData, updateRequestData } = useContext(AppContext);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
@@ -16,7 +17,7 @@ const Requests = () => {
         updateRequestData(data);
         console.log(data);
       });
-  }, []);
+  }, [updateRequestData]);
   return requestData.length === 0 ? (
     <main>
       <h1>You currently have no friend requests!</h1>

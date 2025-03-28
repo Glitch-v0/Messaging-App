@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
   const [countdown, setCountdown] = useState(3);
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.removeItem("token");
@@ -11,14 +13,14 @@ const Logout = () => {
     }, 1000);
 
     const timeout = setTimeout(() => {
-      window.location.href = "/login";
+      navigate("/login");
     }, 3000);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, []);
+  }, [navigate]);
 
   return (
     <main>
