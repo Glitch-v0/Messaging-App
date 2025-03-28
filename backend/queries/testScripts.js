@@ -1,6 +1,7 @@
 import prisma from "../prisma/prisma.js";
 import { createToken } from "../utils/tokenUtils.js";
 import { createHash } from "../hashFunctions.js";
+import userQueries from "./userQueries.js";
 
 export const deleteScript = async () => {
   // Delete reactions first
@@ -26,30 +27,20 @@ export const deleteScript = async () => {
 };
 
 export const createScript = async () => {
-  //Create three users
-
-  const hash1 = await createHash("test1");
-  const hash2 = await createHash("test2");
-  const hash3 = await createHash("test3");
-
-  let [user1, user2, user3] = await prisma.user.createMany({
-    data: [
-      {
-        name: "test1",
-        email: "test1@gmail.com",
-        hashedPassword: hash1,
-      },
-      {
-        name: "test2",
-        email: "tes2@gmail.com",
-        hashedPassword: hash2,
-      },
-      {
-        name: "test3",
-        email: "test3@gmail.com",
-        hashedPassword: hash3,
-      },
-    ],
+  await prisma.$transaction(async () => {
+    const bot = await userQueries.createUser(
+      "Your Robot Assistant",
+      "robo@test.com",
+      await createHash("test")
+    );
+    const me = await userQueries.createUser(
+      "njonesDev",
+      "njones@test.com",
+      await createHash("test")
+    );
+    console.log({ bot, me });
+    await userQueries.addFriend(me.id, bot.id);
+    await userQueries.createConversation([me.id, bot.id], me.id, "hi");
   });
 };
 

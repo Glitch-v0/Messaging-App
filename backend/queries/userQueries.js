@@ -10,6 +10,9 @@ const userQueries = {
         profile: {
           create: {},
         },
+        friends: {
+          create: {},
+        },
       },
       select: {
         id: true,
@@ -219,8 +222,23 @@ const userQueries = {
       select: {
         id: true,
         participants: {
+          where: {
+            // remove your id from each conversation's participants
+            id: { not: userId },
+          },
           select: {
             name: true,
+          },
+        },
+        messages: {
+          orderBy: {
+            timestamp: "desc",
+          },
+          take: 1,
+          select: {
+            sender: true,
+            content: true,
+            timestamp: true,
           },
         },
       },
