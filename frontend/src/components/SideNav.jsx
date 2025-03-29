@@ -17,17 +17,19 @@ const SideNav = () => {
   ];
 
   return (
-    <nav>
-      <ul>
-        {links
-          .filter((link) => (hasToken ? link.protected : !link.protected))
-          .map((link) => (
-            <li key={link.path}>
-              <Link to={link.path}>{link.label}</Link>
-            </li>
-          ))}
-      </ul>
-    </nav>
+    <div className="navFiller">
+      <nav>
+        <ul>
+          {links
+            .filter((link) => (hasToken ? link.protected : !link.protected))
+            .map((link) => (
+              <li key={link.path}>
+                <Link to={link.path}>{link.label}</Link>
+              </li>
+            ))}
+        </ul>
+      </nav>
+    </div>
   );
 };
 

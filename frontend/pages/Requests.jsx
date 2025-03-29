@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
 import { AppContext } from "../src/context.jsx";
+import { formatRelativeTime } from "../utils/time.js";
 
 const Requests = () => {
   const { requestData, updateRequestData } = useContext(AppContext);
@@ -28,8 +29,16 @@ const Requests = () => {
     </main>
   ) : (
     <main>
-      <h1>Requests</h1>
-      <p>{JSON.stringify(requestData)}</p>
+      <h1>Received Requests:</h1>
+      {requestData.map((request) => (
+        <div key={request.id} className="requestContainer">
+          <p>{request.sender.name}</p>
+          <p>{formatRelativeTime(request.dateSent)}</p>
+          <button>Accept</button>
+          <button>Decline</button>
+        </div>
+      ))}
+      <h2>Sent Requests:</h2>
     </main>
   );
 };

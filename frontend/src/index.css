@@ -3,6 +3,8 @@
   --nav-background-color: #2a1346;
   --button-background-color: #2a1346;
   --font-color: #fde2ff;
+
+  --nav-width: 16vw;
   font-size: 1.75dvw;
   font-family: "Poppins", sans-serif;
 }
@@ -15,8 +17,9 @@ body {
 #root {
   display: grid;
   grid-template-areas: "nav main";
-  grid-template-columns: 1fr 9fr;
+  grid-template-columns: var(--nav-width) calc(100dvw - var(--nav-width));
   height: 100dvh;
+  width: 100%;
 }
 
 main,
@@ -30,14 +33,17 @@ nav {
   color: var(--font-color);
 }
 
+.navFiller {
+  grid-area: nav;
+  width: var(--nav-width);
+}
+
 nav {
   background-color: var(--nav-background-color);
   position: fixed;
-  top: 0;
   height: 100%;
-  width: 16vw;
+  z-index: 1;
 
-  grid-area: nav;
   place-content: center;
 
   ul {
@@ -52,10 +58,13 @@ nav {
 
 main {
   grid-area: main;
-  margin-left: 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  height: 100%;
+
+  p {
+    text-wrap: wrap;
+    overflow: auto;
+    width: 100%;
+  }
 }
 
 form {
