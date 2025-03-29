@@ -15,11 +15,16 @@ function App() {
   const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
-    const cookieToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="));
-
-    setHasToken(!!cookieToken); // If the cookie exists, set the token state to true
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/whoami`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setHasToken(data.authenticated); // Update based on backend response
+        setProfile(data.user || null);
+      })
+      .catch(() => setHasToken(false));
   }, []);
 
   return (

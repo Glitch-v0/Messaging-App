@@ -7,6 +7,7 @@ import Logout from "../pages/Logout";
 import Requests from "../pages/Requests";
 import Friends from "../pages/Friends";
 import Online from "../pages/Online";
+import NotFound from "../pages/NotFound";
 import Error from "../pages/Error";
 import { Outlet } from "react-router-dom";
 
@@ -19,6 +20,7 @@ const routes = [
         <Outlet />
       </>
     ),
+    errorElement: <Error />,
     children: [
       {
         index: true,
@@ -54,7 +56,7 @@ const routes = [
       },
       {
         path: "*",
-        element: <Error />,
+        element: <NotFound />,
       },
     ],
   },
