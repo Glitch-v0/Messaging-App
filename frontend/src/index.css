@@ -1,6 +1,7 @@
 :root {
   --main-color: #38195e;
   --nav-background-color: #2a1346;
+  --button-background-color: #2a1346;
   --font-color: #fde2ff;
   font-size: 1.75dvw;
   font-family: "Poppins", sans-serif;
@@ -39,11 +40,6 @@ nav {
   grid-area: nav;
   place-content: center;
 
-  a {
-    color: var(--font-color);
-    text-decoration: none;
-  }
-
   ul {
     display: flex;
     flex-direction: column;
@@ -57,6 +53,9 @@ nav {
 main {
   grid-area: main;
   margin-left: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 form {
@@ -67,8 +66,35 @@ form {
   gap: 1rem;
 }
 
+button {
+  background-color: var(--button-background-color);
+  color: var(--font-color);
+  font-size: 2.25dvh;
+  border: 1px solid var(--button-background-color);
+  padding: 0.33rem;
+}
+
+button:hover {
+  cursor: pointer;
+  border: 1px solid var(--font-color);
+}
+
+input {
+  background-color: var(--nav-background-color);
+  color: var(--font-color);
+  border: none;
+  padding: 0.33rem;
+  font-size: 2dvh;
+}
+
+a {
+  color: var(--font-color);
+  text-decoration: none;
+}
+
 .profileSection {
   display: flex;
+  place-items: center;
   gap: 1rem;
 }
 

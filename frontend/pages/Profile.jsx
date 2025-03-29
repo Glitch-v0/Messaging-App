@@ -10,9 +10,7 @@ const Profile = () => {
   const handleProfileUpdate = (update) => {
     const updatedValue = !profile[update];
     const updatedProfile = { ...profile, [update]: updatedValue };
-    console.log(`Sending request to update ${update} to ${updatedValue}`);
     setProfile(updatedProfile); //updates profile with the toggled value
-    console.log(`Sending these values: ${JSON.stringify(updatedProfile)}`);
     fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
       method: "PUT",
       headers: {
@@ -26,7 +24,29 @@ const Profile = () => {
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then(() => {
+        if (update === "darkMode") {
+          const root = document.querySelector(":root");
+          const isDark = updatedProfile.darkMode;
+
+          root.style.setProperty(
+            "--main-color",
+            isDark ? "#000000" : "#38195e"
+          );
+          root.style.setProperty(
+            "--nav-background-color",
+            isDark ? "#0d0d0d" : "#2a1346"
+          );
+          root.style.setProperty(
+            "--font-color",
+            isDark ? "#c5c5c5" : "#fde2ff"
+          );
+          root.style.setProperty(
+            "--button-background-color",
+            isDark ? "#252525" : "#2a1346"
+          );
+        }
+      });
   };
 
   const handleDeleteProfile = async () => {
