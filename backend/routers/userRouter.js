@@ -16,6 +16,10 @@ router.post("/login", async (req, res) => {
   await userController.handleLogin(req, res);
 });
 
+router.post("/logout", verifyToken, async (req, res) => {
+  await userController.handleLogout(req, res);
+});
+
 router.get("/friends", verifyToken, async (req, res) => {
   await userController.getFriends(req, res);
 });

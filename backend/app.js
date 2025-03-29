@@ -2,6 +2,7 @@ import express, { json, urlencoded } from "express";
 import router from "./routers/router.js";
 import cors from "cors";
 import "dotenv/config";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -11,8 +12,11 @@ app.use(json());
 //Parses form data
 app.use(urlencoded({ extended: true }));
 
+app.use(cookieParser(process.env.JWT_SECRET));
+
 const corsOptions = {
   origin: [process.env.FRONTEND_URL],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));

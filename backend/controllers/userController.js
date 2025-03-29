@@ -54,7 +54,26 @@ const userController = {
     }
     const newJWT = createToken(user);
 
-    res.json({ token: newJWT });
+    res
+      .cookie("token", newJWT, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000 * 7,
+        signed: true,
+      })
+      .json({ name: user.name, id: user.id });
+  },
+
+  handleLogout: async (req, res) => {
+    res
+      .clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        signed: true,
+      })
+      .json({ message: "You are now logged out." });
   },
 
   getProfile: async (req, res) => {

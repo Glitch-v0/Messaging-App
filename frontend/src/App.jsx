@@ -15,7 +15,11 @@ function App() {
   const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
-    setHasToken(!!localStorage.getItem("token")); // Convert to boolean
+    const cookieToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="));
+
+    setHasToken(!!cookieToken); // If the cookie exists, set the token state to true
   }, []);
 
   return (

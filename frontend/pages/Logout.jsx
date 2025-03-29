@@ -4,15 +4,36 @@ import { AppContext } from "../src/context.jsx";
 
 const Logout = () => {
   const [countdown, setCountdown] = useState(3);
-  const { setHasToken } = useContext(AppContext);
+  const {
+    updateConversationData,
+    updateFriendsData,
+    setOnlineUsers,
+    setProfile,
+    updateRequestData,
+    setHasToken,
+  } = useContext(AppContext);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.removeItem("token");
+    const handleLogout = async () => {
+      try {
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/logout`, {
+          method: "POST",
+          credentials: "include",
+        });
+        setHasToken(false);
+        updateConversationData(null);
+        updateFriendsData(null);
+        setOnlineUsers(null);
+        setProfile(null);
+        updateRequestData(null);
+      } catch (error) {
+        console.error("Logout failed", error);
+      }
+    };
 
-    setHasToken(false);
-
+    handleLogout();
     const interval = setInterval(() => {
       setCountdown((prev) => prev - 1);
     }, 1000);
@@ -25,7 +46,15 @@ const Logout = () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [navigate]);
+  }, [
+    navigate,
+    setHasToken,
+    updateConversationData,
+    updateFriendsData,
+    setOnlineUsers,
+    setProfile,
+    updateRequestData,
+  ]);
 
   return (
     <main>

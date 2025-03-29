@@ -12,16 +12,15 @@ const Login = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         email: event.target.email.value,
         password: event.target.password.value,
       }),
+      credentials: "include",
     });
     const data = await response.json();
-    //save the token
-    localStorage.setItem("token", data.token);
+
     setHasToken(true);
     console.log(data);
     //redirect to home

@@ -17,13 +17,13 @@ const Profile = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         darkMode: updatedProfile.darkMode,
         showOnline: updatedProfile.showOnline,
         allowRequests: updatedProfile.allowRequests,
       }),
+      credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => console.log(data));
@@ -34,11 +34,11 @@ const Profile = () => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
         password: document.getElementById("password").value,
       }),
+      credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => console.log(data))

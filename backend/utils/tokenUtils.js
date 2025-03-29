@@ -7,22 +7,19 @@ export function createToken(user) {
 }
 
 export function verifyToken(req, res, next) {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer ")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-    jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
-      if (err) {
-        return res.sendStatus(401);
-      }
-      req.userId = authData.id;
-      next();
-    });
-  } else {
+  const token = req.signedCookies?.token; // Read token from the cookie
+
+  if (!token) {
     return res.sendStatus(401);
   }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
+    if (err) {
+      return res.sendStatus(401);
+    }
+    req.userId = authData.id; // Attach user ID to request
+    next();
+  });
 }
 
 export function decodeToken(token) {
