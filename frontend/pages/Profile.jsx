@@ -45,8 +45,12 @@ const Profile = () => {
             "--button-background-color",
             isDark ? "#252525" : "#2a1346"
           );
+
+          // save colors to local storage
+          localStorage.setItem("darkMode", JSON.stringify(isDark));
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleDeleteProfile = async () => {
