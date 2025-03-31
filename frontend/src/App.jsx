@@ -7,6 +7,7 @@ const router = createBrowserRouter(routes);
 
 function App() {
   const [conversationData, updateConversationData] = useState(null);
+  const [currentConversation, setCurrentConversation] = useState(null);
   const [friendsData, updateFriendsData] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -18,7 +19,7 @@ function App() {
     // read local storage for dark mode
     const isDark = localStorage.getItem("darkMode") === "true";
     const root = document.querySelector(":root");
-    console.log(`Dark mode is set to ${isDark}, ${typeof isDark}`);
+    // console.log(`Dark mode is set to ${isDark}, ${typeof isDark}`);
     root.style.setProperty("--main-color", isDark ? "#000000" : "#38195e");
     root.style.setProperty(
       "--nav-background-color",
@@ -50,6 +51,8 @@ function App() {
       value={{
         conversationData,
         updateConversationData,
+        currentConversation,
+        setCurrentConversation,
         friendsData,
         updateFriendsData,
         onlineUsers,

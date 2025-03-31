@@ -259,6 +259,7 @@ const userQueries = {
             sender: {
               select: {
                 name: true,
+                id: true,
               },
             },
             timestamp: true,

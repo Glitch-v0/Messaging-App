@@ -35,7 +35,7 @@ const routes = [
         element: <Profile />,
       },
       {
-        path: "conversations",
+        path: "conversations*",
         element: <Conversations />,
       },
       {

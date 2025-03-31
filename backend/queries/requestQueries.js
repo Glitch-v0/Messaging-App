@@ -29,6 +29,16 @@ const requestQueries = {
             notIn: blockedUserIds,
           },
         },
+        select: {
+          id: true,
+          senderId: true,
+          sender: {
+            select: {
+              name: true,
+            },
+          },
+          dateSent: true,
+        },
       });
     });
   },

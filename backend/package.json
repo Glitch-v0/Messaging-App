@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "NODE_ENV=development && node --watch index.js",
     "test": "NODE_ENV=test && node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll --detectOpenHandles",
+    "seed": "node prisma/seed.js",
     "migrate": "read -p 'Enter migration name: ' name && npx prisma migrate dev --name \"$name\" --schema=./prisma/schema.prisma && npx prisma migrate dev --name \"$name\" --schema=./prisma/schema.test.prisma",
     "generate": "npx prisma generate --schema=./prisma/schema.prisma && npx prisma generate --schema=./prisma/schema.test.prisma",
     "updateDatabase": "npm run migrate && npm run generate",
