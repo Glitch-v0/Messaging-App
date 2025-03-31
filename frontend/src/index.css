@@ -126,7 +126,9 @@ a {
 .conversationContainer {
   display: grid;
   grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr;
   place-content: start;
+  padding: 1rem;
 
   .conversationLists,
   .currentConversation {
@@ -155,27 +157,34 @@ a {
   }
 
   .currentConversation {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
     width: 100%;
 
-    input {
-      width: 90%;
-      margin: 1rem;
-      padding: 1rem;
-    }
-
     .messageContainer {
+      height: 100%;
       overflow: scroll;
 
-      sub {
+      sub.messageTimestamp,
+      sub.messageSender {
         opacity: 0.6;
         font-size: 0.5rem;
         position: absolute;
+      }
+
+      sub.messageTimestamp {
         bottom: 0;
         right: 0;
         padding-right: 0.5rem;
         padding-bottom: 0.25rem;
+      }
+
+      sub.messageSender {
+        top: 0;
+        left: 0;
+        padding-left: 1rem;
+        padding-top: 0.25rem;
       }
 
       .messageFromOwner,
@@ -192,12 +201,6 @@ a {
         word-break: break-word;
       }
 
-      .messageFromOwner:hover,
-      .messageFromOther:hover {
-        cursor: pointer;
-        scale: 1.05;
-      }
-
       .messageFromOwner {
         align-self: end;
         background-color: var(--nav-background-color);
@@ -205,6 +208,64 @@ a {
 
       .messageFromOther {
         align-self: start;
+      }
+
+      button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        .moreButton path {
+          fill: var(--font-color);
+          opacity: 0.6;
+          scale: 1.1;
+        }
+
+        .moreButton:hover path {
+          opacity: 1;
+        }
+      }
+
+      #iconContainer {
+        z-index: -1;
+        background-color: var(--main-color);
+        position: absolute;
+        display: flex;
+        padding: 0.5rem;
+        flex-direction: column;
+        justify-content: space-around;
+        gap: 1rem;
+
+        border: 1px solid var(--font-color);
+        border-radius: var(--border-radius);
+        width: fit-content;
+
+        .messageIcon:hover {
+          cursor: pointer;
+          scale: 1.1;
+        }
+      }
+
+      /* #iconContainer:not(:hover) {
+        z-index: -1;
+        opacity: 0;
+      } */
+    }
+
+    .messageInputContainer {
+      display: flex;
+      place-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      background-color: var(--nav-background-color);
+      border-radius: var(--border-radius);
+      height: 25%;
+
+      input {
+        width: 100%;
       }
     }
   }

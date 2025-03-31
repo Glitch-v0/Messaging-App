@@ -49,13 +49,13 @@ export const createScript = async () => {
     await requestQueries.sendFriendRequest(bot2.id, me.id);
     const conv1 = await userQueries.createConversation(
       [me.id, bot.id],
-      me.id,
+      bot.id,
       "Hey there! So glad you decided to join." +
         "Feel free to talk to me, but I am unfortunately not programmed to respond back."
     );
     const conv2 = await userQueries.createConversation(
       [me.id, bot2.id],
-      me.id,
+      bot.id,
       "Hi there! I'm sending you these messages to show you features of your conversation. Your newest conversation is shown first." +
         " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages."
     );
