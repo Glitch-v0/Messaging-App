@@ -127,13 +127,12 @@ a {
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr;
-  place-content: start;
-  padding: 1rem;
+  margin: 0;
+  padding: 0;
 
   .conversationLists,
   .currentConversation {
-    height: 100%;
-    padding: 1rem;
+    height: 100vh;
   }
 
   .conversationLists {
@@ -159,13 +158,11 @@ a {
   .currentConversation {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 8fr 1fr;
     width: 100%;
 
     .messageContainer {
-      height: 100%;
       overflow: scroll;
-
       sub.messageTimestamp,
       sub.messageSender {
         opacity: 0.6;
@@ -233,6 +230,7 @@ a {
         z-index: -1;
         background-color: var(--main-color);
         position: absolute;
+        top: 0;
         display: flex;
         padding: 0.5rem;
         flex-direction: column;
@@ -258,11 +256,10 @@ a {
     .messageInputContainer {
       display: flex;
       place-content: center;
-      gap: 1rem;
+      margin: 1rem;
       padding: 1rem;
       background-color: var(--nav-background-color);
       border-radius: var(--border-radius);
-      height: 25%;
 
       input {
         width: 100%;

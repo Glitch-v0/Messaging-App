@@ -71,6 +71,38 @@ const Conversations = () => {
       buttonRect.left - iconContainerWidth * 0.5 + "px";
   };
 
+  const handleReactButton = (e) => {
+    const currentButton = e.target;
+    const parent = currentButton.parentElement.parentElement;
+    console.log(`Clicked react button! Sending message ID: ${parent.id}`);
+    // fetch(
+    //   `${import.meta.env.VITE_BACKEND_URL}/conversations/${
+    //     currentConversation.id
+    //   }/messages/${messageId}/reaction`,
+    //   {
+    //     method: "PATCH",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     credentials: "include",
+    //   }
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (data) {
+    //       console.log(data);
+    //     }
+    //   });
+  };
+
+  const handleDeleteButton = (messageId) => {
+    console.log("Clicked delete button!");
+  };
+
+  const handleEditButton = (messageId) => {
+    console.log("Clicked edit button!");
+  };
+
   useEffect(() => {
     //load messages
     fetch(`${import.meta.env.VITE_BACKEND_URL}/conversations`, {
@@ -133,7 +165,7 @@ const Conversations = () => {
                 }
               >
                 {message.content}
-                <button onClick={(e) => handleMoreButton(e)}>
+                <button id={message.id} onClick={(e) => handleMoreButton(e)}>
                   <svg
                     width="24"
                     height="24"
@@ -159,6 +191,7 @@ const Conversations = () => {
               height="24"
               viewBox="0 0 24 24"
               id="reactToMessageIcon"
+              onClick={(e) => handleReactButton(e)}
             >
               <path
                 fill="currentColor"
@@ -171,6 +204,7 @@ const Conversations = () => {
               height="24"
               viewBox="0 0 24 24"
               id="deleteMessageIcon"
+              onClick={handleDeleteButton}
             >
               <path
                 fill="currentColor"
@@ -183,6 +217,7 @@ const Conversations = () => {
               height="24"
               viewBox="0 0 24 24"
               id="editMessageIcon"
+              onClick={() => handleEditButton()}
             >
               <path
                 fill="currentColor"
