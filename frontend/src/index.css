@@ -231,19 +231,6 @@ a {
         opacity: 0;
       } */
     }
-
-    .messageInputContainer {
-      display: flex;
-      place-content: center;
-      margin: 1rem;
-      padding: 1rem;
-      background-color: var(--nav-background-color);
-      border-radius: var(--border-radius);
-
-      input {
-        width: 100%;
-      }
-    }
   }
 }
 
@@ -264,6 +251,19 @@ a {
   .messageIcon:hover {
     cursor: pointer;
     scale: 1.1;
+  }
+}
+
+.messageInputContainer {
+  display: flex;
+  place-content: center;
+  margin: 1rem;
+  padding: 1rem;
+  background-color: var(--nav-background-color);
+  border-radius: var(--border-radius);
+
+  form {
+    width: 100%;
   }
 }
 

@@ -224,14 +224,19 @@ const Conversations = () => {
                 ))}
             </div>
             <div className="messageInputContainer">
-              <input
-                id="messageInput"
-                type="text"
-                placeholder="Type your message"
-              />
-              <button onClick={() => handleSendMessage(currentConversation.id)}>
-                Send
-              </button>
+              <form
+                action=""
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage(currentConversation.id);
+                }}
+              >
+                <input
+                  id="messageInput"
+                  type="text"
+                  placeholder="Type your message"
+                />
+              </form>
             </div>
           </div>
         </>
