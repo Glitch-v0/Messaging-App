@@ -1,6 +1,7 @@
 import { createToken } from "../utils/tokenUtils.js";
 import { createHash, comparePasswords } from "../hashFunctions.js";
 import userQueries from "../queries/userQueries.js";
+import asyncHandler from "express-async-handler";
 
 const userController = {
   handleRegister: async (req, res) => {

@@ -227,7 +227,6 @@ a {
       }
 
       #iconContainer {
-        z-index: -1;
         background-color: var(--main-color);
         position: absolute;
         top: 0;

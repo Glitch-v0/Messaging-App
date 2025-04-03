@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../src/context.jsx";
 import { formatRelativeTime } from "../utils/time.js";
@@ -10,6 +10,8 @@ const Conversations = () => {
     currentConversation,
     setCurrentConversation,
   } = useContext(AppContext);
+  const [currentMessage, setCurrentMessage] = useState(null);
+  const [iconContainerZIndex, setIconContainerZIndex] = useState(-2);
 
   const handleLoadConversation = (conversationId) => {
     fetch(
@@ -50,8 +52,19 @@ const Conversations = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          setCurrentConversation(...currentConversation, data);
-          console.log(data);
+          setCurrentConversation((prev) => ({
+            ...prev,
+            messages: [...prev.messages, data],
+          }));
+          setTimeout(() => {
+            const currentConversation =
+              document.getElementsByClassName("messageContainer");
+            const currentMessage = document.getElementById(data.id);
+            const currentMessagePosition =
+              currentMessage.getBoundingClientRect();
+            console.log({ currentConversation, currentMessagePosition });
+            currentConversation[0].scrollTo(0, currentMessagePosition.y);
+          }, 500);
         }
       });
   };
@@ -60,25 +73,25 @@ const Conversations = () => {
     // create vertical icon container
     const button = e.target;
     const buttonRect = button.getBoundingClientRect();
-    console.log("Clicked more button!" + button);
+    // console.log("Clicked more button!" + button);
+    // console.log(`Button belongs to message ${button.parentElement.id}`);
+    setCurrentMessage(button.parentElement.id);
 
     const iconContainer = document.getElementById("iconContainer");
     const iconContainerHeight = iconContainer.offsetHeight;
     const iconContainerWidth = iconContainer.offsetWidth;
-    iconContainer.style.zIndex = 2;
+    setIconContainerZIndex(2);
     iconContainer.style.top = buttonRect.top - iconContainerHeight * 0.5 + "px";
     iconContainer.style.left =
       buttonRect.left - iconContainerWidth * 0.5 + "px";
   };
 
-  const handleReactButton = (e) => {
-    const currentButton = e.target;
-    const parent = currentButton.parentElement.parentElement;
-    console.log(`Clicked react button! Sending message ID: ${parent.id}`);
+  const handleReactButton = () => {
+    console.log(`Clicked react button! Sending message ID: ${currentMessage}`);
     // fetch(
     //   `${import.meta.env.VITE_BACKEND_URL}/conversations/${
     //     currentConversation.id
-    //   }/messages/${messageId}/reaction`,
+    //   }/messages/${currentMessage}/reaction`,
     //   {
     //     method: "PATCH",
     //     headers: {
@@ -95,11 +108,34 @@ const Conversations = () => {
     //   });
   };
 
-  const handleDeleteButton = (messageId) => {
+  const handleDeleteButton = () => {
     console.log("Clicked delete button!");
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/conversations/${
+        currentConversation.id
+      }/messages/${currentMessage}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setCurrentConversation((prev) => ({
+            ...prev,
+            messages: prev.messages.filter((message) => message.id !== data.id),
+          }));
+          setIconContainerZIndex(-2);
+        }
+      });
   };
 
-  const handleEditButton = (messageId) => {
+  const handleEditButton = () => {
     console.log("Clicked edit button!");
   };
 
@@ -118,7 +154,7 @@ const Conversations = () => {
         console.log(data);
         const iconContainer = document.getElementById("iconContainer");
         iconContainer.addEventListener("mouseleave", () => {
-          iconContainer.style.zIndex = -1;
+          setIconContainerZIndex(-2);
         });
       });
   }, [updateConversationData]);
@@ -184,7 +220,7 @@ const Conversations = () => {
                 <sub className="messageSender">{message.sender.name}</sub>
               </p>
             ))}
-          <div id="iconContainer">
+          <div id="iconContainer" style={{ zIndex: iconContainerZIndex }}>
             <svg
               className="messageIcon"
               width="24"

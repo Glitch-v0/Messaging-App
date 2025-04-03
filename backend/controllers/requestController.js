@@ -1,33 +1,34 @@
 import requestQueries from "../queries/requestQueries.js";
+import asyncHandler from "express-async-handler";
 
 const requestController = {
-  sendFriendRequest: async (req, res) => {
+  sendFriendRequest: asyncHandler(async (req, res) => {
     res.json(
       await requestQueries.sendFriendRequest(req.userId, req.body.receiverId)
     );
-  },
+  }),
 
-  getAllRequests: async (req, res) => {
+  getAllRequests: asyncHandler(async (req, res) => {
     res.json(await requestQueries.getAllRequests(req.userId));
-  },
+  }),
 
-  getSingleRequest: async (req, res) => {
+  getSingleRequest: asyncHandler(async (req, res) => {
     res.json(await requestQueries.getSingleRequest(req.params.requestId));
-  },
+  }),
 
-  getSentRequests: async (req, res) => {
+  getSentRequests: asyncHandler(async (req, res) => {
     res.json(await requestQueries.getSentRequests(req.userId));
-  },
+  }),
 
-  acceptFriendRequest: async (req, res) => {
+  acceptFriendRequest: asyncHandler(async (req, res) => {
     res.json(await requestQueries.acceptFriendRequest(req.params.requestId));
-  },
+  }),
 
-  rejectFriendRequest: async (req, res) => {
+  rejectFriendRequest: asyncHandler(async (req, res) => {
     res.json(
       await requestQueries.rejectFriendRequest(req.userId, req.params.requestId)
     );
-  },
+  }),
 };
 
 export default requestController;

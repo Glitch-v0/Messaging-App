@@ -34,7 +34,7 @@ function errorHandler(err, req, res, next) {
   next();
 }
 
-app.use(errorHandler);
 app.use("/", router);
+app.use(errorHandler);
 
 export default app;
