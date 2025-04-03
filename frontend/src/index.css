@@ -6,7 +6,7 @@
 
   --nav-width: 16vw;
   --border-radius: 1rem;
-  font-size: 1.75dvw;
+  font-size: 1.25rem;
   font-family: "Poppins", sans-serif;
 }
 
@@ -85,7 +85,7 @@ form {
 button {
   background-color: var(--button-background-color);
   color: var(--font-color);
-  font-size: 2.25dvh;
+  font-size: 1rem;
   border: 1px solid var(--button-background-color);
   padding: 0.33rem;
 }
@@ -100,7 +100,7 @@ input {
   color: var(--font-color);
   border: none;
   padding: 0.33rem;
-  font-size: 2dvh;
+  font-size: 1rem;
 }
 
 a {
@@ -136,7 +136,7 @@ a {
   }
 
   .conversationLists {
-    font-size: 1.25dvw;
+    font-size: 0.75rem;
     display: flex;
     flex-direction: column;
 
@@ -162,6 +162,8 @@ a {
     width: 100%;
 
     .messageContainer {
+      display: flex;
+      flex-direction: column;
       overflow: scroll;
       sub.messageTimestamp,
       sub.messageSender {
@@ -192,10 +194,32 @@ a {
         padding: 1rem;
         margin: 1rem;
         min-width: 25%;
-        max-width: fit-content;
+        max-width: 75%;
+        width: fit-content;
         text-wrap: wrap;
         text-align: start;
         word-break: break-word;
+
+        form {
+          width: inherit;
+
+          p {
+            padding: 0;
+            margin: 0;
+          }
+
+          input {
+            width: inherit;
+            resize: none;
+            font-size: inherit;
+            padding: 0;
+            margin: 0;
+
+            ::placeholder {
+              color: var(--font-color);
+            }
+          }
+        }
       }
 
       .messageFromOwner {
@@ -265,6 +289,15 @@ a {
   form {
     width: 100%;
   }
+}
+
+textArea {
+  width: 100%;
+  color: var(--font-color);
+  background-color: var(--nav-background-color);
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 
 .errorButton {

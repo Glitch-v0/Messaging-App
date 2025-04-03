@@ -289,7 +289,6 @@ const userQueries = {
             },
             take: 1,
             select: {
-              sender: true,
               content: true,
               timestamp: true,
             },
@@ -320,6 +319,9 @@ const userQueries = {
                 },
               },
               timestamp: true,
+            },
+            orderBy: {
+              timestamp: "asc",
             },
           },
           participants: {

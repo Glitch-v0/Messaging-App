@@ -97,9 +97,15 @@ const userController = {
     const conversation = await userQueries.getConversation(
       req.params.conversationId
     );
-    if (!conversation) {
-      return res.sendStatus(404);
-    }
+
+    //add owner property to each message based on req.userId
+    conversation.messages.forEach((message) => {
+      if (message.sender.id === req.userId) {
+        message.owner = true;
+      } else {
+        message.owner = false;
+      }
+    });
     res.json(conversation);
   },
 

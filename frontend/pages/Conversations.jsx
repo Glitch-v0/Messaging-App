@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../src/context.jsx";
 import { formatRelativeTime } from "../utils/time.js";
+import Message from "../src/components/Message.jsx";
 
 const Conversations = () => {
   const {
@@ -12,6 +13,7 @@ const Conversations = () => {
   } = useContext(AppContext);
   const [currentMessage, setCurrentMessage] = useState(null);
   const [iconContainerZIndex, setIconContainerZIndex] = useState(-2);
+  const [messageEditingMode, setMessageEditingMode] = useState(false);
 
   const handleLoadConversation = (conversationId) => {
     fetch(
@@ -73,9 +75,12 @@ const Conversations = () => {
     // create vertical icon container
     const button = e.target;
     const buttonRect = button.getBoundingClientRect();
-    // console.log("Clicked more button!" + button);
-    // console.log(`Button belongs to message ${button.parentElement.id}`);
-    setCurrentMessage(button.parentElement.id);
+    console.log(
+      `Clicked more button, belonging to message ${
+        e.target.closest(".messageFromOwner").id
+      }`
+    );
+    setCurrentMessage(e.target.closest(".messageFromOwner").id);
 
     const iconContainer = document.getElementById("iconContainer");
     const iconContainerHeight = iconContainer.offsetHeight;
@@ -137,7 +142,47 @@ const Conversations = () => {
 
   const handleEditButton = () => {
     console.log("Clicked edit button!");
-    // const message =
+    setMessageEditingMode(!messageEditingMode);
+    setTimeout(() => {
+      const form = document.getElementById(currentMessage);
+      const input = form.getElementsByTagName("input")[0];
+      console.log({ form, input });
+      input.focus();
+    }, 250);
+  };
+
+  const handleSubmitEdit = (e) => {
+    e.preventDefault();
+    fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/conversations/${
+        currentConversation.id
+      }/messages/${currentMessage}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          message: e.target.message.value,
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setCurrentConversation((prev) => ({
+            ...prev,
+            messages: prev.messages.map((message) =>
+              message.id === currentMessage
+                ? { ...message, content: data.content } // Update with the new content
+                : message
+            ),
+          }));
+          setMessageEditingMode(false);
+        }
+      });
   };
 
   useEffect(() => {
@@ -191,38 +236,18 @@ const Conversations = () => {
             <div className="messageContainer">
               {currentConversation &&
                 currentConversation.messages.map((message) => (
-                  <p
+                  <Message
                     key={message.id}
-                    className={
-                      message.senderId === currentConversation.owner
-                        ? "messageFromOwner"
-                        : "messageFromOther"
+                    messageEditing={
+                      messageEditingMode && message.id === currentMessage
                     }
-                  >
-                    {message.content}
-                    <button
-                      id={message.id}
-                      onClick={(e) => handleMoreButton(e)}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        className="moreButton"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M12 20q-.825 0-1.412-.587T10 18t.588-1.412T12 16t1.413.588T14 18t-.587 1.413T12 20m0-6q-.825 0-1.412-.587T10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14m0-6q-.825 0-1.412-.587T10 6t.588-1.412T12 4t1.413.588T14 6t-.587 1.413T12 8"
-                        />
-                      </svg>
-                    </button>
-                    <sub className="messageTimestamp">
-                      {formatRelativeTime(message.timestamp)}
-                    </sub>
-                    <sub className="messageSender">{message.sender.name}</sub>
-                  </p>
+                    message={message}
+                    handleMoreButton={handleMoreButton}
+                    handleSubmitEdit={handleSubmitEdit}
+                  />
                 ))}
             </div>
+
             <div className="messageInputContainer">
               <form
                 action=""
