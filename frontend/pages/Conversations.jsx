@@ -137,6 +137,7 @@ const Conversations = () => {
 
   const handleEditButton = () => {
     console.log("Clicked edit button!");
+    // const message =
   };
 
   useEffect(() => {
@@ -159,119 +160,122 @@ const Conversations = () => {
       });
   }, [updateConversationData]);
 
-  return !conversationData ? (
-    <main>
-      <h1>Loading...</h1>
-    </main>
-  ) : conversationData.length === 0 ? (
-    <main>
-      <h1>No conversations</h1>
-      <p>You should start one!</p>
-    </main>
-  ) : (
+  return (
     <main className="conversationContainer">
-      <div className="conversationLists">
-        <h1>Conversations</h1>
-        {conversationData.map((conversation) => (
-          // List of participants
-          <Link
-            key={conversation.id}
-            onClick={() => handleLoadConversation(conversation.id)}
-          >
-            <ul>
-              {conversation.participants.map((participant) => (
-                <li key={participant.name}>{participant.name}</li>
-              ))}
-              <p>{conversation.messages[0].content.substring(0, 10)}...</p>
-            </ul>
-          </Link>
-          // Message
-        ))}
-      </div>
-      <div className="currentConversation">
-        <div className="messageContainer">
-          {currentConversation &&
-            currentConversation.messages.map((message) => (
-              <p
-                key={message.id}
-                className={
-                  message.senderId === currentConversation.owner
-                    ? "messageFromOwner"
-                    : "messageFromOther"
-                }
+      {!conversationData ? (
+        <h1>Loading...</h1>
+      ) : conversationData.length === 0 ? (
+        <>
+          <h1>No conversations</h1>
+          <p>You should start one!</p>
+        </>
+      ) : (
+        <>
+          <div className="conversationLists">
+            <h1>Conversations</h1>
+            {conversationData.map((conversation) => (
+              <Link
+                key={conversation.id}
+                onClick={() => handleLoadConversation(conversation.id)}
               >
-                {message.content}
-                <button id={message.id} onClick={(e) => handleMoreButton(e)}>
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    className="moreButton"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M12 20q-.825 0-1.412-.587T10 18t.588-1.412T12 16t1.413.588T14 18t-.587 1.413T12 20m0-6q-.825 0-1.412-.587T10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14m0-6q-.825 0-1.412-.587T10 6t.588-1.412T12 4t1.413.588T14 6t-.587 1.413T12 8"
-                    />
-                  </svg>
-                </button>
-                <sub className="messageTimestamp">
-                  {formatRelativeTime(message.timestamp)}
-                </sub>
-                <sub className="messageSender">{message.sender.name}</sub>
-              </p>
+                <ul>
+                  {conversation.participants.map((participant) => (
+                    <li key={participant.name}>{participant.name}</li>
+                  ))}
+                  <p>{conversation.messages[0].content.substring(0, 10)}...</p>
+                </ul>
+              </Link>
             ))}
-          <div id="iconContainer" style={{ zIndex: iconContainerZIndex }}>
-            <svg
-              className="messageIcon"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              id="reactToMessageIcon"
-              onClick={(e) => handleReactButton(e)}
-            >
-              <path
-                fill="currentColor"
-                d="M20 7V5h-2V3h2V1h2v2h2v2h-2v2zm-4.5 4q.625 0 1.063-.437T17 9.5t-.437-1.062T15.5 8t-1.062.438T14 9.5t.438 1.063T15.5 11m-7 0q.625 0 1.063-.437T10 9.5t-.437-1.062T8.5 8t-1.062.438T7 9.5t.438 1.063T8.5 11m3.5 6.5q1.7 0 3.088-.962T17.1 14H6.9q.625 1.575 2.013 2.538T12 17.5m0 4.5q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2q1.075 0 2.075.213T16 2.825V7h2v2h3.55q.225.725.338 1.463T22 12q0 2.075-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"
-              />
-            </svg>
-            <svg
-              className="messageIcon"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              id="deleteMessageIcon"
-              onClick={handleDeleteButton}
-            >
-              <path
-                fill="currentColor"
-                d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
-              />
-            </svg>
-            <svg
-              className="messageIcon"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              id="editMessageIcon"
-              onClick={() => handleEditButton()}
-            >
-              <path
-                fill="currentColor"
-                d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"
-              />
-            </svg>
           </div>
-        </div>
-        <div className="messageInputContainer">
-          <input
-            id="messageInput"
-            type="text"
-            placeholder="Type your message"
+          <div className="currentConversation">
+            <div className="messageContainer">
+              {currentConversation &&
+                currentConversation.messages.map((message) => (
+                  <p
+                    key={message.id}
+                    className={
+                      message.senderId === currentConversation.owner
+                        ? "messageFromOwner"
+                        : "messageFromOther"
+                    }
+                  >
+                    {message.content}
+                    <button
+                      id={message.id}
+                      onClick={(e) => handleMoreButton(e)}
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        className="moreButton"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M12 20q-.825 0-1.412-.587T10 18t.588-1.412T12 16t1.413.588T14 18t-.587 1.413T12 20m0-6q-.825 0-1.412-.587T10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14m0-6q-.825 0-1.412-.587T10 6t.588-1.412T12 4t1.413.588T14 6t-.587 1.413T12 8"
+                        />
+                      </svg>
+                    </button>
+                    <sub className="messageTimestamp">
+                      {formatRelativeTime(message.timestamp)}
+                    </sub>
+                    <sub className="messageSender">{message.sender.name}</sub>
+                  </p>
+                ))}
+            </div>
+            <div className="messageInputContainer">
+              <input
+                id="messageInput"
+                type="text"
+                placeholder="Type your message"
+              />
+              <button onClick={() => handleSendMessage(currentConversation.id)}>
+                Send
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+      <div id="iconContainer" style={{ zIndex: iconContainerZIndex }}>
+        <svg
+          className="messageIcon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          id="reactToMessageIcon"
+          onClick={(e) => handleReactButton(e)}
+        >
+          <path
+            fill="currentColor"
+            d="M20 7V5h-2V3h2V1h2v2h2v2h-2v2zm-4.5 4q.625 0 1.063-.437T17 9.5t-.437-1.062T15.5 8t-1.062.438T14 9.5t.438 1.063T15.5 11m-7 0q.625 0 1.063-.437T10 9.5t-.437-1.062T8.5 8t-1.062.438T7 9.5t.438 1.063T8.5 11m3.5 6.5q1.7 0 3.088-.962T17.1 14H6.9q.625 1.575 2.013 2.538T12 17.5m0 4.5q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2q1.075 0 2.075.213T16 2.825V7h2v2h3.55q.225.725.338 1.463T22 12q0 2.075-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"
           />
-          <button onClick={() => handleSendMessage(currentConversation.id)}>
-            Send
-          </button>
-        </div>
+        </svg>
+        <svg
+          className="messageIcon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          id="deleteMessageIcon"
+          onClick={handleDeleteButton}
+        >
+          <path
+            fill="currentColor"
+            d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
+          />
+        </svg>
+        <svg
+          className="messageIcon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          id="editMessageIcon"
+          onClick={() => handleEditButton()}
+        >
+          <path
+            fill="currentColor"
+            d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"
+          />
+        </svg>
       </div>
     </main>
   );

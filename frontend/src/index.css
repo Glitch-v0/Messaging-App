@@ -226,26 +226,6 @@ a {
         }
       }
 
-      #iconContainer {
-        background-color: var(--main-color);
-        position: absolute;
-        top: 0;
-        display: flex;
-        padding: 0.5rem;
-        flex-direction: column;
-        justify-content: space-around;
-        gap: 1rem;
-
-        border: 1px solid var(--font-color);
-        border-radius: var(--border-radius);
-        width: fit-content;
-
-        .messageIcon:hover {
-          cursor: pointer;
-          scale: 1.1;
-        }
-      }
-
       /* #iconContainer:not(:hover) {
         z-index: -1;
         opacity: 0;
@@ -264,6 +244,26 @@ a {
         width: 100%;
       }
     }
+  }
+}
+
+#iconContainer {
+  background-color: var(--main-color);
+  position: absolute;
+  top: 0;
+  display: flex;
+  padding: 0.5rem;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 1rem;
+
+  border: 1px solid var(--font-color);
+  border-radius: var(--border-radius);
+  width: fit-content;
+
+  .messageIcon:hover {
+    cursor: pointer;
+    scale: 1.1;
   }
 }
 
