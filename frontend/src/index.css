@@ -19,7 +19,7 @@ body {
   display: grid;
   grid-template-areas: "nav main";
   grid-template-columns: var(--nav-width) calc(100dvw - var(--nav-width));
-  height: 100dvh;
+  height: 100%;
   width: 100%;
 }
 
@@ -69,7 +69,6 @@ main {
 
   p {
     text-wrap: wrap;
-    overflow: auto;
     width: 100%;
   }
 }
@@ -199,25 +198,17 @@ a {
         text-wrap: wrap;
         text-align: start;
         word-break: break-word;
-
-        form {
-          width: inherit;
-
-          p {
-            padding: 0;
-            margin: 0;
-          }
+        p {
+          padding: 0;
+          margin: 0;
 
           input {
             width: inherit;
-            resize: none;
+            opacity: 0.85;
+            border: 2px solid #fde2ff !important;
             font-size: inherit;
-            padding: 0;
-            margin: 0;
-
-            ::placeholder {
-              color: var(--font-color);
-            }
+            padding: 0 !important;
+            margin: 0 !important;
           }
         }
       }
@@ -243,6 +234,7 @@ a {
           fill: var(--font-color);
           opacity: 0.6;
           scale: 1.1;
+          pointer-events: none;
         }
 
         .moreButton:hover path {

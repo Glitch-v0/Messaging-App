@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { formatRelativeTime } from "../utils/time.js";
-import { AppContext } from "../src/context.jsx";
+import { AppContext } from "../context.jsx";
 
 const Online = () => {
   const { onlineUsers, setOnlineUsers } = useContext(AppContext);

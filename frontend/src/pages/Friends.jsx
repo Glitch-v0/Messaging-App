@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { AppContext } from "../src/context.jsx";
+import { AppContext } from "../context.jsx";
 
 const Friends = () => {
   const { friendsData, updateFriendsData } = useContext(AppContext);

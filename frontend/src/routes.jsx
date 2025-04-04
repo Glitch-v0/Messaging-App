@@ -1,14 +1,14 @@
-import Register from "../pages/Register";
-import Login from "../pages/Login";
-import Profile from "../pages/Profile";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Conversations from "./pages/Conversations";
+import Logout from "./pages/Logout";
+import Requests from "./pages/Requests";
+import Friends from "./pages/Friends";
+import Online from "./pages/Online";
+import NotFound from "./pages/NotFound";
+import Error from "./pages/Error";
 import SideNav from "./components/SideNav";
-import Conversations from "../pages/Conversations";
-import Logout from "../pages/Logout";
-import Requests from "../pages/Requests";
-import Friends from "../pages/Friends";
-import Online from "../pages/Online";
-import NotFound from "../pages/NotFound";
-import Error from "../pages/Error";
 import { Outlet } from "react-router-dom";
 
 const routes = [

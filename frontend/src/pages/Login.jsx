@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../src/context.jsx";
+import { AppContext } from "../context.jsx";
 
 const Login = () => {
   const { setHasToken } = useContext(AppContext);

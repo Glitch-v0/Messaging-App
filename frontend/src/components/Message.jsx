@@ -1,4 +1,4 @@
-import { formatRelativeTime } from "../../utils/time.js";
+import { formatRelativeTime } from "../utils/time.js";
 import propTypes from "prop-types";
 
 const Message = ({
@@ -6,8 +6,9 @@ const Message = ({
   message,
   handleMoreButton,
   handleSubmitEdit,
+  currentMessage,
 }) => {
-  return messageEditing && message.owner ? (
+  return messageEditing && message.owner && currentMessage ? (
     <form
       className="messageFromOwner"
       onSubmit={(e) => handleSubmitEdit(e)}
@@ -69,5 +70,6 @@ Message.propTypes = {
   message: propTypes.object,
   handleMoreButton: propTypes.func,
   handleSubmitEdit: propTypes.func,
+  currentMessage: propTypes.string,
 };
 export default Message;

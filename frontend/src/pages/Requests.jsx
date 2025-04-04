@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { AppContext } from "../src/context.jsx";
+import { AppContext } from "../context.jsx";
 import { formatRelativeTime } from "../utils/time.js";
 
 const Requests = () => {

@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { AppContext } from "../src/context.jsx";
-import { formatRelativeTime } from "../utils/time.js";
-import Message from "../src/components/Message.jsx";
+import { AppContext } from "../context.jsx";
+import Message from "../components/Message.jsx";
 
 const Conversations = () => {
   const {
@@ -56,17 +55,16 @@ const Conversations = () => {
         if (data) {
           setCurrentConversation((prev) => ({
             ...prev,
-            messages: [...prev.messages, data],
+            messages: [...prev.messages, { ...data, owner: true }],
           }));
+          document.getElementById("messageInput").value = "";
           setTimeout(() => {
-            const currentConversation =
-              document.getElementsByClassName("messageContainer");
-            const currentMessage = document.getElementById(data.id);
-            const currentMessagePosition =
-              currentMessage.getBoundingClientRect();
-            console.log({ currentConversation, currentMessagePosition });
-            currentConversation[0].scrollTo(0, currentMessagePosition.y);
-          }, 500);
+            console.log({ data });
+            const container = document.querySelector(".messageContainer");
+            if (container) {
+              container.scrollTop = container.scrollHeight;
+            }
+          }, 100); // delay for layout to update
         }
       });
   };
@@ -75,12 +73,23 @@ const Conversations = () => {
     // create vertical icon container
     const button = e.target;
     const buttonRect = button.getBoundingClientRect();
+
+    let parent = button.parentElement.parentElement;
+    console.log(`Button clicked: ${button}, Current parent ID: ${parent.id}`);
+    if (parent.id === null) {
+      parent = button.parentElement.parentElement;
+      console.log(`Id not found: changing to parent ID: ${parent.id}`);
+    }
     console.log(
-      `Clicked more button, belonging to message ${
-        e.target.closest(".messageFromOwner").id
-      }`
+      `Clicked more button ${button}, belonging to message ${parent}`
     );
-    setCurrentMessage(e.target.closest(".messageFromOwner").id);
+
+    //Check if current message is already set
+    if (currentMessage !== parent.id) {
+      console.log("Not the same message! Updating");
+      setCurrentMessage(parent.id);
+      setMessageEditingMode(false);
+    }
 
     const iconContainer = document.getElementById("iconContainer");
     const iconContainerHeight = iconContainer.offsetHeight;
@@ -88,7 +97,7 @@ const Conversations = () => {
     setIconContainerZIndex(2);
     iconContainer.style.top = buttonRect.top - iconContainerHeight * 0.5 + "px";
     iconContainer.style.left =
-      buttonRect.left - iconContainerWidth * 0.5 + "px";
+      buttonRect.left - iconContainerWidth * 0.25 + "px";
   };
 
   const handleReactButton = () => {
@@ -143,12 +152,16 @@ const Conversations = () => {
   const handleEditButton = () => {
     console.log("Clicked edit button!");
     setMessageEditingMode(!messageEditingMode);
-    setTimeout(() => {
-      const form = document.getElementById(currentMessage);
-      const input = form.getElementsByTagName("input")[0];
-      console.log({ form, input });
-      input.focus();
-    }, 250);
+    setIconContainerZIndex(-2);
+    if (messageEditingMode === false) {
+      setTimeout(() => {
+        console.log(`Message editing omode: ${messageEditingMode}`);
+        const form = document.getElementById(currentMessage);
+        const input = form.getElementsByTagName("input")[0];
+        console.log({ form, input });
+        input.focus();
+      }, 150);
+    }
   };
 
   const handleSubmitEdit = (e) => {
@@ -244,6 +257,7 @@ const Conversations = () => {
                     message={message}
                     handleMoreButton={handleMoreButton}
                     handleSubmitEdit={handleSubmitEdit}
+                    currentMessage={currentMessage}
                   />
                 ))}
             </div>

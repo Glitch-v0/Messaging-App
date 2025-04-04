@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../src/context.jsx";
+import { AppContext } from "../context.jsx";
 
 const Logout = () => {
   const [countdown, setCountdown] = useState(3);
