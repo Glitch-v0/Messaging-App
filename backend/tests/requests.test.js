@@ -15,9 +15,20 @@ afterAll(async () => {
 
 test("users can send friend requests", async () => {
   const [user1, user2] = await userTokenScript(2);
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .post(`/api/requests`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
       receiverId: user2.id,
@@ -44,9 +55,20 @@ test("user can get friend requests", async () => {
       { senderId: user2.id, receiverId: user3.id },
     ],
   });
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test2@gmail.com",
+      password: "test2",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get(`/api/requests`)
-    .set("Authorization", `Bearer ${user3.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -54,14 +76,18 @@ test("user can get friend requests", async () => {
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
+            sender: {
+              name: user1.name,
+            },
             senderId: user1.id,
-            receiverId: user3.id,
             dateSent: expect.any(String),
           }),
           expect.objectContaining({
             id: expect.any(String),
             senderId: user2.id,
-            receiverId: user3.id,
+            sender: {
+              name: user2.name,
+            },
             dateSent: expect.any(String),
           }),
         ])
@@ -77,9 +103,20 @@ test("user can see all sent requests", async () => {
       { senderId: user1.id, receiverId: user3.id },
     ],
   });
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get(`/api/requests/sent`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -110,9 +147,20 @@ test("user can see one request's details", async () => {
       receiverId: user2.id,
     },
   });
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get(`/api/requests/${friendRequest.id}`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect({
@@ -128,9 +176,19 @@ test("users don't see requests from blocked users", async () => {
   await userQueries.addBlocked(user1.id, user2.id);
   await requestQueries.sendFriendRequest(user2.id, user1.id);
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get(`/api/requests`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect([]);
@@ -144,9 +202,20 @@ test("user can accept friend request", async () => {
       receiverId: user2.id,
     },
   });
-  const response = await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test1@gmail.com",
+      password: "test1",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  const response = await agent
     .get(`/api/requests/${friendRequest.id}/accept`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200);
   expect(response.body).toEqual({
@@ -171,9 +240,20 @@ test("user can reject friend request", async () => {
       receiverId: user2.id,
     },
   });
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get(`/api/requests/${friendRequest.id}/reject`)
-    .set("Authorization", `Bearer ${user2.token}`)
     .expect("Content-Type", /json/)
     .expect(200);
   expect({

@@ -17,18 +17,32 @@ test("user can get friends", async () => {
     data: {
       ownerId: user1.id,
       friends: {
-        connect: { id: user2.id, id: user3.id },
+        connect: [{ id: user2.id }, { id: user3.id }],
       },
     },
   });
 
-  request(app)
+  const agent = request.agent(app);
+
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: user1.email,
+      password: "test0",
+    })
+    .expect(200)
+    .expect("set-cookie", /token=.*/);
+
+  await agent
     .get("/api/friends")
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect({
-      friends: [user2, user3],
+      friends: [
+        { id: user2.id, name: user2.name },
+        { id: user3.id, name: user3.name },
+      ],
     });
 });
 
@@ -45,7 +59,6 @@ test("user can get blocked users", async () => {
 
   request(app)
     .get("/api/blocked")
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect({

@@ -99,14 +99,18 @@ const userController = {
     );
 
     //add owner property to each message based on req.userId
-    conversation.messages.forEach((message) => {
-      if (message.sender.id === req.userId) {
-        message.owner = true;
-      } else {
-        message.owner = false;
-      }
-    });
-    res.json(conversation);
+    if (conversation) {
+      conversation.messages.forEach((message) => {
+        if (message.sender.id === req.userId) {
+          message.owner = true;
+        } else {
+          message.owner = false;
+        }
+      });
+      res.json(conversation);
+    } else {
+      res.sendStatus(404);
+    }
   },
 
   getConversations: async (req, res) => {

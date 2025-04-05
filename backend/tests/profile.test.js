@@ -14,9 +14,19 @@ afterAll(async () => {
 test("users can get their profile", async () => {
   const user1 = await userTokenScript(1);
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get("/api/profile")
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -35,9 +45,19 @@ test("users can get their profile", async () => {
 test("users can update their profile", async () => {
   const user1 = await userTokenScript(1);
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .put("/api/profile")
-    .set("Authorization", `Bearer ${user1.token}`)
     .set("Content-Type", "application/json")
     .send({
       darkMode: true,
@@ -62,9 +82,19 @@ test("users can update their profile", async () => {
 test("users can delete their profile", async () => {
   const user1 = await userTokenScript(1);
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .delete("/api/profile")
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
       password: "test0",

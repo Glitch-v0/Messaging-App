@@ -18,9 +18,19 @@ test("users can create a conversation with friends", async () => {
   await userQueries.addFriend(user1.id, user3.id);
   await userQueries.addFriend(user2.id, user3.id);
 
-  await request(app)
+  const agent = request.agent(app);
+  agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  agent
     .post(`/api/conversations`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
       participants: [user1.id, user2.id, user3.id],
@@ -42,9 +52,20 @@ test("users can create a conversation with friends", async () => {
 test("users can't create conversations if all participants are not friends", async () => {
   const [user1, user2, user3] = await userTokenScript(3);
   await userQueries.addFriend(user1.id, user2.id);
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .post(`/api/conversations`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
       participants: [user2.id, user3.id],
@@ -75,9 +96,19 @@ test("users can get all their conversations", async () => {
     "hello"
   );
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get(`/api/conversations`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -85,11 +116,13 @@ test("users can get all their conversations", async () => {
         expect.arrayContaining([
           expect.objectContaining({
             id: conversation1.id,
-            participants: [{ name: user1.name }, { name: user2.name }],
+            messages: expect.anything(),
+            participants: [{ name: user2.name }],
           }),
           expect.objectContaining({
             id: conversation2.id,
-            participants: [{ name: user1.name }, { name: user3.name }],
+            messages: expect.anything(),
+            participants: [{ name: user3.name }],
           }),
         ])
       );
@@ -104,9 +137,19 @@ test("users can send a message", async () => {
     "hello"
   );
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .post(`/api/conversations/${conversation.id}/messages`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
       message: "test",
@@ -144,9 +187,19 @@ test("users can get a conversation", async () => {
     "test3"
   );
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .get(`/api/conversations/${conversation.id}`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -180,9 +233,19 @@ test("users can delete a conversation", async () => {
     "hello"
   );
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .delete(`/api/conversations/${conversation.id}`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect(200)
     .expect((res) => {
       expect(res.body).toEqual(
@@ -205,10 +268,18 @@ test("conversations are deleted if both users delete it", async () => {
   await userQueries.deleteConversation(conversation.id, user1.id);
   await userQueries.deleteConversation(conversation.id, user2.id);
 
-  await request(app)
-    .get(`/api/conversations/${conversation.id}`)
-    .set("Authorization", `Bearer ${user1.token}`)
-    .expect(404);
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent.get(`/api/conversations/${conversation.id}`).expect(404);
 });
 
 test("users can edit a message", async () => {
@@ -221,9 +292,19 @@ test("users can edit a message", async () => {
 
   const message = conversation.messages[0];
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .put(`/api/conversations/${conversation.id}/messages/${message.id}`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({
       message: "test",
@@ -249,9 +330,19 @@ test("users can delete a message", async () => {
 
   const message = conversation.messages[0];
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .delete(`/api/conversations/${conversation.id}/messages/${message.id}`)
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {
@@ -273,11 +364,21 @@ test("user can react to a message", async () => {
 
   const message = conversation.messages[0];
 
-  await request(app)
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .patch(
       `/api/conversations/${conversation.id}/messages/${message.id}/reaction`
     )
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({ reactionType: "like" })
     .expect("Content-Type", /json/)
@@ -303,11 +404,22 @@ test("user can change their message reaction", async () => {
 
   const message = conversation.messages[0];
   await userQueries.reactToMessage(user1.id, message.id, "like");
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .patch(
       `/api/conversations/${conversation.id}/messages/${message.id}/reaction`
     )
-    .set("Authorization", `Bearer ${user1.token}`)
     .type("form")
     .send({ reactionType: "dislike" })
     .expect("Content-Type", /json/)
@@ -333,11 +445,22 @@ test("user can remove message reaction", async () => {
 
   const message = conversation.messages[0];
   await userQueries.reactToMessage(user1.id, message.id, "like");
-  await request(app)
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: "test0@gmail.com",
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
     .delete(
       `/api/conversations/${conversation.id}/messages/${message.id}/reaction`
     )
-    .set("Authorization", `Bearer ${user1.token}`)
     .expect("Content-Type", /json/)
     .expect(200)
     .expect((res) => {

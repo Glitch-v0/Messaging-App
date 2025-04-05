@@ -2,7 +2,8 @@
   "scripts": {
     "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
     "frontend": "npm run dev --prefix frontend",
-    "backend": "node --watch backend"
+    "backend": "node --watch backend",
+    "testback": "cd backend &&NODE_ENV=test && node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll --detectOpenHandles"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

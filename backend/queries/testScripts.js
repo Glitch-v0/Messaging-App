@@ -81,21 +81,21 @@ export const userTokenScript = async (numberOfUsers) => {
         },
       },
     });
-    const token = createToken(user);
+    // const token = createToken(user);
 
     if (numberOfUsers === 1) {
       return {
         id: user.id,
         name: user.name,
         email: user.email,
-        token: token,
+        // token: token,
       };
     }
     users.push({
       id: user.id,
       name: user.name,
       email: user.email,
-      token: token,
+      // token: token,
     });
   }
   return users;
