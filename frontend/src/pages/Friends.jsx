@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
 import { AppContext } from "../context.jsx";
+import { toast } from "sonner";
 
 const Friends = () => {
   const { friendsData, updateFriendsData } = useContext(AppContext);
@@ -16,7 +17,8 @@ const Friends = () => {
       .then((data) => {
         updateFriendsData(data);
         console.log(data);
-      });
+      })
+      .catch((err) => toast.error(err.message));
   }, [updateFriendsData]);
   return !friendsData ? (
     <main>

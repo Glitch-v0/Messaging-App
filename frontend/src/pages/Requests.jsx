@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { AppContext } from "../context.jsx";
 import { formatRelativeTime } from "../utils/time.js";
+import { toast } from "sonner";
 
 const Requests = () => {
   const { requestData, updateRequestData } = useContext(AppContext);
@@ -17,7 +18,8 @@ const Requests = () => {
       .then((data) => {
         updateRequestData(data);
         console.log(data);
-      });
+      })
+      .catch((err) => toast.error(err.message));
   }, [updateRequestData]);
   return !requestData ? (
     <main>

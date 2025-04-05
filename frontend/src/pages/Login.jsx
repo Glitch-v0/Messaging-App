@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context.jsx";
+import { toast } from "sonner";
 
 const Login = () => {
   const { setHasToken } = useContext(AppContext);
@@ -8,23 +9,30 @@ const Login = () => {
   const handleSubmit = async (event) => {
     console.log({ event });
     event.preventDefault();
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: event.target.email.value,
-        password: event.target.password.value,
-      }),
-      credentials: "include",
-    });
-    const data = await response.json();
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: event.target.email.value,
+            password: event.target.password.value,
+          }),
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
 
-    setHasToken(true);
-    console.log(data);
-    //redirect to home
-    navigate("/conversations");
+      setHasToken(true);
+      console.log(data);
+      //redirect to home
+      navigate("/conversations");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (

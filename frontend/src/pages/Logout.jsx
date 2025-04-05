@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context.jsx";
+import { toast } from "sonner";
 
 const Logout = () => {
   const [countdown, setCountdown] = useState(3);
@@ -28,8 +29,8 @@ const Logout = () => {
         setOnlineUsers(null);
         setProfile(null);
         updateRequestData(null);
-      } catch (error) {
-        console.error("Logout failed", error);
+      } catch (err) {
+        toast.error(err.message);
       }
     };
 

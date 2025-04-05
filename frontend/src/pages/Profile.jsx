@@ -1,6 +1,7 @@
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context.jsx";
+import { toast } from "sonner";
 
 const Profile = () => {
   const { profile, setProfile } = useContext(AppContext);
@@ -50,7 +51,7 @@ const Profile = () => {
           localStorage.setItem("darkMode", JSON.stringify(isDark));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err.message));
   };
 
   const handleDeleteProfile = async () => {
@@ -66,7 +67,8 @@ const Profile = () => {
     })
       .then((res) => res.json())
       .then((data) => console.log(data))
-      .then(() => navigate("/"));
+      .then(() => navigate("/"))
+      .catch((err) => toast.error(err.message));
   };
 
   useEffect(() => {
@@ -78,7 +80,8 @@ const Profile = () => {
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((data) => setProfile(data));
+      .then((data) => setProfile(data))
+      .catch((err) => toast.error(err.message));
   }, [setProfile]);
 
   return !profile ? (

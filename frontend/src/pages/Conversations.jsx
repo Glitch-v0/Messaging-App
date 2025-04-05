@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../context.jsx";
 import Message from "../components/Message.jsx";
+import { toast } from "sonner";
 
 const Conversations = () => {
   const {
@@ -31,7 +32,8 @@ const Conversations = () => {
           setCurrentConversation(data);
           console.log(data);
         }
-      });
+      })
+      .catch((err) => toast.error(err.message));
   };
 
   const handleSendMessage = (conversationId) => {
@@ -66,7 +68,8 @@ const Conversations = () => {
             }
           }, 100); // delay for layout to update
         }
-      });
+      })
+      .catch((err) => toast.error(err.message));
   };
 
   const handleMoreButton = (e) => {
@@ -146,7 +149,8 @@ const Conversations = () => {
           }));
           setIconContainerZIndex(-2);
         }
-      });
+      })
+      .catch((err) => toast.error(err.message));
   };
 
   const handleEditButton = () => {
@@ -195,7 +199,8 @@ const Conversations = () => {
           }));
           setMessageEditingMode(false);
         }
-      });
+      })
+      .catch((err) => toast.error(err.message));
   };
 
   useEffect(() => {
@@ -215,7 +220,8 @@ const Conversations = () => {
         iconContainer.addEventListener("mouseleave", () => {
           setIconContainerZIndex(-2);
         });
-      });
+      })
+      .catch((err) => toast.error(err.message));
   }, [updateConversationData]);
 
   return (

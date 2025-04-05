@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AppContext } from "./context.jsx";
+import { toast } from "sonner";
 import routes from "./routes.jsx";
 
 const router = createBrowserRouter(routes);
@@ -43,7 +44,17 @@ function App() {
         setProfile(data.user || null);
         handleDarkMode();
       })
-      .catch(() => setHasToken(false));
+      .catch((err) => {
+        setHasToken(false);
+        //don't toast for login or register page
+        if (
+          window.location.pathname === "/login" ||
+          window.location.pathname === "/"
+        ) {
+          return;
+        }
+        toast.error(err.message);
+      });
   }, []);
 
   return (

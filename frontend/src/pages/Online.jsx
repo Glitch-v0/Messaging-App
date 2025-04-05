@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { formatRelativeTime } from "../utils/time.js";
 import { AppContext } from "../context.jsx";
+import { toast } from "sonner";
 
 const Online = () => {
   const { onlineUsers, setOnlineUsers } = useContext(AppContext);
@@ -17,7 +18,8 @@ const Online = () => {
       .then((data) => {
         setOnlineUsers(data);
         console.log(data);
-      });
+      })
+      .catch((err) => toast.error(err.message));
   }, [setOnlineUsers]);
 
   return !onlineUsers ? (
