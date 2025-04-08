@@ -1,38 +1,47 @@
-import { useContext, useEffect } from "react";
-import { AppContext } from "../context.jsx";
+import { useQuery } from "@tanstack/react-query";
 import { formatRelativeTime } from "../utils/time.js";
-import { toast } from "sonner";
+import Spinner from "../components/Spinner.jsx";
+import Error from "./Error.jsx";
 
 const Requests = () => {
-  const { requestData, updateRequestData } = useContext(AppContext);
+  const { isPending, isError, data, error, refetch } = useQuery({
+    queryKey: ["requests"],
+    queryFn: fetchRequests,
+    // staleTime: 1000 * 30,
+  });
 
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
+  async function fetchRequests() {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        updateRequestData(data);
-        console.log(data);
-      })
-      .catch((err) => toast.error(err.message));
-  }, [updateRequestData]);
-  return !requestData ? (
-    <main>
-      <h1>Loading...</h1>
-    </main>
-  ) : requestData.length === 0 ? (
+    });
+    const data = await res.json();
+    return data;
+  }
+
+  if (isPending) {
+    return (
+      <main>
+        <Spinner />
+      </main>
+    );
+  }
+
+  if (isError) {
+    return <Error error={error} refetch={refetch} />;
+  }
+
+  return data.length === 0 ? (
     <main>
       <h1>You currently have no friend requests!</h1>
     </main>
   ) : (
     <main>
       <h1>Received Requests:</h1>
-      {requestData.map((request) => (
+      {data.map((request) => (
         <div key={request.id} className="requestContainer">
           <p>{request.sender.name}</p>
           <p>{formatRelativeTime(request.dateSent)}</p>

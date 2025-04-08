@@ -12,7 +12,6 @@ function App() {
   const [friendsData, updateFriendsData] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [requestData, updateRequestData] = useState(null);
 
   const [hasToken, setHasToken] = useState(false);
 
@@ -70,8 +69,6 @@ function App() {
         setOnlineUsers,
         profile,
         setProfile,
-        requestData,
-        updateRequestData,
         hasToken,
         setHasToken,
       }}

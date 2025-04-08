@@ -1,14 +1,19 @@
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const NotFound = () => {
+const NotFound = ({ error, refetch }) => {
   return (
     <main>
-      <h1>Error! Something went wrong.</h1>
-      <Link to="/">
-        <button className="errorButton">Go Back</button>
-      </Link>
+      <h1>Error! {error.message}</h1>
+      <button className="errorButton" onClick={refetch}>
+        Reload
+      </button>
     </main>
   );
+};
+
+NotFound.propTypes = {
+  error: PropTypes.object,
+  refetch: PropTypes.func,
 };
 
 export default NotFound;
