@@ -3,24 +3,23 @@ import { formatRelativeTime } from "../utils/time.js";
 import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
 
+const fetchRequests = async () => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  const data = await res.json();
+  return data;
+};
+
 const Requests = () => {
   const { isPending, isError, data, error, refetch } = useQuery({
     queryKey: ["requests"],
     queryFn: fetchRequests,
-    // staleTime: 1000 * 30,
   });
-
-  async function fetchRequests() {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-    const data = await res.json();
-    return data;
-  }
 
   if (isPending) {
     return (

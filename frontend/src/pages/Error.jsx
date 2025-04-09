@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const NotFound = ({ error, refetch }) => {
+const NotFound = (error, refetch) => {
   return (
     <main>
       <h1>Error! {error.message}</h1>

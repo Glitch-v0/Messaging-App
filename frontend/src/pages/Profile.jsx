@@ -1,57 +1,78 @@
-import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../context.jsx";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import Error from "./Error.jsx";
 import { toast } from "sonner";
+import Spinner from "../components/Spinner.jsx";
+
+const fetchProfileData = async () => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  const data = await res.json();
+  return data;
+};
+
+const handleDarkMode = (data) => {
+  // save to local storage
+  localStorage.setItem("darkMode", data.darkMode);
+
+  // read local storage for dark mode
+  const root = document.querySelector(":root");
+  // console.log(`Dark mode is set to ${isDark}, ${typeof isDark}`);
+  root.style.setProperty("--main-color", data.darkMode ? "#000000" : "#38195e");
+  root.style.setProperty(
+    "--nav-background-color",
+    data.darkMode ? "#0d0d0d" : "#2a1346"
+  );
+  root.style.setProperty("--font-color", data.darkMode ? "#c5c5c5" : "#fde2ff");
+  root.style.setProperty(
+    "--button-background-color",
+    data.darkMode ? "#252525" : "#2a1346"
+  );
+};
 
 const Profile = () => {
-  const { profile, setProfile } = useContext(AppContext);
+  const client = useQueryClient();
 
   const navigate = useNavigate();
+  const { isPending, isError, data, error, refetch } = useQuery({
+    queryKey: ["profile"],
+    queryFn: fetchProfileData,
+  });
 
-  const handleProfileUpdate = (update) => {
-    const updatedValue = !profile[update];
-    const updatedProfile = { ...profile, [update]: updatedValue };
-    setProfile(updatedProfile); //updates profile with the toggled value
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        darkMode: updatedProfile.darkMode,
-        showOnline: updatedProfile.showOnline,
-        allowRequests: updatedProfile.allowRequests,
-      }),
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then(() => {
-        if (update === "darkMode") {
-          const root = document.querySelector(":root");
-          const isDark = updatedProfile.darkMode;
+  const updateProfileMutation = useMutation({
+    mutationFn: async (updatedProfile) => {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedProfile),
+      });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      // update the profile cache directly
+      client.setQueryData(["profile"], data);
+      console.log({ data });
+      handleDarkMode(data);
+      toast.success("Profile updated");
+    },
+    onError: (error) => {
+      toast.error("Failed to update profile");
+      console.error(error);
+    },
+  });
 
-          root.style.setProperty(
-            "--main-color",
-            isDark ? "#000000" : "#38195e"
-          );
-          root.style.setProperty(
-            "--nav-background-color",
-            isDark ? "#0d0d0d" : "#2a1346"
-          );
-          root.style.setProperty(
-            "--font-color",
-            isDark ? "#c5c5c5" : "#fde2ff"
-          );
-          root.style.setProperty(
-            "--button-background-color",
-            isDark ? "#252525" : "#2a1346"
-          );
-
-          // save colors to local storage
-          localStorage.setItem("darkMode", JSON.stringify(isDark));
-        }
-      })
-      .catch((err) => toast.error(err.message));
+  const handleProfileUpdate = (key) => {
+    const current = client.getQueryData(["profile"]);
+    const updatedProfile = { ...current, [key]: !current[key] };
+    updateProfileMutation.mutate(updatedProfile);
   };
 
   const handleDeleteProfile = async () => {
@@ -71,38 +92,33 @@ const Profile = () => {
       .catch((err) => toast.error(err.message));
   };
 
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => setProfile(data))
-      .catch((err) => toast.error(err.message));
-  }, [setProfile]);
+  if (isPending) {
+    return (
+      <main>
+        <Spinner />
+      </main>
+    );
+  }
 
-  return !profile ? (
-    <main>
-      <h1>Loading...</h1>
-    </main>
-  ) : (
+  if (isError) {
+    return <Error error={error} refetch={refetch} />;
+  }
+
+  return (
     <main>
       <h1>Profile Settings</h1>
       <p className="profileSection">
-        Dark Mode: {String(profile.darkMode)}
+        Dark Mode: {String(data.darkMode)}
         <button onClick={() => handleProfileUpdate("darkMode")}>Toggle</button>
       </p>
       <p className="profileSection">
-        Show Online: {String(profile.showOnline)}
+        Show Online: {String(data.showOnline)}
         <button onClick={() => handleProfileUpdate("showOnline")}>
           Toggle
         </button>
       </p>
       <p className="profileSection">
-        Allow Requests: {String(profile.allowRequests)}
+        Allow Requests: {String(data.allowRequests)}
         <button onClick={() => handleProfileUpdate("allowRequests")}>
           Toggle
         </button>
