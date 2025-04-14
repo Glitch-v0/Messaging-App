@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AppContext } from "./context.jsx";
 import { toast } from "sonner";
 import routes from "./routes.jsx";
@@ -23,11 +25,10 @@ const handleDarkMode = () => {
   );
 };
 
+const queryClient = new QueryClient();
+
 function App() {
-  const [conversationData, updateConversationData] = useState(null);
   const [currentConversation, setCurrentConversation] = useState(null);
-  const [friendsData, updateFriendsData] = useState(null);
-  const [onlineUsers, setOnlineUsers] = useState(null);
 
   const [hasToken, setHasToken] = useState(false);
 
@@ -55,22 +56,19 @@ function App() {
   }, []);
 
   return (
-    <AppContext.Provider
-      value={{
-        conversationData,
-        updateConversationData,
-        currentConversation,
-        setCurrentConversation,
-        friendsData,
-        updateFriendsData,
-        onlineUsers,
-        setOnlineUsers,
-        hasToken,
-        setHasToken,
-      }}
-    >
-      <RouterProvider router={router} />
-    </AppContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <AppContext.Provider
+        value={{
+          currentConversation,
+          setCurrentConversation,
+          hasToken,
+          setHasToken,
+        }}
+      >
+        <RouterProvider router={router} />
+        <ReactQueryDevtools />
+      </AppContext.Provider>
+    </QueryClientProvider>
   );
 }
 

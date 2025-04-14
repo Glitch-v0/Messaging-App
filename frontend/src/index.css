@@ -222,6 +222,13 @@ a {
         align-self: start;
       }
 
+      .lds-spinner {
+        position: relative;
+        top: 0;
+        right: 50%;
+        transform: translate(-50%, -50%);
+      }
+
       button {
         position: absolute;
         top: 50%;
@@ -241,11 +248,6 @@ a {
           opacity: 1;
         }
       }
-
-      /* #iconContainer:not(:hover) {
-        z-index: -1;
-        opacity: 0;
-      } */
     }
   }
 }

@@ -16,3 +16,12 @@ export const AppContext = createContext({
   requestData: [],
   updateRequestData: () => {},
 });
+
+export const ConversationContext = createContext({
+  getSingleConversationQuery: {},
+  messageEditingMode: {},
+  currentMessage: {},
+  handleSubmitEdit: () => {},
+  handleDeleteMessage: () => {},
+  handleReactToMessage: () => {},
+});

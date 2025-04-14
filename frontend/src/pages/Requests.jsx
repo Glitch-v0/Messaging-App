@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { formatRelativeTime } from "../utils/time.js";
+import { toast } from "sonner";
 import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
 
@@ -16,10 +17,14 @@ const fetchRequests = async () => {
 };
 
 const Requests = () => {
-  const { isPending, isError, data, error, refetch } = useQuery({
+  const { isPending, isPaused, isError, data, error, refetch } = useQuery({
     queryKey: ["requests"],
     queryFn: fetchRequests,
+    staleTime: 1000 * 60 * 1,
   });
+
+  if (isPaused)
+    toast.error("Looks like you are offline. Check your internet connection");
 
   if (isPending) {
     return (

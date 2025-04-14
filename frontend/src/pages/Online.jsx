@@ -1,32 +1,39 @@
-import { useContext, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { formatRelativeTime } from "../utils/time.js";
-import { AppContext } from "../context.jsx";
 import { toast } from "sonner";
+import Spinner from "../components/Spinner.jsx";
+import Error from "./Error.jsx";
 
 const Online = () => {
-  const { onlineUsers, setOnlineUsers } = useContext(AppContext);
+  const { isPending, isPaused, isError, data, error, refetch } = useQuery({
+    queryKey: ["online"],
+    queryFn: () =>
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/online`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }).then((res) => res.json()),
+    staleTime: 1000 * 60 * 1,
+  });
 
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/online`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setOnlineUsers(data);
-        console.log(data);
-      })
-      .catch((err) => toast.error(err.message));
-  }, [setOnlineUsers]);
+  if (isPaused)
+    toast.error("Looks like you are offline. Check your internet connection");
 
-  return !onlineUsers ? (
-    <main>
-      <h1>Loading...</h1>
-    </main>
-  ) : (
+  if (isPending) {
+    return (
+      <main>
+        <Spinner />
+      </main>
+    );
+  }
+
+  if (isError) {
+    return <Error error={error} refetch={refetch} />;
+  }
+
+  return (
     <main>
       <h1>Online</h1>
       <table>
@@ -37,7 +44,7 @@ const Online = () => {
           </tr>
         </thead>
         <tbody className="onlineUsers">
-          {onlineUsers.map((user) => (
+          {data.map((user) => (
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{formatRelativeTime(user.lastSeen)}</td>

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const NotFound = (error, refetch) => {
+const errorPage = (error, refetch) => {
   return (
     <main>
       <h1>Error! {error.message}</h1>
@@ -11,9 +11,9 @@ const NotFound = (error, refetch) => {
   );
 };
 
-NotFound.propTypes = {
+errorPage.propTypes = {
   error: PropTypes.object,
   refetch: PropTypes.func,
 };
 
-export default NotFound;
+export default errorPage;

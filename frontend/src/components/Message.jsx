@@ -1,17 +1,24 @@
 import { formatRelativeTime } from "../utils/time.js";
+import { ConversationContext } from "../context.jsx";
 import propTypes from "prop-types";
+import { useContext } from "react";
 
 const Message = ({
   messageEditing,
   message,
   handleMoreButton,
-  handleSubmitEdit,
   currentMessage,
 }) => {
-  return messageEditing && message.owner && currentMessage ? (
+  const { editMessageMutation } = useContext(ConversationContext);
+  return messageEditing && message.owner && message.id === currentMessage ? (
     <form
       className="messageFromOwner"
-      onSubmit={(e) => handleSubmitEdit(e)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const message = formData.get("message");
+        editMessageMutation.mutate(message);
+      }}
       key={message.id}
     >
       <p id={message.id}>

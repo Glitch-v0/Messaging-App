@@ -167,7 +167,18 @@ const userController = {
   },
 
   deleteMessage: async (req, res) => {
-    res.json(await userQueries.deleteMessage(req.params.messageId, req.userId));
+    if (req.params.messageId === "undefined") {
+      return res.sendStatus(400);
+    }
+    const response = await userQueries.deleteMessage(
+      req.params.messageId,
+      req.userId
+    );
+    if (response.error) {
+      res.status(404).json(response);
+    } else {
+      res.status(200).json(response);
+    }
   },
 
   reactToMessage: async (req, res) => {
