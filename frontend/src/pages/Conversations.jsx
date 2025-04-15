@@ -104,6 +104,23 @@ const handleReactButton = async (e) => {
   console.log({ messageRect, reactionContainer });
 };
 
+const reactMessage = async (conversationId, messageId, emoji) => {
+  const res = await fetch(
+    `${
+      import.meta.env.VITE_BACKEND_URL
+    }/conversations/${conversationId}/messages/${messageId}/reaction`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ reactionType: emoji }),
+    }
+  );
+  return res.json();
+};
+
 const Conversations = () => {
   const client = useQueryClient();
   const [currentConversation, setCurrentConversation] = useState(null);
@@ -211,6 +228,44 @@ const Conversations = () => {
     },
   });
 
+  const reactMessageMutation = useMutation({
+    mutationFn: (emoji) => {
+      console.log({ emoji, currentConversation, currentMessage });
+      return reactMessage(currentConversation, currentMessage, emoji);
+    },
+    onSuccess: (newReaction) => {
+      //update messages to set new reaction to currentMessage
+      client.setQueryData(
+        ["currentConversation", currentConversation],
+        (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            messages: old.messages.map((message) => {
+              if (message.id !== currentMessage) return message;
+
+              const filteredReactions = message.reactions.filter(
+                (reaction) => reaction.userId !== newReaction.userId
+              );
+
+              console.log({ filteredReactions, newReaction });
+
+              return {
+                ...message,
+                reactions: [...filteredReactions, newReaction],
+              };
+            }),
+          };
+        }
+      );
+      toast.success("Message reacted");
+    },
+    onError: (error) => {
+      toast.error("Error reacting to message");
+      console.error({ error });
+    },
+  });
+
   if (getAllConversationsQuery.isPaused) {
     toast.error("Looks like you are offline. Check your internet connection");
   }
@@ -262,6 +317,7 @@ const Conversations = () => {
             currentMessage,
             setCurrentMessage,
             messageEditingMode,
+            setMessageEditingMode,
             editMessageMutation,
           }}
         >
@@ -293,7 +349,7 @@ const Conversations = () => {
         handleReactButton={handleReactButton}
       />
 
-      <ReactionContainer />
+      <ReactionContainer reactMessageMutation={reactMessageMutation} />
     </main>
   );
 };

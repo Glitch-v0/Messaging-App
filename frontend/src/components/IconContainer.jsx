@@ -1,3 +1,5 @@
+import propTypes from "prop-types";
+
 const IconContainer = ({
   currentConversation,
   currentMessage,
@@ -82,6 +84,15 @@ const IconContainer = ({
       </svg>
     </div>
   );
+};
+
+IconContainer.propTypes = {
+  currentMessage: propTypes.string,
+  currentConversation: propTypes.object,
+  deleteMessageMutation: propTypes.object,
+  handleReactButton: propTypes.func,
+  setMessageEditingMode: propTypes.func,
+  messageEditingMode: propTypes.bool,
 };
 
 export default IconContainer;

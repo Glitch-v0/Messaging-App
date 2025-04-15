@@ -1,4 +1,6 @@
-const ReactionContainer = () => {
+import propTypes from "prop-types";
+
+const ReactionContainer = ({ reactMessageMutation }) => {
   return (
     <div
       className="reactionContainer"
@@ -7,15 +9,18 @@ const ReactionContainer = () => {
         container.style.zIndex = "-2";
       }}
     >
-      <button>👍</button>
-      <button>👎</button>
-      <button>❤️</button>
-      <button>😂</button>
-      <button>👏</button>
-      <button>🙌</button>
-      <button>🔥</button>
+      <button onClick={() => reactMessageMutation.mutate("👍")}>👍</button>
+      <button onClick={() => reactMessageMutation.mutate("👎")}>👎</button>
+      <button onClick={() => reactMessageMutation.mutate("❤️")}>❤️</button>
+      <button onClick={() => reactMessageMutation.mutate("😂")}>😂</button>
+      <button onClick={() => reactMessageMutation.mutate("👏")}>👏</button>
+      <button onClick={() => reactMessageMutation.mutate("🙌")}>🙌</button>
+      <button onClick={() => reactMessageMutation.mutate("🔥")}>🔥</button>
     </div>
   );
 };
 
+ReactionContainer.propTypes = {
+  reactMessageMutation: propTypes.object,
+};
 export default ReactionContainer;

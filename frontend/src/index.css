@@ -163,7 +163,8 @@ a {
     .messageContainer {
       display: flex;
       flex-direction: column;
-      overflow: scroll;
+      overflow-y: scroll;
+
       sub.messageTimestamp,
       sub.messageSender {
         opacity: 0.6;
@@ -303,6 +304,18 @@ a {
   button:active {
     scale: 1.2;
   }
+}
+
+.messageReactions {
+  position: absolute;
+  display: flex;
+  font-size: 0.6rem;
+  padding: 0;
+  margin: 0;
+  margin-left: 0.95rem;
+  margin-bottom: 0.25rem;
+  left: 0;
+  opacity: 0.85;
 }
 
 .messageInputContainer {

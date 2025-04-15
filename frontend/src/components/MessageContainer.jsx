@@ -11,6 +11,7 @@ const MessageContainer = () => {
     currentMessage,
     setCurrentMessage,
     messageEditingMode,
+    setMessageEditingMode,
   } = useContext(ConversationContext);
 
   const handleMoreButton = (e) => {
@@ -19,7 +20,7 @@ const MessageContainer = () => {
     const buttonRect = button.getBoundingClientRect();
 
     let parent = button.parentElement.parentElement;
-    console.log(`Clicked more button, belonging to message ${parent.id}`);
+    // console.log(`Clicked more button, belonging to message ${parent.id}`);
 
     const iconContainer = document.getElementById("iconContainer");
     const iconContainerHeight = iconContainer.offsetHeight;
@@ -30,6 +31,7 @@ const MessageContainer = () => {
       buttonRect.left - iconContainerWidth * 0.25 + "px";
 
     setCurrentMessage(parent.id);
+    setMessageEditingMode(false);
     console.log({ currentMessage });
   };
 

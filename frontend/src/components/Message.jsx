@@ -27,6 +27,20 @@ const Message = ({
           {formatRelativeTime(message.timestamp)}
         </sub>
         <sub className="messageSender">{message.sender.name}</sub>
+        {/* Group and display reactions */}
+        <span className="messageReactions">
+          {Object.entries(
+            message.reactions.reduce((acc, reaction) => {
+              acc[reaction.type] = (acc[reaction.type] || 0) + 1;
+              return acc;
+            }, {})
+          ).map(([type, count]) => (
+            <span key={type} className="messageReactionType">
+              <span className="reaction-emoji">{type}</span>
+              <span className="reaction-count">{count}</span>
+            </span>
+          ))}
+        </span>
 
         <button type="button" onClick={(e) => handleMoreButton(e)}>
           <svg
@@ -71,6 +85,20 @@ const Message = ({
             </svg>
           </button>
         ) : null}
+
+        <span className="messageReactions">
+          {Object.entries(
+            message.reactions.reduce((acc, reaction) => {
+              acc[reaction.type] = (acc[reaction.type] || 0) + 1;
+              return acc;
+            }, {})
+          ).map(([type, count]) => (
+            <span key={type} className="messageReactionType">
+              <span className="reaction-emoji">{type}</span>
+              <span className="reaction-count">{count > 1 ? count : ""}</span>
+            </span>
+          ))}
+        </span>
       </p>
     </>
   );

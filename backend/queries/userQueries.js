@@ -319,6 +319,7 @@ const userQueries = {
                 },
               },
               timestamp: true,
+              reactions: true,
             },
             orderBy: {
               timestamp: "asc",
@@ -458,6 +459,7 @@ const userQueries = {
   },
 
   reactToMessage: async (userId, messageId, reactionType) => {
+    console.log({ userId, messageId, reactionType });
     try {
       return await prisma.reaction.upsert({
         where: {
@@ -483,6 +485,7 @@ const userQueries = {
           type: reactionType,
         },
         select: {
+          id: true,
           type: true,
           messageId: true,
           userId: true,

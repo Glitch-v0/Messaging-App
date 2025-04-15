@@ -182,13 +182,13 @@ const userController = {
   },
 
   reactToMessage: async (req, res) => {
-    res.json(
-      await userQueries.reactToMessage(
-        req.userId,
-        req.params.messageId,
-        req.body.reactionType
-      )
+    const response = await userQueries.reactToMessage(
+      req.userId,
+      req.params.messageId,
+      req.body.reactionType
     );
+    console.log({ response });
+    res.json(response);
   },
 
   removeReaction: async (req, res) => {
