@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner.jsx";
 import MessageContainer from "../components/MessageContainer.jsx";
 import IconContainer from "../components/IconContainer.jsx";
+import ReactionContainer from "../components/ReactionContainer.jsx";
 import { toast } from "sonner";
 import Error from "./Error.jsx";
 import { ConversationContext } from "../context.jsx";
@@ -81,6 +82,26 @@ const sendMessage = async (conversationId, message) => {
     }
   );
   return res.json();
+};
+
+const handleReactButton = async (e) => {
+  const messageRect = e.target.getBoundingClientRect();
+  const reactionContainer = document.querySelector(".reactionContainer");
+
+  reactionContainer.style.zIndex = "4";
+
+  //Bottom set to top of what is clicked
+  reactionContainer.style.bottom =
+    window.innerHeight - messageRect.top - messageRect.height + "px";
+
+  //Right side set to left side of what is clicked
+  reactionContainer.style.right =
+    window.innerWidth -
+    messageRect.right -
+    reactionContainer.style.width +
+    "px";
+
+  console.log({ messageRect, reactionContainer });
 };
 
 const Conversations = () => {
@@ -266,12 +287,13 @@ const Conversations = () => {
       <IconContainer
         currentMessage={currentMessage}
         currentConversation={currentConversation}
-        // reactFn={() => {}}
         deleteMessageMutation={deleteMessageMutation}
-        // editFn={() => {}}
         messageEditingMode={messageEditingMode}
         setMessageEditingMode={setMessageEditingMode}
+        handleReactButton={handleReactButton}
       />
+
+      <ReactionContainer />
     </main>
   );
 };

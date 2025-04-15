@@ -268,7 +268,40 @@ a {
 
   .messageIcon:hover {
     cursor: pointer;
-    scale: 1.1;
+    scale: 1.05;
+  }
+
+  .messageIcon:active {
+    scale: 1.2;
+  }
+}
+
+.reactionContainer {
+  position: absolute;
+  display: flex;
+  z-index: -2;
+  transition: z-index 0.1s ease-out 0s;
+  background-color: var(--nav-background-color);
+  border: 1px solid var(--font-color);
+  border-radius: var(--border-radius);
+  padding: 0.25rem;
+
+  button {
+    border: none;
+    font-size: 1rem;
+    opacity: 0.75;
+    border: none;
+    background-color: transparent !important;
+  }
+
+  button:hover {
+    opacity: 1;
+    scale: 1.05;
+    border: none;
+  }
+
+  button:active {
+    scale: 1.2;
   }
 }
 
@@ -303,6 +336,11 @@ textArea {
 
 .errorButton:hover {
   cursor: pointer;
+}
+
+.emojiPicker {
+  position: absolute;
+  z-index: 5 !important;
 }
 
 .lds-spinner,

@@ -4,6 +4,7 @@ const IconContainer = ({
   deleteMessageMutation,
   messageEditingMode,
   setMessageEditingMode,
+  handleReactButton,
 }) => {
   const hideIconContainer = () => {
     const iconContainer = document.getElementById("iconContainer");
@@ -16,10 +17,10 @@ const IconContainer = ({
     hideIconContainer();
     if (messageEditingMode === true) {
       setTimeout(() => {
-        console.log(`Message editing mode: ${messageEditingMode}`);
+        // console.log(`Message editing mode: ${messageEditingMode}`);
         const form = document.getElementById(currentMessage);
         const input = form.getElementsByTagName("input")[0];
-        console.log({ form, input });
+        // console.log({ form, input });
         input.focus();
       }, 500);
     }
@@ -38,7 +39,9 @@ const IconContainer = ({
         height="24"
         viewBox="0 0 24 24"
         id="reactToMessageIcon"
-        // onClick={(e) => handleReactButton(e)}
+        onClick={(e) => {
+          handleReactButton(e);
+        }}
       >
         <path
           fill="currentColor"
