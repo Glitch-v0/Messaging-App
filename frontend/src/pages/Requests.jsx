@@ -49,8 +49,10 @@ const Requests = () => {
         <div key={request.id} className="requestContainer">
           <p>{request.sender.name}</p>
           <p>{formatRelativeTime(request.dateSent)}</p>
-          <button>Accept</button>
-          <button>Decline</button>
+          <div className="requestButtons">
+            <button>Accept</button>
+            <button>Decline</button>
+          </div>
         </div>
       ))}
       <h2>Sent Requests:</h2>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner.jsx";
 import MessageContainer from "../components/MessageContainer.jsx";
 import IconContainer from "../components/IconContainer.jsx";
@@ -297,7 +296,7 @@ const Conversations = () => {
       <div className="conversationLists">
         <h1>Conversations</h1>
         {getAllConversationsQuery.data.map((conversation) => (
-          <Link
+          <div
             key={conversation.id}
             onClick={() => setCurrentConversation(conversation.id)}
           >
@@ -305,9 +304,12 @@ const Conversations = () => {
               {conversation.participants.map((participant) => (
                 <li key={participant.name}>{participant.name}</li>
               ))}
-              <p>{conversation.messages[0].content.substring(0, 10)}...</p>
+              <p>
+                &quot;{conversation.messages[0].content.substring(0, 10)}
+                ...&quot;
+              </p>
             </ul>
-          </Link>
+          </div>
         ))}
       </div>
       <div className="currentConversation">
@@ -319,6 +321,7 @@ const Conversations = () => {
             messageEditingMode,
             setMessageEditingMode,
             editMessageMutation,
+            handleReactButton,
           }}
         >
           <MessageContainer />

@@ -333,11 +333,13 @@ a {
 
 textArea {
   width: 100%;
+  height: auto;
   color: var(--font-color);
   background-color: var(--nav-background-color);
   padding: 0;
   margin: 0;
   border: none;
+  field-sizing: content;
 }
 
 .errorButton {
@@ -437,5 +439,27 @@ textArea {
   }
   100% {
     opacity: 0;
+  }
+}
+
+.messageFromOtherIcon {
+  opacity: 0.6;
+  margin-right: 0.25rem;
+}
+
+.messageFromOtherIcon:hover {
+  opacity: 1;
+}
+
+.requestButtons {
+  display: flex;
+  gap: 1rem;
+
+  button {
+    border-radius: var(--border-radius);
+  }
+
+  button:hover {
+    scale: 1.02;
   }
 }

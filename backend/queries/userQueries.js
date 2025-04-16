@@ -422,6 +422,7 @@ const userQueries = {
             },
           },
           timestamp: true,
+          reactions: true,
         },
       });
     } catch (error) {
