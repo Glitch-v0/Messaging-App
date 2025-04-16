@@ -1,5 +1,4 @@
 import prisma from "../prisma/prisma.js";
-import { createToken } from "../utils/tokenUtils.js";
 import { createHash } from "../hashFunctions.js";
 import userQueries from "./userQueries.js";
 import requestQueries from "./requestQueries.js";
@@ -59,11 +58,13 @@ export const createScript = async () => {
       "Hi there! I'm sending you these messages to show you features of your conversation. Your newest conversation is shown first." +
         " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages."
     );
-    await userQueries.sendMessage(
+    const message = await userQueries.sendMessage(
       conv2.id,
       me.id,
       "Good to know. Thanks for the information."
     );
+
+    await userQueries.reactToMessage(bot.id, message.id, "👍");
   });
 };
 

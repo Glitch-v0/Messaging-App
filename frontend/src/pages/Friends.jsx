@@ -41,7 +41,14 @@ const Friends = () => {
       <h1>Friends</h1>
       <ul>
         {data.friends.map((friend) => (
-          <li key={friend.id}>{friend.name}</li>
+          <div key={friend.id} className="friend">
+            <li>{friend.name}</li>
+            <div>
+              <button>Start a new conversation</button>
+              <button>Unfriend</button>
+              <button>Block</button>
+            </div>
+          </div>
         ))}
       </ul>
     </main>
