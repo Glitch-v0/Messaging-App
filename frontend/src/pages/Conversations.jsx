@@ -281,7 +281,7 @@ const Conversations = () => {
     return (
       <Error
         error={getAllConversationsQuery.isError}
-        refetch={fetchConversations}
+        goToLink={"/conversations"}
       />
     );
   }
