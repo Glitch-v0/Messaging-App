@@ -7,132 +7,17 @@ import ReactionContainer from "../components/ReactionContainer.jsx";
 import { toast } from "sonner";
 import Error from "./Error.jsx";
 import { ConversationContext } from "../context.jsx";
-
-const fetchConversations = async () => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/conversations`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-  return res.json();
-};
-
-const fetchCurrentConversation = async (conversationId) => {
-  const res = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/conversations/${conversationId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    }
-  );
-  return res.json();
-};
-
-const deleteMessage = async (conversationId, messageId) => {
-  const res = await fetch(
-    `${
-      import.meta.env.VITE_BACKEND_URL
-    }/conversations/${conversationId}/messages/${messageId}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    }
-  );
-  return res.json();
-};
-
-const editMessage = async (conversationId, messageId, message) => {
-  const res = await fetch(
-    `${
-      import.meta.env.VITE_BACKEND_URL
-    }/conversations/${conversationId}/messages/${messageId}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ message }),
-    }
-  );
-  return res.json();
-};
-
-const sendMessage = async (conversationId, message) => {
-  const res = await fetch(
-    `${
-      import.meta.env.VITE_BACKEND_URL
-    }/conversations/${conversationId}/messages`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ message }),
-    }
-  );
-  return res.json();
-};
-
-const deleteConversation = async (conversationId) => {
-  const res = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/conversations/${conversationId}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    }
-  );
-  return res.json();
-};
-
-const handleReactButton = async (e) => {
-  const messageRect = e.target.getBoundingClientRect();
-  const reactionContainer = document.querySelector(".reactionContainer");
-
-  reactionContainer.style.zIndex = "4";
-
-  //Bottom set to top of what is clicked
-  reactionContainer.style.bottom =
-    window.innerHeight - messageRect.top - messageRect.height + "px";
-
-  //Right side set to left side of what is clicked
-  reactionContainer.style.right =
-    window.innerWidth -
-    messageRect.right -
-    reactionContainer.style.width +
-    "px";
-
-  console.log({ messageRect, reactionContainer });
-};
-
-const reactMessage = async (conversationId, messageId, emoji) => {
-  const res = await fetch(
-    `${
-      import.meta.env.VITE_BACKEND_URL
-    }/conversations/${conversationId}/messages/${messageId}/reaction`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ reactionType: emoji }),
-    }
-  );
-  return res.json();
-};
+import {
+  fetchConversations,
+  fetchCurrentConversation,
+  deleteConversation,
+} from "../api/conversations.js";
+import {
+  deleteMessage,
+  editMessage,
+  sendMessage,
+  reactMessage,
+} from "../api/messages.js";
 
 const Conversations = () => {
   const client = useQueryClient();
@@ -362,7 +247,6 @@ const Conversations = () => {
             messageEditingMode,
             setMessageEditingMode,
             editMessageMutation,
-            handleReactButton,
           }}
         >
           <MessageContainer />
@@ -390,9 +274,7 @@ const Conversations = () => {
         deleteMessageMutation={deleteMessageMutation}
         messageEditingMode={messageEditingMode}
         setMessageEditingMode={setMessageEditingMode}
-        handleReactButton={handleReactButton}
       />
-
       <ReactionContainer reactMessageMutation={reactMessageMutation} />
     </main>
   );

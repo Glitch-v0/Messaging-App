@@ -1,12 +1,31 @@
 import propTypes from "prop-types";
 
+const handleReactButton = async (e) => {
+  const messageRect = e.target.getBoundingClientRect();
+  const reactionContainer = document.querySelector(".reactionContainer");
+
+  reactionContainer.style.zIndex = "4";
+
+  //Bottom set to top of what is clicked
+  reactionContainer.style.bottom =
+    window.innerHeight - messageRect.top - messageRect.height + "px";
+
+  //Right side set to left side of what is clicked
+  reactionContainer.style.right =
+    window.innerWidth -
+    messageRect.right -
+    reactionContainer.style.width +
+    "px";
+
+  console.log({ messageRect, reactionContainer });
+};
+
 const IconContainer = ({
   currentConversation,
   currentMessage,
   deleteMessageMutation,
   messageEditingMode,
   setMessageEditingMode,
-  handleReactButton,
 }) => {
   const hideIconContainer = () => {
     const iconContainer = document.getElementById("iconContainer");
