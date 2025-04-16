@@ -463,3 +463,13 @@ textArea {
     scale: 1.02;
   }
 }
+
+.deleteConversationIcon {
+  opacity: 0.6;
+  margin-right: 0.5rem;
+  width: 1.5rem;
+}
+
+.deleteConversationIcon:hover {
+  opacity: 1;
+}

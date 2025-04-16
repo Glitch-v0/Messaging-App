@@ -391,7 +391,7 @@ const userQueries = {
         },
       });
 
-      if (conversation.participants.length === 0) {
+      if (conversation.participants.length < 2) {
         return await prisma.conversation.delete({
           where: {
             id: conversation.id,

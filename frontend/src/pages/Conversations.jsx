@@ -83,6 +83,20 @@ const sendMessage = async (conversationId, message) => {
   return res.json();
 };
 
+const deleteConversation = async (conversationId) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/conversations/${conversationId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+  return res.json();
+};
+
 const handleReactButton = async (e) => {
   const messageRect = e.target.getBoundingClientRect();
   const reactionContainer = document.querySelector(".reactionContainer");
@@ -137,6 +151,19 @@ const Conversations = () => {
     queryFn: () => fetchCurrentConversation(currentConversation),
     enabled: !!currentConversation,
     staleTime: 1000 * 60 * 0.5,
+  });
+
+  const deleteConversationMutation = useMutation({
+    mutationFn: () => deleteConversation(currentConversation),
+    onSuccess: () => {
+      client.invalidateQueries(["conversations"]);
+      setCurrentConversation(null);
+      toast.success("Conversation deleted");
+    },
+    onError: (error) => {
+      toast.error("Error deleting conversation");
+      console.error({ error });
+    },
   });
 
   const deleteMessageMutation = useMutation({
@@ -308,6 +335,20 @@ const Conversations = () => {
                 &quot;{conversation.messages[0].content.substring(0, 10)}
                 ...&quot;
               </p>
+              <svg
+                className="conversationIcon deleteConversationIcon"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                onClick={() =>
+                  deleteConversationMutation.mutate(conversation.id)
+                }
+              >
+                <path
+                  fill="currentColor"
+                  d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
+                />
+              </svg>
             </ul>
           </div>
         ))}
