@@ -1,26 +1,43 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { formatRelativeTime } from "../utils/time.js";
 import { toast } from "sonner";
 import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
-
-const fetchRequests = async () => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
-  const data = await res.json();
-  return data;
-};
+import {
+  fetchRequests,
+  acceptRequest,
+  rejectFriendRequest,
+} from "../api/requests.js";
 
 const Requests = () => {
   const { isPending, isPaused, isError, data, error, refetch } = useQuery({
     queryKey: ["requests"],
     queryFn: fetchRequests,
     staleTime: 1000 * 60 * 1,
+  });
+
+  const acceptRequestMutation = useMutation({
+    mutationFn: acceptRequest,
+    onSuccess: () => {
+      toast.success("Friend request accepted!");
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Error accepting friend request");
+      console.error({ error });
+    },
+  });
+
+  const rejectRequestMutation = useMutation({
+    mutationFn: rejectFriendRequest,
+    onSuccess: () => {
+      toast.success("Friend request rejected!");
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Error rejecting friend request");
+      console.error({ error });
+    },
   });
 
   if (isPaused)
@@ -50,8 +67,12 @@ const Requests = () => {
           <p>{request.sender.name}</p>
           <p>{formatRelativeTime(request.dateSent)}</p>
           <div className="requestButtons">
-            <button>Accept</button>
-            <button>Decline</button>
+            <button onClick={() => acceptRequestMutation.mutate(request.id)}>
+              Accept
+            </button>
+            <button onClick={() => rejectRequestMutation.mutate(request.id)}>
+              Decline
+            </button>
           </div>
         </div>
       ))}

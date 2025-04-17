@@ -28,11 +28,11 @@ router.get("/:requestId", verifyToken, async (req, res) => {
   await requestController.getSingleRequest(req, res);
 });
 
-router.get("/:requestId/accept", verifyToken, async (req, res) => {
+router.post("/:requestId/accept", verifyToken, async (req, res) => {
   await requestController.acceptFriendRequest(req, res);
 });
 
-router.get("/:requestId/reject", verifyToken, async (req, res) => {
+router.post("/:requestId/reject", verifyToken, async (req, res) => {
   await requestController.rejectFriendRequest(req, res);
 });
 

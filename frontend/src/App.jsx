@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AppContext } from "./context.jsx";
 import { toast } from "sonner";
-import routes from "./routes.jsx";
-
-const router = createBrowserRouter(routes);
+import router from "./routes.jsx";
 
 const handleDarkMode = () => {
   // read local storage for dark mode

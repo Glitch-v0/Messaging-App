@@ -9,7 +9,7 @@ import Online from "./pages/Online";
 import NotFound from "./pages/NotFound";
 import Error from "./pages/Error";
 import SideNav from "./components/SideNav";
-import { Outlet } from "react-router-dom";
+import { Outlet, createBrowserRouter } from "react-router-dom";
 
 const routes = [
   {
@@ -62,4 +62,6 @@ const routes = [
   },
 ];
 
-export default routes;
+const router = createBrowserRouter(routes);
+
+export default router;
