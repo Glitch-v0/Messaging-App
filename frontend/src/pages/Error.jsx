@@ -7,7 +7,7 @@ const ErrorPage = () => {
   console.log({ error, location });
   return (
     <main>
-      <h1>Error! {error.message}</h1>
+      <h1>Error! {error ? error.message : "Please try again"}</h1>
       <Link to={location}>
         <button className="errorButton">Reload</button>
       </Link>

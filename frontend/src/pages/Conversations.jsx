@@ -210,12 +210,7 @@ const Conversations = () => {
   }
 
   if (getAllConversationsQuery.isError) {
-    return (
-      <Error
-        error={getAllConversationsQuery.isError}
-        goToLink={"/conversations"}
-      />
-    );
+    return <Error />;
   }
 
   return getAllConversationsQuery.data.length === 0 ? (
