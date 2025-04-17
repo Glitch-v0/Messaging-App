@@ -1,3 +1,4 @@
+import { Outlet, createBrowserRouter } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -9,7 +10,7 @@ import Online from "./pages/Online";
 import NotFound from "./pages/NotFound";
 import Error from "./pages/Error";
 import SideNav from "./components/SideNav";
-import { Outlet, createBrowserRouter } from "react-router-dom";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const routes = [
   {
@@ -31,28 +32,33 @@ const routes = [
         element: <Login />,
       },
       {
-        path: "profile",
-        element: <Profile />,
-      },
-      {
-        path: "conversations/*",
-        element: <Conversations />,
-      },
-      {
-        path: "logout",
-        element: <Logout />,
-      },
-      {
-        path: "requests",
-        element: <Requests />,
-      },
-      {
-        path: "friends",
-        element: <Friends />,
-      },
-      {
-        path: "online",
-        element: <Online />,
+        element: <ProtectedRoutes />,
+        children: [
+          {
+            path: "profile",
+            element: <Profile />,
+          },
+          {
+            path: "conversations/*",
+            element: <Conversations />,
+          },
+          {
+            path: "logout",
+            element: <Logout />,
+          },
+          {
+            path: "requests",
+            element: <Requests />,
+          },
+          {
+            path: "friends",
+            element: <Friends />,
+          },
+          {
+            path: "online",
+            element: <Online />,
+          },
+        ],
       },
       {
         path: "*",
