@@ -331,17 +331,6 @@ a {
   }
 }
 
-textArea {
-  width: 100%;
-  height: auto;
-  color: var(--font-color);
-  background-color: var(--nav-background-color);
-  padding: 0;
-  margin: 0;
-  border: none;
-  field-sizing: content;
-}
-
 .errorButton {
   background-color: var(--nav-background-color);
   color: var(--font-color);
@@ -474,19 +463,39 @@ textArea {
   opacity: 1;
 }
 
-.friend {
+.friendContainer {
   display: flex;
-  flex-direction: row;
-  place-items: center;
+  flex-direction: column;
+  text-align: center;
   place-content: center;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 1rem;
+  place-items: center;
 
-  button {
-    margin: 1rem;
-    padding: 1rem;
-    border-radius: var(--border-radius);
+  width: 100%;
+  .friend {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    place-content: center;
+    place-items: center;
+    list-style: none;
+
+    .friendActions,
+    .friendSendMessage {
+      display: flex;
+      flex-direction: row;
+      place-items: center;
+      place-content: center;
+
+      textarea {
+        field-sizing: content;
+        width: 400px;
+      }
+    }
+
+    button {
+      margin: 1rem;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+    }
   }
 }

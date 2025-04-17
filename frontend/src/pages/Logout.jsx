@@ -24,11 +24,6 @@ const Logout = () => {
           credentials: "include",
         });
         setHasToken(false);
-        updateConversationData(null);
-        updateFriendsData(null);
-        setOnlineUsers(null);
-        setProfile(null);
-        updateRequestData(null);
       } catch (err) {
         toast.error(err.message);
       }

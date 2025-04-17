@@ -32,19 +32,30 @@ const Friends = () => {
     return <Error error={error} refetch={refetch} />;
   }
 
-  return data.length === 0 ? (
+  return data?.length === 0 ? (
     <main>
       <h1>You currently have no friends.</h1>
     </main>
   ) : (
     <main>
       <h1>Friends</h1>
-      <ul>
+      <ul className="friendContainer">
         {data.friends.map((friend) => (
           <div key={friend.id} className="friend">
             <li>{friend.name}</li>
-            <div>
-              <button>Start a new conversation</button>
+            <form
+              onSubmit={(event) => event.preventDefault()}
+              className="friendSendMessage"
+            >
+              <textarea
+                name=""
+                id=""
+                placeholder="Send a message"
+                defaultValue={"Hi!"}
+              />
+              <button>Submit</button>
+            </form>
+            <div className="friendActions">
               <button>Unfriend</button>
               <button>Block</button>
             </div>

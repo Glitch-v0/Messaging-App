@@ -28,8 +28,6 @@ const handleDarkMode = () => {
 const queryClient = new QueryClient();
 
 function App() {
-  const [currentConversation, setCurrentConversation] = useState(null);
-
   const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
@@ -59,8 +57,6 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AppContext.Provider
         value={{
-          currentConversation,
-          setCurrentConversation,
           hasToken,
           setHasToken,
         }}
