@@ -40,6 +40,7 @@ function App() {
       })
       .catch((err) => {
         setHasToken(false);
+        handleDarkMode();
         //don't toast for login or register page
         if (
           window.location.pathname === "/login" ||

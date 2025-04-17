@@ -43,10 +43,6 @@ const routes = [
             element: <Conversations />,
           },
           {
-            path: "logout",
-            element: <Logout />,
-          },
-          {
             path: "requests",
             element: <Requests />,
           },
@@ -59,6 +55,10 @@ const routes = [
             element: <Online />,
           },
         ],
+      },
+      {
+        path: "logout",
+        element: <Logout />,
       },
       {
         path: "*",
