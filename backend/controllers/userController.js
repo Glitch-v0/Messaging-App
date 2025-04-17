@@ -9,7 +9,7 @@ const userController = {
     const user = await userQueries.createUser(
       req.body.name,
       req.body.email,
-      password
+      password,
     );
     res.json({ name: user.name, id: user.id });
   },
@@ -27,7 +27,7 @@ const userController = {
     const user = await userQueries.getUserById(req.userId);
     const isMatch = await comparePasswords(
       req.body.password,
-      user.hashedPassword
+      user.hashedPassword,
     );
     if (!isMatch) {
       return res.sendStatus(401);
@@ -46,7 +46,7 @@ const userController = {
 
     const isMatch = await comparePasswords(
       req.body.password,
-      user.hashedPassword
+      user.hashedPassword,
     );
     if (!isMatch) {
       return res
@@ -95,7 +95,7 @@ const userController = {
 
   getConversation: async (req, res) => {
     const conversation = await userQueries.getConversation(
-      req.params.conversationId
+      req.params.conversationId,
     );
 
     //add owner property to each message based on req.userId
@@ -120,7 +120,7 @@ const userController = {
   createConversation: async (req, res) => {
     // Check if participants are on either's blocklist
     const friends = await userQueries.checkIfParticipantsAreFriends(
-      req.body.participants
+      req.body.participants,
     );
 
     if (!friends) {
@@ -132,8 +132,8 @@ const userController = {
       await userQueries.createConversation(
         req.body.participants,
         req.userId,
-        req.body.message
-      )
+        req.body.message,
+      ),
     );
   },
 
@@ -141,8 +141,8 @@ const userController = {
     res.json(
       await userQueries.deleteConversation(
         req.params.conversationId,
-        req.userId
-      )
+        req.userId,
+      ),
     );
   },
 
@@ -151,8 +151,8 @@ const userController = {
       await userQueries.sendMessage(
         req.params.conversationId,
         req.userId,
-        req.body.message
-      )
+        req.body.message,
+      ),
     );
   },
 
@@ -161,8 +161,8 @@ const userController = {
       await userQueries.updateMessage(
         req.params.messageId,
         req.userId,
-        req.body.message
-      )
+        req.body.message,
+      ),
     );
   },
 
@@ -172,7 +172,7 @@ const userController = {
     }
     const response = await userQueries.deleteMessage(
       req.params.messageId,
-      req.userId
+      req.userId,
     );
     if (response.error) {
       res.status(404).json(response);
@@ -185,7 +185,7 @@ const userController = {
     const response = await userQueries.reactToMessage(
       req.userId,
       req.params.messageId,
-      req.body.reactionType
+      req.body.reactionType,
     );
     console.log({ response });
     res.json(response);
@@ -193,7 +193,7 @@ const userController = {
 
   removeReaction: async (req, res) => {
     res.json(
-      await userQueries.removeReaction(req.userId, req.params.messageId)
+      await userQueries.removeReaction(req.userId, req.params.messageId),
     );
   },
 };

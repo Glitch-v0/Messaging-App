@@ -18,7 +18,7 @@ const fetchCurrentConversation = async (conversationId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }
+    },
   );
   return res.json();
 };
@@ -32,7 +32,7 @@ const deleteConversation = async (conversationId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }
+    },
   );
   return res.json();
 };

@@ -9,7 +9,7 @@ router.post(
   "/register",
   expressAsyncHandler(async (req, res) => {
     await userController.handleRegister(req, res);
-  })
+  }),
 );
 
 router.post("/login", async (req, res) => {

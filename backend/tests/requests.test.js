@@ -42,7 +42,7 @@ test("users can send friend requests", async () => {
           senderId: user1.id,
           receiverId: user2.id,
           dateSent: expect.any(String),
-        })
+        }),
       );
     });
 });
@@ -90,7 +90,7 @@ test("user can get friend requests", async () => {
             },
             dateSent: expect.any(String),
           }),
-        ])
+        ]),
       );
     });
 });
@@ -134,7 +134,7 @@ test("user can see all sent requests", async () => {
             receiverId: user3.id,
             dateSent: expect.any(String),
           }),
-        ])
+        ]),
       );
     });
 });

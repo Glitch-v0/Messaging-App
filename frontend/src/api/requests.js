@@ -19,7 +19,7 @@ const acceptRequest = async (requestId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }
+    },
   );
   const data = await res.json();
   return data;
@@ -34,7 +34,7 @@ const rejectFriendRequest = async (requestId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }
+    },
   );
   const data = await res.json();
   return data;

@@ -27,7 +27,7 @@ router.get("/", (req, res) => {
   router.stack.forEach((r) => {
     if (r?.route?.path) {
       const methods = Object.keys(r.route.methods).map((method) =>
-        method.toUpperCase()
+        method.toUpperCase(),
       );
       methods.forEach((method) => {
         routes.push(`${method} ${r.route.path}`);
@@ -39,7 +39,7 @@ router.get("/", (req, res) => {
   userRouter.stack.forEach((r) => {
     if (r?.route?.path) {
       const methods = Object.keys(r.route.methods).map((method) =>
-        method.toUpperCase()
+        method.toUpperCase(),
       );
       methods.forEach((method) => {
         routes.push(`${method} ${r.route.path}`);

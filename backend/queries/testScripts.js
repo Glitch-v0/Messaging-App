@@ -31,17 +31,17 @@ export const createScript = async () => {
     const bot = await userQueries.createUser(
       "Your Robot Assistant",
       "robo@test.com",
-      await createHash("test")
+      await createHash("test"),
     );
     const bot2 = await userQueries.createUser(
       "Test Robo Bro",
       "robo2@test.com",
-      await createHash("test")
+      await createHash("test"),
     );
     const me = await userQueries.createUser(
       "njonesDev",
       "njones@test.com",
-      await createHash("test")
+      await createHash("test"),
     );
     console.log({ bot, bot2, me });
     await userQueries.addFriend(me.id, bot.id);
@@ -50,18 +50,18 @@ export const createScript = async () => {
       [me.id, bot.id],
       bot.id,
       "Hey there! So glad you decided to join." +
-        "Feel free to talk to me, but I am unfortunately not programmed to respond back."
+        "Feel free to talk to me, but I am unfortunately not programmed to respond back.",
     );
     const conv2 = await userQueries.createConversation(
       [me.id, bot2.id],
       bot.id,
       "Hi there! I'm sending you these messages to show you features of your conversation. Your newest conversation is shown first." +
-        " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages."
+        " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages.",
     );
     const message = await userQueries.sendMessage(
       conv2.id,
       me.id,
-      "Good to know. Thanks for the information."
+      "Good to know. Thanks for the information.",
     );
 
     await userQueries.reactToMessage(bot.id, message.id, "👍");

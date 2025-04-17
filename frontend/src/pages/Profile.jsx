@@ -26,12 +26,12 @@ const handleDarkMode = (data) => {
   root.style.setProperty("--main-color", data.darkMode ? "#000000" : "#38195e");
   root.style.setProperty(
     "--nav-background-color",
-    data.darkMode ? "#0d0d0d" : "#2a1346"
+    data.darkMode ? "#0d0d0d" : "#2a1346",
   );
   root.style.setProperty("--font-color", data.darkMode ? "#c5c5c5" : "#fde2ff");
   root.style.setProperty(
     "--button-background-color",
-    data.darkMode ? "#252525" : "#2a1346"
+    data.darkMode ? "#252525" : "#2a1346",
   );
 };
 
@@ -39,7 +39,7 @@ const Profile = () => {
   const client = useQueryClient();
 
   const navigate = useNavigate();
-  const { isPending, isError, data, error, refetch } = useQuery({
+  const { isPending, isError, data } = useQuery({
     queryKey: ["profile"],
     queryFn: fetchProfileData,
   });
@@ -101,7 +101,7 @@ const Profile = () => {
   }
 
   if (isError) {
-    return <Error error={error} refetch={refetch} />;
+    return <Error />;
   }
 
   return (

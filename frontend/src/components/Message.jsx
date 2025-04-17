@@ -34,7 +34,7 @@ const Message = ({
             message.reactions.reduce((acc, reaction) => {
               acc[reaction.type] = (acc[reaction.type] || 0) + 1;
               return acc;
-            }, {})
+            }, {}),
           ).map(([type, count]) => (
             <span key={type} className="messageReactionType">
               <span className="reaction-emoji">{type}</span>
@@ -111,7 +111,7 @@ const Message = ({
             message.reactions.reduce((acc, reaction) => {
               acc[reaction.type] = (acc[reaction.type] || 0) + 1;
               return acc;
-            }, {})
+            }, {}),
           ).map(([type, count]) => (
             <span key={type} className="messageReactionType">
               <span className="reaction-emoji">{type}</span>

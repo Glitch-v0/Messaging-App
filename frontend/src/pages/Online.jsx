@@ -5,7 +5,7 @@ import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
 
 const Online = () => {
-  const { isPending, isPaused, isError, data, error, refetch } = useQuery({
+  const { isPending, isPaused, isError, data } = useQuery({
     queryKey: ["online"],
     queryFn: () =>
       fetch(`${import.meta.env.VITE_BACKEND_URL}/online`, {
@@ -30,7 +30,7 @@ const Online = () => {
   }
 
   if (isError) {
-    return <Error error={error} refetch={refetch} />;
+    return <Error />;
   }
 
   return (

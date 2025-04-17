@@ -10,7 +10,7 @@ import {
 } from "../api/requests.js";
 
 const Requests = () => {
-  const { isPending, isPaused, isError, data, error, refetch } = useQuery({
+  const { isPending, isPaused, isError, data, refetch } = useQuery({
     queryKey: ["requests"],
     queryFn: fetchRequests,
     staleTime: 1000 * 60 * 1,
@@ -52,7 +52,7 @@ const Requests = () => {
   }
 
   if (isError) {
-    return <Error error={error} refetch={refetch} />;
+    return <Error />;
   }
 
   return data.length === 0 ? (

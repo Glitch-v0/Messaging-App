@@ -19,7 +19,7 @@ const requestQueries = {
         });
 
         const blockedUserIds = blocked.flatMap((entry) =>
-          entry.blocked.map((user) => user.id)
+          entry.blocked.map((user) => user.id),
         );
 
         // Get requests from users not on block list

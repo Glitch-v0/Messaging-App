@@ -19,5 +19,5 @@ createRoot(document.getElementById("root")).render(
       position="top-center"
     />
     <App />
-  </StrictMode>
+  </StrictMode>,
 );

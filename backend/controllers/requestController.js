@@ -4,7 +4,7 @@ import asyncHandler from "express-async-handler";
 const requestController = {
   sendFriendRequest: asyncHandler(async (req, res) => {
     res.json(
-      await requestQueries.sendFriendRequest(req.userId, req.body.receiverId)
+      await requestQueries.sendFriendRequest(req.userId, req.body.receiverId),
     );
   }),
 
@@ -26,7 +26,10 @@ const requestController = {
 
   rejectFriendRequest: asyncHandler(async (req, res) => {
     res.json(
-      await requestQueries.rejectFriendRequest(req.userId, req.params.requestId)
+      await requestQueries.rejectFriendRequest(
+        req.userId,
+        req.params.requestId,
+      ),
     );
   }),
 };

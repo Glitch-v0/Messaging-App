@@ -22,7 +22,7 @@ const Login = () => {
             password: event.target.password.value,
           }),
           credentials: "include",
-        }
+        },
       );
       const data = await response.json();
 

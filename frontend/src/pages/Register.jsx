@@ -19,7 +19,7 @@ const Register = () => {
             email: event.target.email.value,
             password: event.target.password.value,
           }),
-        }
+        },
       );
       const data = await response.json();
       console.log(data);

@@ -10,8 +10,6 @@ const SideNav = () => {
     setIsOpen(!isOpen);
     const root = document.querySelector(":root");
     root.style.setProperty("--nav-width", !isOpen ? "200px" : "0px");
-
-    const navButton = document.querySelector("#navButton");
   };
 
   const links = [

@@ -4,7 +4,7 @@ import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
 
 const Friends = () => {
-  const { isPending, isPaused, isError, data, error, refetch } = useQuery({
+  const { isPending, isPaused, isError, data } = useQuery({
     queryKey: ["friends"],
     queryFn: () =>
       fetch(`${import.meta.env.VITE_BACKEND_URL}/friends`, {
@@ -29,7 +29,7 @@ const Friends = () => {
   }
 
   if (isError) {
-    return <Error error={error} refetch={refetch} />;
+    return <Error />;
   }
 
   return data?.length === 0 ? (

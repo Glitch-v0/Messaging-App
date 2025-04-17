@@ -37,7 +37,7 @@ test("users can get their profile", async () => {
           darkMode: false,
           showOnline: false,
           allowRequests: false,
-        })
+        }),
       );
     });
 });
@@ -74,7 +74,7 @@ test("users can update their profile", async () => {
           darkMode: true,
           showOnline: true,
           allowRequests: true,
-        })
+        }),
       );
     });
 });

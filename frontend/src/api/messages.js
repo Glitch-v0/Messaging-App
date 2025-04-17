@@ -9,7 +9,7 @@ const deleteMessage = async (conversationId, messageId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }
+    },
   );
   return res.json();
 };
@@ -26,7 +26,7 @@ const editMessage = async (conversationId, messageId, message) => {
       },
       credentials: "include",
       body: JSON.stringify({ message }),
-    }
+    },
   );
   return res.json();
 };
@@ -43,7 +43,7 @@ const sendMessage = async (conversationId, message) => {
       },
       credentials: "include",
       body: JSON.stringify({ message }),
-    }
+    },
   );
   return res.json();
 };
@@ -60,7 +60,7 @@ const reactMessage = async (conversationId, messageId, emoji) => {
       },
       credentials: "include",
       body: JSON.stringify({ reactionType: emoji }),
-    }
+    },
   );
   return res.json();
 };

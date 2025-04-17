@@ -52,7 +52,7 @@ test("users see others online", async () => {
             name: user3.name,
             lastSeen: expect.any(String),
           }),
-        ])
+        ]),
       );
     });
 });
@@ -94,7 +94,7 @@ test("blocked user cannot see the blocker", async () => {
             name: user2.name,
             lastSeen: expect.any(String),
           }),
-        ])
+        ]),
       );
     });
 });
@@ -137,7 +137,7 @@ test("blocker cannot see the blocked user", async () => {
             name: user2.name,
             lastSeen: expect.any(String),
           }),
-        ])
+        ]),
       );
     });
 });
