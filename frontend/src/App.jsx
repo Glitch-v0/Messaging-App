@@ -29,6 +29,7 @@ function App() {
   const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
+    handleDarkMode();
     fetch(`${import.meta.env.VITE_BACKEND_URL}/whoami`, {
       method: "GET",
       credentials: "include",
@@ -36,11 +37,9 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setHasToken(data.authenticated); // Update based on backend response
-        handleDarkMode();
       })
       .catch((err) => {
         setHasToken(false);
-        handleDarkMode();
         //don't toast for login or register page
         if (
           window.location.pathname === "/login" ||

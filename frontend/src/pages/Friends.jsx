@@ -43,22 +43,8 @@ const Friends = () => {
         {data.friends.map((friend) => (
           <div key={friend.id} className="friend">
             <li>{friend.name}</li>
-            <form
-              onSubmit={(event) => event.preventDefault()}
-              className="friendSendMessage"
-            >
-              <textarea
-                name=""
-                id=""
-                placeholder="Send a message"
-                defaultValue={"Hi!"}
-              />
-              <button>Submit</button>
-            </form>
-            <div className="friendActions">
-              <button>Unfriend</button>
-              <button>Block</button>
-            </div>
+            <button>Unfriend</button>
+            <button>Block</button>
           </div>
         ))}
       </ul>

@@ -1,9 +1,18 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { AppContext } from "../context.jsx";
 
 const SideNav = () => {
+  const [isOpen, setIsOpen] = useState(true);
   const { hasToken } = useContext(AppContext);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+    const root = document.querySelector(":root");
+    root.style.setProperty("--nav-width", !isOpen ? "200px" : "0px");
+
+    const navButton = document.querySelector("#navButton");
+  };
 
   const links = [
     { path: "/profile", label: "Profile", protected: true },
@@ -17,19 +26,38 @@ const SideNav = () => {
   ];
 
   return (
-    <div className="navFiller">
+    <>
       <nav>
-        <ul>
-          {links
-            .filter((link) => (hasToken ? link.protected : !link.protected))
-            .map((link) => (
-              <li key={link.path}>
-                <Link to={link.path}>{link.label}</Link>
-              </li>
-            ))}
-        </ul>
+        {isOpen ? (
+          <ul>
+            {links
+              .filter((link) => (hasToken ? link.protected : !link.protected))
+              .map((link) => (
+                <li key={link.path}>
+                  <Link to={link.path}>{link.label}</Link>
+                </li>
+              ))}
+          </ul>
+        ) : null}
+        <button id="navButton" onClick={handleToggle}>
+          <svg
+            width={30}
+            height={30}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="var(--font-color)"
+              d={
+                isOpen
+                  ? "M11 17V7l-5 5zm2 4h2V3h-2z"
+                  : "M5 19v-6h2v4h4v2zm12-8V7h-4V5h6v6z"
+              }
+            />
+          </svg>
+        </button>
       </nav>
-    </div>
+    </>
   );
 };
 

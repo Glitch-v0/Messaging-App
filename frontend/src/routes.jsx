@@ -21,7 +21,7 @@ const routes = [
         <Outlet />
       </>
     ),
-    errorElement: <Error goToLink="/conversations" />,
+    errorElement: <Error />,
     children: [
       {
         index: true,

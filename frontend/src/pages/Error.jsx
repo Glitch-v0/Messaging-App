@@ -1,20 +1,22 @@
-import { Link } from "react-router-dom";
+import { useRouteError, useLocation, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const errorPage = (error, goToLink) => {
+const ErrorPage = () => {
+  const error = useRouteError();
+  const location = useLocation();
+  console.log({ error, location });
   return (
     <main>
       <h1>Error! {error.message}</h1>
-      <Link to={goToLink}>
+      <Link to={location}>
         <button className="errorButton">Reload</button>
       </Link>
     </main>
   );
 };
 
-errorPage.propTypes = {
-  error: PropTypes.object,
-  refetch: PropTypes.func,
+ErrorPage.propTypes = {
+  goToLink: PropTypes.string,
 };
 
-export default errorPage;
+export default ErrorPage;

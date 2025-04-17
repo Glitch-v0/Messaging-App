@@ -11,7 +11,7 @@
 }
 
 body {
-  background-color: black;
+  background-color: var(--main-color);
   margin: 0;
 }
 
@@ -34,17 +34,15 @@ nav {
   color: var(--font-color);
 }
 
-.navFiller {
-  grid-area: nav;
-  width: var(--nav-width);
-}
-
 nav {
+  grid-area: nav;
   background-color: var(--nav-background-color);
   width: var(--nav-width);
   position: fixed;
   height: 100%;
-  z-index: 1;
+
+  transition: width 0.85s ease-in-out;
+  z-index: 2;
 
   place-content: center;
 
@@ -59,6 +57,15 @@ nav {
     li {
       width: 100%;
     }
+  }
+
+  #navButton {
+    position: absolute;
+    top: 0%;
+    left: 87%;
+    z-index: 3;
+    background-color: transparent;
+    border: none;
   }
 }
 
@@ -469,33 +476,21 @@ a {
   text-align: center;
   place-content: center;
   place-items: center;
-
-  width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
   .friend {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+    width: 100%;
+    display: grid;
+    list-style: none;
     place-content: center;
     place-items: center;
-    list-style: none;
-
-    .friendActions,
-    .friendSendMessage {
-      display: flex;
-      flex-direction: row;
-      place-items: center;
-      place-content: center;
-
-      textarea {
-        field-sizing: content;
-        width: 400px;
-      }
-    }
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
 
     button {
-      margin: 1rem;
-      padding: 1rem;
       border-radius: var(--border-radius);
+      width: 100%;
     }
   }
 }
