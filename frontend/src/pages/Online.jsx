@@ -1,8 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
+import { friendsAPI } from "../api/friends.js";
 import { formatRelativeTime } from "../utils/time.js";
 import { toast } from "sonner";
 import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
+
+const handleAddFriend = (e, id) => {
+  friendsAPI
+    .addFriend(id)
+    .then(() => {
+      toast.success("Friend request sent");
+      e.target.disabled = true;
+    })
+    .catch(() => {
+      toast.error("Error sending friend request");
+    });
+};
 
 const Online = () => {
   const { isPending, isPaused, isError, data } = useQuery({
@@ -15,7 +28,7 @@ const Online = () => {
         },
         credentials: "include",
       }).then((res) => res.json()),
-    staleTime: 1000 * 60 * 1,
+    staleTime: 1000 * 10 * 1,
   });
 
   if (isPaused)
@@ -49,7 +62,9 @@ const Online = () => {
               <td>{user.name}</td>
               <td>{formatRelativeTime(user.lastSeen)}</td>
               <td>
-                <button>Add Friend</button>
+                <button onClick={(e) => handleAddFriend(e, user.id)}>
+                  Add Friend
+                </button>
               </td>
             </tr>
           ))}

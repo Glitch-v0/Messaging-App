@@ -24,6 +24,17 @@ const friendsAPI = {
     const data = await res.json();
     return data;
   },
+  addFriend: async (friendId) => {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ receiverId: friendId }),
+    });
+    return res.json();
+  },
   removeFriend: async (friendId) => {
     const res = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/friends/${friendId}/remove`,

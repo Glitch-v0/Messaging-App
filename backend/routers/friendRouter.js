@@ -1,5 +1,5 @@
 import { Router } from "express";
-import friendController from "../controllers/requestController.js";
+import friendController from "../controllers/friendController.js";
 import { verifyToken } from "../utils/tokenUtils.js";
 
 const router = Router();

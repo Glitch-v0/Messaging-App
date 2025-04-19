@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import prisma from "../prisma/prisma.js";
 import { createHash } from "../hashFunctions.js";
 import userQueries from "./userQueries.js";
@@ -28,43 +29,48 @@ export const deleteScript = async () => {
 
 export const createScript = async () => {
   await prisma.$transaction(async () => {
-    const bot = await userQueries.createUser(
-      "Your Robot Assistant",
-      "robo@test.com",
-      await createHash("test"),
+    const bot1 = await userQueries.createUser(
+      "HelperBot",
+      "robo1@test.com",
+      await createHash(crypto.randomUUID())
     );
     const bot2 = await userQueries.createUser(
-      "Test Robo Bro",
+      "RoboBro",
       "robo2@test.com",
-      await createHash("test"),
+      await createHash(crypto.randomUUID())
+    );
+    const bot3 = await userQueries.createUser(
+      "PotentialFriendBot",
+      "robo3@test.com",
+      await createHash(crypto.randomUUID())
     );
     const me = await userQueries.createUser(
       "njonesDev",
       "njones@test.com",
-      await createHash("test"),
+      await createHash("test")
     );
-    console.log({ bot, bot2, me });
-    await userQueries.addFriend(me.id, bot.id);
-    await requestQueries.sendFriendRequest(bot2.id, me.id);
+    await userQueries.addFriend(me.id, bot1.id);
+    await userQueries.addFriend(me.id, bot2.id);
+    await requestQueries.sendFriendRequest(bot3.id, me.id);
     const conv1 = await userQueries.createConversation(
-      [me.id, bot.id],
-      bot.id,
+      [me.id, bot1.id],
+      bot1.id,
       "Hey there! So glad you decided to join." +
-        "Feel free to talk to me, but I am unfortunately not programmed to respond back.",
+        "Feel free to talk to me, but I am unfortunately not programmed to respond back."
     );
     const conv2 = await userQueries.createConversation(
       [me.id, bot2.id],
-      bot.id,
+      bot1.id,
       "Hi there! I'm sending you these messages to show you features of your conversation. Your newest conversation is shown first." +
-        " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages.",
+        " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages."
     );
     const message = await userQueries.sendMessage(
       conv2.id,
       me.id,
-      "Good to know. Thanks for the information.",
+      "Good to know. Thanks for the information."
     );
 
-    await userQueries.reactToMessage(bot.id, message.id, "👍");
+    await userQueries.reactToMessage(bot1.id, message.id, "👍");
   });
 };
 
