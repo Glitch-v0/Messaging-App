@@ -55,7 +55,7 @@ const userQueries = {
     }
   },
 
-  getUserByOnline: async (userId) => {
+  getUsersByOnline: async (userId) => {
     try {
       return await prisma.user.findMany({
         where: {
@@ -79,14 +79,34 @@ const userQueries = {
             },
           },
         },
-        select: {
-          id: true,
-          name: true,
-          lastSeen: true,
+        include: {
+          friends: {
+            where: {
+              friends: {
+                some: {
+                  id: userId,
+                },
+              },
+            },
+            select: {
+              id: true,
+            },
+          },
+
+          receivedRequests: {
+            where: {
+              senderId: userId,
+            },
+          },
+        },
+        omit: {
+          email: true,
+          hashedPassword: true,
         },
       });
     } catch (error) {
-      return { error: "Failed to retrieve user." };
+      console.error(error);
+      return { error: "Failed to retrieve users." };
     }
   },
 

@@ -57,17 +57,37 @@ const Online = () => {
           </tr>
         </thead>
         <tbody className="onlineUsers">
-          {data.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{formatRelativeTime(user.lastSeen)}</td>
-              <td>
-                <button onClick={(e) => handleAddFriend(e, user.id)}>
-                  Add Friend
-                </button>
-              </td>
-            </tr>
-          ))}
+          {data.length === 0 ? (
+            <tr>No users online</tr>
+          ) : (
+            data.length > 0 &&
+            data.map((user) => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{formatRelativeTime(user.lastSeen)}</td>
+                <td>
+                  {/*Checks for pending request */}
+                  {user.receivedRequests ? (
+                    <button
+                      onClick={(e) => handleAddFriend(e, user.id)}
+                      disabled
+                    >
+                      Friend Request Sent
+                    </button>
+                  ) : /*Checks if already friend or is user */
+                  !user.friends && !user?.isUser ? (
+                    <button onClick={(e) => handleAddFriend(e, user.id)}>
+                      Add Friend
+                    </button>
+                  ) : user.friends ? (
+                    <p>Friend</p>
+                  ) : user?.isUser ? (
+                    <p>You</p>
+                  ) : null}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </main>
