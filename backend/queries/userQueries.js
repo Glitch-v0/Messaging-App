@@ -124,7 +124,6 @@ const userQueries = {
           // Making boolean values out of string inputs from json object
           darkMode: body.darkMode,
           showOnline: body.showOnline,
-          allowRequests: body.allowRequests,
         },
       });
     } catch (error) {

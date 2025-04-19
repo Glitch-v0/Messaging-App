@@ -26,12 +26,11 @@ model User {
 }
 
 model Profile {
-  id            String  @id @default(cuid())
-  userId        String  @unique
-  darkMode      Boolean @default(false)
-  showOnline    Boolean @default(false)
-  allowRequests Boolean @default(false)
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String  @id @default(cuid())
+  userId     String  @unique
+  darkMode   Boolean @default(false)
+  showOnline Boolean @default(true)
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model FriendList {

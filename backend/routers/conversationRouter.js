@@ -1,7 +1,6 @@
 import { Router } from "express";
 import userController from "../controllers/userController.js";
 import { verifyToken } from "../utils/tokenUtils.js";
-import expressAsyncHandler from "express-async-handler";
 
 const router = Router();
 
@@ -30,7 +29,7 @@ router.put(
   verifyToken,
   async (req, res) => {
     await userController.updateMessage(req, res);
-  },
+  }
 );
 
 router.delete(
@@ -38,7 +37,7 @@ router.delete(
   verifyToken,
   async (req, res) => {
     await userController.deleteMessage(req, res);
-  },
+  }
 );
 
 router.patch(
@@ -46,7 +45,7 @@ router.patch(
   verifyToken,
   async (req, res) => {
     await userController.reactToMessage(req, res);
-  },
+  }
 );
 
 router.delete(
@@ -54,7 +53,7 @@ router.delete(
   verifyToken,
   async (req, res) => {
     await userController.removeReaction(req, res);
-  },
+  }
 );
 
 export default router;

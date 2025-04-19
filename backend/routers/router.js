@@ -1,6 +1,7 @@
 import { Router } from "express";
 import userRouter from "./userRouter.js";
 import requestRouter from "./requestRouter.js";
+import friendRouter from "./friendRouter.js";
 import conversationRouter from "./conversationRouter.js";
 import { verifyToken } from "../utils/tokenUtils.js";
 
@@ -12,6 +13,8 @@ router.get("/ping", (req, res) => {
 router.use("/api", userRouter);
 
 router.use("/api/requests", requestRouter);
+
+router.use("/api/friends", friendRouter);
 
 router.use("/api/conversations", conversationRouter);
 
@@ -27,7 +30,7 @@ router.get("/", (req, res) => {
   router.stack.forEach((r) => {
     if (r?.route?.path) {
       const methods = Object.keys(r.route.methods).map((method) =>
-        method.toUpperCase(),
+        method.toUpperCase()
       );
       methods.forEach((method) => {
         routes.push(`${method} ${r.route.path}`);
@@ -39,7 +42,7 @@ router.get("/", (req, res) => {
   userRouter.stack.forEach((r) => {
     if (r?.route?.path) {
       const methods = Object.keys(r.route.methods).map((method) =>
-        method.toUpperCase(),
+        method.toUpperCase()
       );
       methods.forEach((method) => {
         routes.push(`${method} ${r.route.path}`);

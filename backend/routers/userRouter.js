@@ -1,16 +1,12 @@
 import { Router } from "express";
 import userController from "../controllers/userController.js";
 import { verifyToken } from "../utils/tokenUtils.js";
-import expressAsyncHandler from "express-async-handler";
 
 const router = Router();
 
-router.post(
-  "/register",
-  expressAsyncHandler(async (req, res) => {
-    await userController.handleRegister(req, res);
-  }),
-);
+router.post("/register", async (req, res) => {
+  await userController.handleRegister(req, res);
+});
 
 router.post("/login", async (req, res) => {
   await userController.handleLogin(req, res);

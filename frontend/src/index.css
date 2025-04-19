@@ -66,6 +66,13 @@ nav {
     z-index: 3;
     background-color: transparent;
     border: none;
+    opacity: 0.55;
+  }
+
+  #navButton:hover,
+  #navButton:active {
+    opacity: 1;
+    scale: 1.05;
   }
 }
 
