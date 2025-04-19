@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { friendsAPI } from "../api/friends.js";
 import { formatRelativeTime } from "../utils/time.js";
 import { toast } from "sonner";
@@ -28,7 +28,7 @@ const Online = () => {
         },
         credentials: "include",
       }).then((res) => res.json()),
-    staleTime: 1000 * 10 * 1,
+    staleTime: 1000 * 5 * 1,
   });
 
   if (isPaused)
@@ -67,12 +67,12 @@ const Online = () => {
                 <td>{formatRelativeTime(user.lastSeen)}</td>
                 <td>
                   {/*Checks for pending request */}
-                  {user.receivedRequests ? (
+                  {user.receivedRequests || user.sentRequests ? (
                     <button
                       onClick={(e) => handleAddFriend(e, user.id)}
                       disabled
                     >
-                      Friend Request Sent
+                      Friend Request Pending
                     </button>
                   ) : /*Checks if already friend or is user */
                   !user.friends && !user?.isUser ? (

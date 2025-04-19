@@ -1,28 +1,38 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
 import { friendsAPI } from "../api/friends.js";
 
 const Friends = () => {
-  const client = useQueryClient();
-
-  const { isPending, isPaused, isError, data } = useQuery({
+  const { isPending, isPaused, isError, data, refetch } = useQuery({
     queryKey: ["friends"],
     queryFn: friendsAPI.getFriends,
-    staleTime: 1000 * 60 * 1,
+    staleTime: 1000 * 5 * 1,
   });
 
   const removeFriendMutation = useMutation({
-    mutationFn: ({ fn, id }) => {
-      return fn(id);
-    },
+    mutationFn: (id) => friendsAPI.removeFriend(id),
     onSuccess: () => {
-      client.fetchQuery(["friends"]);
+      console.log({ data });
+      refetch();
       toast.success("Friend removed");
     },
     onError: (error) => {
       toast.error("Error removing friend");
+      console.error({ error });
+    },
+  });
+
+  const blockFriendMutation = useMutation({
+    mutationFn: (id) => friendsAPI.blockFrien(id),
+    onSuccess: () => {
+      console.log({ data });
+      refetch();
+      toast.success("Friend blocked");
+    },
+    onError: (error) => {
+      toast.error("Error blocking friend");
       console.error({ error });
     },
   });
@@ -53,24 +63,10 @@ const Friends = () => {
         {data.friends.map((friend) => (
           <div key={friend.id} className="friend">
             <li>{friend.name}</li>
-            <button
-              onClick={() =>
-                removeFriendMutation.mutate({
-                  fn: friendsAPI.removeFriend,
-                  id: friend.id,
-                })
-              }
-            >
+            <button onClick={() => removeFriendMutation.mutate(friend.id)}>
               Unfriend
             </button>
-            <button
-              onClick={() =>
-                removeFriendMutation.mutate({
-                  fn: friendsAPI.blockFriend,
-                  id: friend.id,
-                })
-              }
-            >
+            <button onClick={() => blockFriendMutation.mutate(friend.id)}>
               Block
             </button>
           </div>

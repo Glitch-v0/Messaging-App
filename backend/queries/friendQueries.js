@@ -45,34 +45,38 @@ const friendQueries = {
   },
   unfriend: async (userId, friendId) => {
     try {
-      await prisma.friendList.update({
-        where: {
-          ownerId: userId,
-        },
-        data: {
-          friends: {
-            disconnect: {
-              id: friendId,
-            },
-          },
-        },
-      });
+      return await prisma.$transaction([
+        prisma.friendList.update({
+          where: { ownerId: userId },
+          data: { friends: { disconnect: { id: friendId } } },
+        }),
+        prisma.friendList.update({
+          where: { ownerId: friendId },
+          data: { friends: { disconnect: { id: userId } } },
+        }),
+      ]);
     } catch (error) {
       return { error: "Failed to unfriend." };
     }
   },
   block: async (userId, blockedId) => {
     try {
-      return await prisma.friendList.upsert({
-        where: { ownerId: userId },
-        update: {
-          blocked: { connect: { id: blockedId } },
-        },
-        create: {
-          ownerId: userId,
-          blocked: { connect: { id: blockedId } },
-        },
-      });
+      return await prisma.$transaction([
+        // Remove from both friends lists
+        prisma.friendList.update({
+          where: { ownerId: userId },
+          data: { friends: { disconnect: { id: blockedId } } },
+        }),
+        prisma.friendList.update({
+          where: { ownerId: blockedId },
+          data: { friends: { disconnect: { id: userId } } },
+        }),
+        // Add to blocklist
+        prisma.friendList.update({
+          where: { ownerId: userId },
+          data: { blocked: { connect: { id: blockedId } } },
+        }),
+      ]);
     } catch (error) {
       return { error: "Failed to block user." };
     }

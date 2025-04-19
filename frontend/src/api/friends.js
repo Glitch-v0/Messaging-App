@@ -33,6 +33,7 @@ const friendsAPI = {
       credentials: "include",
       body: JSON.stringify({ receiverId: friendId }),
     });
+    console.log({ res });
     return res.json();
   },
   removeFriend: async (friendId) => {

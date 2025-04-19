@@ -11,11 +11,23 @@ const friendController = {
   }),
 
   removeFriend: asyncHandler(async (req, res) => {
-    res.json(await friendQueries.unfriend(req.userId, req.params.friendId));
+    const query = await friendQueries.unfriend(req.userId, req.params.friendId);
+    if (query.error) {
+      console.log({ query });
+      res.status(404).json(query);
+    } else {
+      console.log({ query });
+      res.status(200).json(query);
+    }
   }),
 
   removeAndBlockFriend: asyncHandler(async (req, res) => {
-    res.json(await friendQueries.block(req.userId, req.params.friendId));
+    const query = await friendQueries.block(req.userId, req.params.friendId);
+    if (query.error) {
+      res.status(404).json(query);
+    } else {
+      res.status(200).json(query);
+    }
   }),
 };
 

@@ -26,6 +26,7 @@ const userController = {
         ...user,
         friends: user.friends !== null,
         receivedRequests: user.receivedRequests?.length > 0,
+        sentRequests: user.sentRequests?.length > 0,
         isUser: user.id === req.userId,
       }));
 

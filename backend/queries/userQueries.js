@@ -98,6 +98,12 @@ const userQueries = {
               senderId: userId,
             },
           },
+
+          sentRequests: {
+            where: {
+              receiverId: userId,
+            },
+          },
         },
         omit: {
           email: true,
