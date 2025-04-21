@@ -79,7 +79,6 @@ nav {
 main {
   grid-area: main;
   height: 100dvh;
-  padding: 1rem;
 
   p {
     text-wrap: wrap;
@@ -96,16 +95,16 @@ form {
 }
 
 button {
-  background-color: var(--button-background-color);
+  /* background-color: var(--button-background-color); */
+  background-color: transparent;
   color: var(--font-color);
-  font-size: 1rem;
-  border: 1px solid var(--button-background-color);
-  padding: 0.33rem;
+  font-size: 0.75rem;
+  border: 1px solid transparent;
 }
 
 button:hover {
   cursor: pointer;
-  border: 1px solid var(--font-color);
+  scale: 1.05;
 }
 
 input {
@@ -136,7 +135,7 @@ a {
   }
 }
 
-.conversationContainer {
+#conversationContainer {
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr;
@@ -153,18 +152,38 @@ a {
     display: flex;
     flex-direction: column;
 
-    ul {
+    button {
       display: flex;
-      list-style: none;
-      border: 1px solid var(--font-color);
-      border-radius: var(--border-radius);
       place-items: center;
+      place-content: center;
+      margin: 0;
+      padding: 0;
+      opacity: 0.6;
+
+      ul {
+        display: flex;
+        list-style: none;
+        border: 1px solid var(--font-color);
+        border-radius: var(--border-radius);
+        place-items: center;
+        padding: 0.5rem;
+        width: 100%;
+
+        li {
+          padding: 0;
+          margin: 0;
+        }
+      }
+
+      ul:hover {
+        cursor: pointer;
+        background-color: hsl(from var(--main-color) h s calc(l + 10%));
+        color: hsl(from var(--font-color) h s calc(l + 10%));
+      }
     }
 
-    ul:hover {
-      cursor: pointer;
-      background-color: hsl(from var(--main-color) h s calc(l + 10%));
-      color: hsl(from var(--font-color) h s calc(l + 10%));
+    button:hover {
+      opacity: 1;
     }
   }
 
@@ -268,18 +287,29 @@ a {
 }
 
 #iconContainer {
-  background-color: var(--main-color);
   position: absolute;
   top: 0;
-  display: flex;
-  padding: 0.5rem;
+
+  display: none;
   flex-direction: column;
   justify-content: space-around;
-  gap: 1rem;
+  background-color: var(--main-color);
 
+  padding: 0.2rem;
+  gap: 0.6rem;
   border: 1px solid var(--font-color);
   border-radius: var(--border-radius);
   width: fit-content;
+
+  .messageIcon {
+    padding: 0;
+    margin: 0;
+
+    svg {
+      margin: 0;
+      padding: 0;
+    }
+  }
 
   .messageIcon:hover {
     cursor: pointer;
@@ -293,7 +323,7 @@ a {
 
 #reactionContainer {
   position: absolute;
-  display: flex;
+  display: none;
   z-index: -2;
   transition: z-index 0.1s ease-out 0s;
   background-color: var(--nav-background-color);

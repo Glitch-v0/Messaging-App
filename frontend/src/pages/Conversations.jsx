@@ -20,9 +20,10 @@ import {
 } from "../api/messages.js";
 
 const handleReactButton = async (e) => {
+  console.log({ e });
   const messageRect = e.target.getBoundingClientRect();
   const reactionContainer = document.querySelector("#reactionContainer");
-
+  reactionContainer.style.display = "flex";
   reactionContainer.style.zIndex = "4";
 
   //Bottom set to top of what is clicked
@@ -222,11 +223,11 @@ const Conversations = () => {
       <p>You should start one.</p>
     </main>
   ) : (
-    <main className="conversationContainer">
+    <main id="conversationContainer">
       <div className="conversationLists">
         <h1>Conversations</h1>
         {getAllConversationsQuery.data.map((conversation) => (
-          <div
+          <button
             key={conversation.id}
             onClick={() => setCurrentConversation(conversation.id)}
           >
@@ -253,7 +254,7 @@ const Conversations = () => {
                 />
               </svg>
             </ul>
-          </div>
+          </button>
         ))}
       </div>
       <div className="currentConversation">

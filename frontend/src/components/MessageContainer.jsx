@@ -19,18 +19,21 @@ const MessageContainer = () => {
     const button = e.target;
     const buttonRect = button.getBoundingClientRect();
 
-    let parent = button.parentElement.parentElement;
+    // let parent = button.parentElement.parentElement;
     // console.log(`Clicked more button, belonging to message ${parent.id}`);
 
     const iconContainer = document.getElementById("iconContainer");
+    iconContainer.style.display = "flex";
     const iconContainerHeight = iconContainer.offsetHeight;
     const iconContainerWidth = iconContainer.offsetWidth;
     iconContainer.style.zIndex = "2";
     iconContainer.style.top = buttonRect.top - iconContainerHeight * 0.5 + "px";
     iconContainer.style.left =
       buttonRect.left - iconContainerWidth * 0.25 + "px";
+    iconContainer.focus();
 
-    setCurrentMessage(parent.id);
+    console.log(`Setting current message ID to ${currentMessage}`);
+    setCurrentMessage(currentMessage);
     setMessageEditingMode(false);
     console.log({ currentMessage });
   };

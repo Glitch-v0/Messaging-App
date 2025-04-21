@@ -76,7 +76,12 @@ const Message = ({
 
         <sub className="messageSender">{message.sender.name}</sub>
         {message.owner ? (
-          <button onClick={(e) => handleMoreButton(e)}>
+          <button
+            onClick={(e) => {
+              handleMoreButton(e);
+              setCurrentMessage(message.id);
+            }}
+          >
             <svg
               width="24"
               height="24"
@@ -90,17 +95,18 @@ const Message = ({
             </svg>
           </button>
         ) : (
-          <button>
+          <button
+            onClick={(e) => {
+              handleReactButton(e);
+              setCurrentMessage(message.id);
+            }}
+          >
             <svg
               className="messageIcon messageFromOtherIcon"
               width="24"
               height="24"
               viewBox="0 0 24 24"
               id="reactToMessageIcon"
-              onClick={(e) => {
-                handleReactButton(e);
-                setCurrentMessage(message.id);
-              }}
             >
               <path
                 fill="currentColor"
