@@ -2,7 +2,7 @@ import propTypes from "prop-types";
 
 const handleReactButton = async (e) => {
   const messageRect = e.target.getBoundingClientRect();
-  const reactionContainer = document.querySelector(".reactionContainer");
+  const reactionContainer = document.querySelector("#reactionContainer");
 
   reactionContainer.style.zIndex = "4";
 
@@ -16,6 +16,8 @@ const handleReactButton = async (e) => {
     messageRect.right -
     reactionContainer.style.width +
     "px";
+
+  reactionContainer.focus();
 
   console.log({ messageRect, reactionContainer });
 };

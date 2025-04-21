@@ -21,7 +21,7 @@ import {
 
 const handleReactButton = async (e) => {
   const messageRect = e.target.getBoundingClientRect();
-  const reactionContainer = document.querySelector(".reactionContainer");
+  const reactionContainer = document.querySelector("#reactionContainer");
 
   reactionContainer.style.zIndex = "4";
 
@@ -35,6 +35,8 @@ const handleReactButton = async (e) => {
     messageRect.right -
     reactionContainer.style.width +
     "px";
+
+  reactionContainer.focus();
 
   console.log({ messageRect, reactionContainer });
 };
@@ -82,10 +84,10 @@ const Conversations = () => {
           return {
             ...old,
             messages: old.messages.filter(
-              (message) => message.id !== currentMessage,
+              (message) => message.id !== currentMessage
             ),
           };
-        },
+        }
       );
       toast.success("Message deleted");
     },
@@ -111,10 +113,10 @@ const Conversations = () => {
             messages: old.messages.map((message) =>
               message.id === updatedMessage.id
                 ? { ...message, content: updatedMessage.content }
-                : message,
+                : message
             ),
           };
-        },
+        }
       );
       toast.success("Message edit saved");
     },
@@ -128,7 +130,7 @@ const Conversations = () => {
     mutationFn: () =>
       sendMessage(
         currentConversation,
-        document.getElementById("messageInput").value,
+        document.getElementById("messageInput").value
       ),
     onSuccess: (newMessage) => {
       client.setQueryData(
@@ -138,7 +140,7 @@ const Conversations = () => {
             ...old,
             messages: [...old.messages, { ...newMessage, owner: true }],
           };
-        },
+        }
       );
       const input = document.getElementById("messageInput");
       if (input) input.value = "";
@@ -176,7 +178,7 @@ const Conversations = () => {
               if (message.id !== currentMessage) return message;
 
               const filteredReactions = message.reactions.filter(
-                (reaction) => reaction.userId !== newReaction.userId,
+                (reaction) => reaction.userId !== newReaction.userId
               );
 
               console.log({ filteredReactions, newReaction });
@@ -187,8 +189,9 @@ const Conversations = () => {
               };
             }),
           };
-        },
+        }
       );
+
       toast.success("Message reacted");
     },
     onError: (error) => {

@@ -14,6 +14,12 @@ const friendQueries = {
               name: true,
             },
           },
+          blocked: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -62,22 +68,22 @@ const friendQueries = {
   block: async (userId, blockedId) => {
     try {
       return await prisma.$transaction([
-        // Remove from both friends lists
-        prisma.friendList.update({
-          where: { ownerId: userId },
-          data: { friends: { disconnect: { id: blockedId } } },
-        }),
+        // Remove userId from blockedId's friends (if exists)
         prisma.friendList.update({
           where: { ownerId: blockedId },
           data: { friends: { disconnect: { id: userId } } },
         }),
-        // Add to blocklist
+        // Remove blockedId from userId's friends + add to blocklist
         prisma.friendList.update({
           where: { ownerId: userId },
-          data: { blocked: { connect: { id: blockedId } } },
+          data: {
+            friends: { disconnect: { id: blockedId } },
+            blocked: { connect: { id: blockedId } },
+          },
         }),
       ]);
     } catch (error) {
+      console.error({ error });
       return { error: "Failed to block user." };
     }
   },

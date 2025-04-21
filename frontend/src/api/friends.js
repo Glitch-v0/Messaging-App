@@ -8,6 +8,7 @@ const friendsAPI = {
       credentials: "include",
     });
     const data = await res.json();
+    console.log({ data });
     return data;
   },
   getFriend: async (friendId) => {

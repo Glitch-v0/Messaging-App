@@ -25,7 +25,7 @@ const Friends = () => {
   });
 
   const blockFriendMutation = useMutation({
-    mutationFn: (id) => friendsAPI.blockFrien(id),
+    mutationFn: (id) => friendsAPI.blockFriend(id),
     onSuccess: () => {
       console.log({ data });
       refetch();
@@ -69,6 +69,15 @@ const Friends = () => {
             <button onClick={() => blockFriendMutation.mutate(friend.id)}>
               Block
             </button>
+          </div>
+        ))}
+      </ul>
+
+      <h1>Blocked</h1>
+      <ul className="friendContainer">
+        {data?.blocked?.map((friend) => (
+          <div key={friend.id} className="friend">
+            <li>{friend.name}</li>
           </div>
         ))}
       </ul>

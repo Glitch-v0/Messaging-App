@@ -3,9 +3,9 @@ import propTypes from "prop-types";
 const ReactionContainer = ({ reactMessageMutation }) => {
   return (
     <div
-      className="reactionContainer"
+      id="reactionContainer"
       onMouseLeave={() => {
-        const container = document.querySelector(".reactionContainer");
+        const container = document.querySelector("#reactionContainer");
         container.style.zIndex = "-2";
       }}
     >

@@ -34,7 +34,7 @@ const Message = ({
             message.reactions.reduce((acc, reaction) => {
               acc[reaction.type] = (acc[reaction.type] || 0) + 1;
               return acc;
-            }, {}),
+            }, {})
           ).map(([type, count]) => (
             <span key={type} className="messageReactionType">
               <span className="reaction-emoji">{type}</span>
@@ -43,7 +43,11 @@ const Message = ({
           ))}
         </span>
 
-        <button type="button" onClick={(e) => handleMoreButton(e)}>
+        <button
+          type="button"
+          onClick={(e) => handleMoreButton(e)}
+          aria-haspopup="menu"
+        >
           <svg
             width="24"
             height="24"
@@ -111,7 +115,7 @@ const Message = ({
             message.reactions.reduce((acc, reaction) => {
               acc[reaction.type] = (acc[reaction.type] || 0) + 1;
               return acc;
-            }, {}),
+            }, {})
           ).map(([type, count]) => (
             <span key={type} className="messageReactionType">
               <span className="reaction-emoji">{type}</span>
