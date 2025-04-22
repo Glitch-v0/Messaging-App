@@ -3,17 +3,18 @@ import { ConversationContext } from "../context.jsx";
 import propTypes from "prop-types";
 import { useContext } from "react";
 
-const Message = ({ message, handleMoreButton, currentMessageId }) => {
+const Message = ({ message, handleMoreButton }) => {
   const {
     editMessageMutation,
     handleReactButton,
-    setCurrentMessageId,
+    currentMessage,
+    setCurrentMessage,
     messageEditingMode,
   } = useContext(ConversationContext);
 
   return messageEditingMode &&
     message.owner &&
-    message.id === currentMessageId ? (
+    message.id === currentMessage.id ? (
     <form
       className="messageFromOwner"
       onSubmit={(e) => {
@@ -82,7 +83,7 @@ const Message = ({ message, handleMoreButton, currentMessageId }) => {
           <button
             onClick={(e) => {
               handleMoreButton(e);
-              setCurrentMessageId(message.id);
+              setCurrentMessage(message);
             }}
           >
             <svg
@@ -101,7 +102,7 @@ const Message = ({ message, handleMoreButton, currentMessageId }) => {
           <button
             onClick={(e) => {
               handleReactButton(e);
-              setCurrentMessageId(message.id);
+              setCurrentMessage(message);
             }}
           >
             {/* React button replaces more button for messages not belonging to owner */}
@@ -143,6 +144,6 @@ Message.propTypes = {
   message: propTypes.object,
   handleMoreButton: propTypes.func,
   handleSubmitEdit: propTypes.func,
-  currentMessageId: propTypes.string,
+  currentMessage: propTypes.object,
 };
 export default Message;

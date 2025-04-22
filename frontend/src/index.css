@@ -335,13 +335,16 @@ a {
     border-color: transparent;
     font-size: 1rem;
     opacity: 0.75;
-    background-color: transparent !important;
+    background-color: transparent;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease,
+      border-color 0.2s ease;
   }
 
   button:hover {
     opacity: 1;
-    scale: 1.05;
-    border-color: transparent;
+    transform: translateY(-0.5rem) scale(1.75);
   }
 
   button:active {
@@ -529,4 +532,13 @@ a {
       width: 100%;
     }
   }
+}
+
+.yourReaction {
+  background-color: color-mix(
+    in srgb,
+    var(--font-color) 20%,
+    transparent
+  ) !important;
+  border-radius: var(--border-radius) !important;
 }

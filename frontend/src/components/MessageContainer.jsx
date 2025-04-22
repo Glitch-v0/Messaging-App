@@ -8,8 +8,8 @@ import { ConversationContext } from "../context.jsx";
 const MessageContainer = () => {
   const {
     getSingleConversationQuery,
-    currentMessageId,
-    setCurrentMessageId,
+    currentMessage,
+    setCurrentMessage,
     setMessageEditingMode,
   } = useContext(ConversationContext);
 
@@ -17,9 +17,6 @@ const MessageContainer = () => {
     // create vertical icon container
     const button = e.target;
     const buttonRect = button.getBoundingClientRect();
-
-    // let parent = button.parentElement.parentElement;
-    // console.log(`Clicked more button, belonging to message ${parent.id}`);
 
     const iconContainer = document.getElementById("iconContainer");
     iconContainer.style.display = "flex";
@@ -31,10 +28,8 @@ const MessageContainer = () => {
       buttonRect.left - iconContainerWidth * 0.25 + "px";
     iconContainer.focus();
 
-    console.log(`Setting current message ID to ${currentMessageId}`);
-    setCurrentMessageId(currentMessageId);
+    setCurrentMessage(currentMessage);
     setMessageEditingMode(false);
-    console.log({ currentMessageId });
   };
 
   if (getSingleConversationQuery.isPaused) {
@@ -61,10 +56,7 @@ const MessageContainer = () => {
     <div className="messageContainer">
       {getSingleConversationQuery?.data?.messages
         ? getSingleConversationQuery.data.messages.map((message) => (
-            <Message
-              key={message.id}
-              {...{ message, handleMoreButton, currentMessageId }}
-            />
+            <Message key={message.id} {...{ message, handleMoreButton }} />
           ))
         : null}
     </div>

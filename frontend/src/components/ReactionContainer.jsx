@@ -6,7 +6,9 @@ const hideReactionContainer = () => {
   container.tabIndex = "-1";
   container.style.display = "none";
 };
-const ReactionContainer = ({ reactMessageMutation }) => {
+const ReactionContainer = ({ reactMessageMutation, currentMessage }) => {
+  const reactions = ["👍", "👎", "❤️", "😂", "😭", "🤣", "👏", "🙌"];
+
   return (
     <div
       id="reactionContainer"
@@ -24,67 +26,33 @@ const ReactionContainer = ({ reactMessageMutation }) => {
         }
       }}
     >
-      <button
-        onClick={(e) => {
-          reactMessageMutation.mutate(e.currentTarget.textContent);
-          hideReactionContainer();
-        }}
-      >
-        👍
-      </button>
-      <button
-        onClick={(e) => {
-          reactMessageMutation.mutate(e.currentTarget.textContent);
-          hideReactionContainer();
-        }}
-      >
-        👎
-      </button>
-      <button
-        onClick={(e) => {
-          reactMessageMutation.mutate(e.currentTarget.textContent);
-          hideReactionContainer();
-        }}
-      >
-        ❤️
-      </button>
-      <button
-        onClick={(e) => {
-          reactMessageMutation.mutate(e.currentTarget.textContent);
-          hideReactionContainer();
-        }}
-      >
-        😂
-      </button>
-      <button
-        onClick={(e) => {
-          reactMessageMutation.mutate(e.currentTarget.textContent);
-          hideReactionContainer();
-        }}
-      >
-        👏
-      </button>
-      <button
-        onClick={(e) => {
-          reactMessageMutation.mutate(e.currentTarget.textContent);
-          hideReactionContainer();
-        }}
-      >
-        🙌
-      </button>
-      <button
-        onClick={(e) => {
-          reactMessageMutation.mutate(e.currentTarget.textContent);
-          hideReactionContainer();
-        }}
-      >
-        🔥
-      </button>
+      {reactions.map((emoji) => (
+        <button
+          key={crypto.randomUUID()}
+          onClick={() => {
+            reactMessageMutation.mutate(emoji);
+            hideReactionContainer();
+          }}
+          className={
+            currentMessage.owner &&
+            currentMessage.reactions.some(
+              (reaction) =>
+                reaction.userId === currentMessage.sender.id &&
+                reaction.type === emoji
+            )
+              ? "yourReaction"
+              : "notYourReaction"
+          }
+        >
+          {emoji}
+        </button>
+      ))}
     </div>
   );
 };
 
 ReactionContainer.propTypes = {
+  currentMessage: propTypes.object,
   reactMessageMutation: propTypes.object,
 };
 export default ReactionContainer;

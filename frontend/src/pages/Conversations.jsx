@@ -17,6 +17,7 @@ import {
   editMessage,
   sendMessage,
   reactMessage,
+  removeMessageReaction,
 } from "../api/messages.js";
 
 const handleReactButton = async (e) => {
@@ -45,7 +46,7 @@ const handleReactButton = async (e) => {
 const Conversations = () => {
   const client = useQueryClient();
   const [currentConversation, setCurrentConversation] = useState(null);
-  const [currentMessageId, setCurrentMessageId] = useState("");
+  const [currentMessage, setCurrentMessage] = useState({});
   const [messageEditingMode, setMessageEditingMode] = useState(false);
 
   const getAllConversationsQuery = useQuery({
@@ -75,7 +76,7 @@ const Conversations = () => {
   });
 
   const deleteMessageMutation = useMutation({
-    mutationFn: () => deleteMessage(currentConversation, currentMessageId),
+    mutationFn: () => deleteMessage(currentConversation, currentMessage.id),
     onSuccess: () => {
       // client.invalidateQueries(["currentConversation", currentConversation]);
       client.setQueryData(
@@ -85,7 +86,7 @@ const Conversations = () => {
           return {
             ...old,
             messages: old.messages.filter(
-              (message) => message.id !== currentMessageId
+              (message) => message.id !== currentMessage.id
             ),
           };
         }
@@ -100,13 +101,13 @@ const Conversations = () => {
 
   const editMessageMutation = useMutation({
     mutationFn: (message) =>
-      editMessage(currentConversation, currentMessageId, message),
+      editMessage(currentConversation, currentMessage.id, message),
     onSuccess: (updatedMessage) => {
       client.setQueryData(
         ["currentConversation", currentConversation],
         (old) => {
           if (!old) return old;
-          setCurrentMessageId("");
+          setCurrentMessage({});
           setMessageEditingMode(false);
 
           return {
@@ -164,8 +165,21 @@ const Conversations = () => {
 
   const reactMessageMutation = useMutation({
     mutationFn: (emoji) => {
-      // console.log({ emoji, currentConversation, currentMessage });
-      return reactMessage(currentConversation, currentMessageId, emoji);
+      // Check if user already has this reaction
+      const hasReaction =
+        currentMessage.owner &&
+        currentMessage.reactions.some(
+          (reaction) =>
+            reaction.userId === currentMessage.sender.id &&
+            reaction.type === emoji
+        );
+
+      // If user already has this reaction, remove it; otherwise, add it
+      if (hasReaction) {
+        return removeMessageReaction(currentConversation, currentMessage.id);
+      } else {
+        return reactMessage(currentConversation, currentMessage.id, emoji);
+      }
     },
     onSuccess: (newReaction) => {
       //update messages to set new reaction to currentMessage
@@ -176,24 +190,32 @@ const Conversations = () => {
           return {
             ...old,
             messages: old.messages.map((message) => {
-              if (message.id !== currentMessageId) return message;
+              if (message.id !== currentMessage.id) return message;
 
-              const filteredReactions = message.reactions.filter(
-                (reaction) => reaction.userId !== newReaction.userId
-              );
-
-              console.log({ filteredReactions, newReaction });
-
-              return {
-                ...message,
-                reactions: [...filteredReactions, newReaction],
-              };
+              if (newReaction.isRemoval) {
+                // Remove user reaction
+                return {
+                  ...message,
+                  reactions: message.reactions.filter(
+                    (reaction) => reaction.userId !== currentMessage.sender.id
+                  ),
+                };
+              } else {
+                // Add/replace user reaction
+                const filteredReactions = message.reactions.filter(
+                  (reaction) => reaction.userId !== newReaction.userId
+                );
+                return {
+                  ...message,
+                  reactions: [...filteredReactions, newReaction],
+                };
+              }
             }),
           };
         }
       );
 
-      toast.success("Message reacted!" + newReaction.type);
+      // toast.success("Message reacted!" + newReaction.type);
     },
     onError: (error) => {
       toast.error("Error reacting to message");
@@ -261,8 +283,8 @@ const Conversations = () => {
         <ConversationContext.Provider
           value={{
             getSingleConversationQuery,
-            currentMessageId,
-            setCurrentMessageId,
+            currentMessage,
+            setCurrentMessage,
             messageEditingMode,
             setMessageEditingMode,
             editMessageMutation,
@@ -289,7 +311,7 @@ const Conversations = () => {
         </div>
       </div>
       <IconContainer
-        currentMessage={currentMessageId}
+        currentMessage={currentMessage}
         currentConversation={currentConversation}
         deleteMessageMutation={deleteMessageMutation}
         messageEditingMode={messageEditingMode}
@@ -297,7 +319,7 @@ const Conversations = () => {
         handleReactButton={handleReactButton}
       />
 
-      <ReactionContainer reactMessageMutation={reactMessageMutation} />
+      <ReactionContainer {...{ reactMessageMutation, currentMessage }} />
     </main>
   );
 };

@@ -49,7 +49,6 @@ const sendMessage = async (conversationId, message) => {
 };
 
 const reactMessage = async (conversationId, messageId, emoji) => {
-  console.log({ messageId });
   const res = await fetch(
     `${
       import.meta.env.VITE_BACKEND_URL
@@ -63,7 +62,29 @@ const reactMessage = async (conversationId, messageId, emoji) => {
       body: JSON.stringify({ reactionType: emoji }),
     }
   );
-  return res.json();
+  const data = await res.json();
+  return { ...data, isRemoval: false };
 };
 
-export { deleteMessage, editMessage, sendMessage, reactMessage };
+const removeMessageReaction = async (conversationId, messageId) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/conversations/${conversationId}/messages/${messageId}/reaction`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+  const data = await res.json();
+  return { ...data, isRemoval: true };
+};
+
+export {
+  deleteMessage,
+  editMessage,
+  sendMessage,
+  reactMessage,
+  removeMessageReaction,
+};

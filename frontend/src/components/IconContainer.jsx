@@ -19,8 +19,6 @@ const handleReactButton = async (e) => {
     "px";
 
   reactionContainer.focus();
-
-  console.log({ messageRect, reactionContainer });
 };
 
 const IconContainer = ({
@@ -37,15 +35,13 @@ const IconContainer = ({
   };
 
   const handleEditButton = async () => {
-    console.log("Clicked edit button!");
     await setMessageEditingMode(!messageEditingMode);
     hideIconContainer();
     if (messageEditingMode === false) {
       setTimeout(() => {
         // console.log(`Message editing mode: ${messageEditingMode}`);
-        const form = document.getElementById(currentMessage);
+        const form = document.getElementById(currentMessage.id);
         const input = form.getElementsByTagName("input")[0];
-        console.log({ form, input });
         input.focus();
       }, 150);
     }
@@ -87,7 +83,7 @@ const IconContainer = ({
         onClick={async () => {
           await deleteMessageMutation.mutate(
             currentConversation,
-            currentMessage
+            currentMessage.id
           );
           hideIconContainer();
         }}
@@ -129,7 +125,7 @@ const IconContainer = ({
 };
 
 IconContainer.propTypes = {
-  currentMessage: propTypes.string,
+  currentMessage: propTypes.object,
   currentConversation: propTypes.object,
   deleteMessageMutation: propTypes.object,
   handleReactButton: propTypes.func,
