@@ -19,7 +19,8 @@ export const AppContext = createContext({
 
 export const ConversationContext = createContext({
   getSingleConversationQuery: {},
-  messageEditingMode: {},
+  messageEditingMode: false,
+  setMessageEditingMode: () => {},
   currentMessage: {},
   handleSubmitEdit: () => {},
   handleDeleteMessage: () => {},

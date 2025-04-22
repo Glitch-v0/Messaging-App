@@ -3,15 +3,17 @@ import { ConversationContext } from "../context.jsx";
 import propTypes from "prop-types";
 import { useContext } from "react";
 
-const Message = ({
-  messageEditing,
-  message,
-  handleMoreButton,
-  currentMessage,
-}) => {
-  const { editMessageMutation, handleReactButton, setCurrentMessage } =
-    useContext(ConversationContext);
-  return messageEditing && message.owner && message.id === currentMessage ? (
+const Message = ({ message, handleMoreButton, currentMessageId }) => {
+  const {
+    editMessageMutation,
+    handleReactButton,
+    setCurrentMessageId,
+    messageEditingMode,
+  } = useContext(ConversationContext);
+
+  return messageEditingMode &&
+    message.owner &&
+    message.id === currentMessageId ? (
     <form
       className="messageFromOwner"
       onSubmit={(e) => {
@@ -74,12 +76,13 @@ const Message = ({
           {formatRelativeTime(message.timestamp)}
         </sub>
 
+        {/* More button available to message owner */}
         <sub className="messageSender">{message.sender.name}</sub>
         {message.owner ? (
           <button
             onClick={(e) => {
               handleMoreButton(e);
-              setCurrentMessage(message.id);
+              setCurrentMessageId(message.id);
             }}
           >
             <svg
@@ -98,9 +101,10 @@ const Message = ({
           <button
             onClick={(e) => {
               handleReactButton(e);
-              setCurrentMessage(message.id);
+              setCurrentMessageId(message.id);
             }}
           >
+            {/* React button replaces more button for messages not belonging to owner */}
             <svg
               className="messageIcon messageFromOtherIcon"
               width="24"
@@ -116,6 +120,7 @@ const Message = ({
           </button>
         )}
 
+        {/* Message reactions */}
         <span className="messageReactions">
           {Object.entries(
             message.reactions.reduce((acc, reaction) => {
@@ -135,10 +140,9 @@ const Message = ({
 };
 
 Message.propTypes = {
-  messageEditing: propTypes.bool,
   message: propTypes.object,
   handleMoreButton: propTypes.func,
   handleSubmitEdit: propTypes.func,
-  currentMessage: propTypes.string,
+  currentMessageId: propTypes.string,
 };
 export default Message;

@@ -47,7 +47,7 @@ const IconContainer = ({
         const input = form.getElementsByTagName("input")[0];
         console.log({ form, input });
         input.focus();
-      }, 100);
+      }, 150);
     }
   };
   return (

@@ -45,7 +45,7 @@ const handleReactButton = async (e) => {
 const Conversations = () => {
   const client = useQueryClient();
   const [currentConversation, setCurrentConversation] = useState(null);
-  const [currentMessage, setCurrentMessage] = useState("");
+  const [currentMessageId, setCurrentMessageId] = useState("");
   const [messageEditingMode, setMessageEditingMode] = useState(false);
 
   const getAllConversationsQuery = useQuery({
@@ -75,7 +75,7 @@ const Conversations = () => {
   });
 
   const deleteMessageMutation = useMutation({
-    mutationFn: () => deleteMessage(currentConversation, currentMessage),
+    mutationFn: () => deleteMessage(currentConversation, currentMessageId),
     onSuccess: () => {
       // client.invalidateQueries(["currentConversation", currentConversation]);
       client.setQueryData(
@@ -85,7 +85,7 @@ const Conversations = () => {
           return {
             ...old,
             messages: old.messages.filter(
-              (message) => message.id !== currentMessage
+              (message) => message.id !== currentMessageId
             ),
           };
         }
@@ -100,13 +100,13 @@ const Conversations = () => {
 
   const editMessageMutation = useMutation({
     mutationFn: (message) =>
-      editMessage(currentConversation, currentMessage, message),
+      editMessage(currentConversation, currentMessageId, message),
     onSuccess: (updatedMessage) => {
       client.setQueryData(
         ["currentConversation", currentConversation],
         (old) => {
           if (!old) return old;
-          setCurrentMessage("");
+          setCurrentMessageId("");
           setMessageEditingMode(false);
 
           return {
@@ -164,8 +164,8 @@ const Conversations = () => {
 
   const reactMessageMutation = useMutation({
     mutationFn: (emoji) => {
-      console.log({ emoji, currentConversation, currentMessage });
-      return reactMessage(currentConversation, currentMessage, emoji);
+      // console.log({ emoji, currentConversation, currentMessage });
+      return reactMessage(currentConversation, currentMessageId, emoji);
     },
     onSuccess: (newReaction) => {
       //update messages to set new reaction to currentMessage
@@ -176,7 +176,7 @@ const Conversations = () => {
           return {
             ...old,
             messages: old.messages.map((message) => {
-              if (message.id !== currentMessage) return message;
+              if (message.id !== currentMessageId) return message;
 
               const filteredReactions = message.reactions.filter(
                 (reaction) => reaction.userId !== newReaction.userId
@@ -193,7 +193,7 @@ const Conversations = () => {
         }
       );
 
-      toast.success("Message reacted");
+      toast.success("Message reacted!" + newReaction.type);
     },
     onError: (error) => {
       toast.error("Error reacting to message");
@@ -261,8 +261,8 @@ const Conversations = () => {
         <ConversationContext.Provider
           value={{
             getSingleConversationQuery,
-            currentMessage,
-            setCurrentMessage,
+            currentMessageId,
+            setCurrentMessageId,
             messageEditingMode,
             setMessageEditingMode,
             editMessageMutation,
@@ -289,7 +289,7 @@ const Conversations = () => {
         </div>
       </div>
       <IconContainer
-        currentMessage={currentMessage}
+        currentMessage={currentMessageId}
         currentConversation={currentConversation}
         deleteMessageMutation={deleteMessageMutation}
         messageEditingMode={messageEditingMode}

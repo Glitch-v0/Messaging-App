@@ -8,9 +8,8 @@ import { ConversationContext } from "../context.jsx";
 const MessageContainer = () => {
   const {
     getSingleConversationQuery,
-    currentMessage,
-    setCurrentMessage,
-    messageEditingMode,
+    currentMessageId,
+    setCurrentMessageId,
     setMessageEditingMode,
   } = useContext(ConversationContext);
 
@@ -32,10 +31,10 @@ const MessageContainer = () => {
       buttonRect.left - iconContainerWidth * 0.25 + "px";
     iconContainer.focus();
 
-    console.log(`Setting current message ID to ${currentMessage}`);
-    setCurrentMessage(currentMessage);
+    console.log(`Setting current message ID to ${currentMessageId}`);
+    setCurrentMessageId(currentMessageId);
     setMessageEditingMode(false);
-    console.log({ currentMessage });
+    console.log({ currentMessageId });
   };
 
   if (getSingleConversationQuery.isPaused) {
@@ -64,10 +63,7 @@ const MessageContainer = () => {
         ? getSingleConversationQuery.data.messages.map((message) => (
             <Message
               key={message.id}
-              messageEditing={messageEditingMode}
-              message={message}
-              handleMoreButton={handleMoreButton}
-              currentMessage={currentMessage}
+              {...{ message, handleMoreButton, currentMessageId }}
             />
           ))
         : null}
