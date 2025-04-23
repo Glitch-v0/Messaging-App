@@ -3,6 +3,7 @@ import userRouter from "./userRouter.js";
 import requestRouter from "./requestRouter.js";
 import friendRouter from "./friendRouter.js";
 import conversationRouter from "./conversationRouter.js";
+import pageRouter from "./pageRouter.js";
 import { verifyToken } from "../utils/tokenUtils.js";
 
 const router = Router();
@@ -17,6 +18,8 @@ router.use("/api/requests", requestRouter);
 router.use("/api/friends", friendRouter);
 
 router.use("/api/conversations", conversationRouter);
+
+router.use("/api/pages", pageRouter);
 
 // A way for the frontend to check if the http cookie is valid
 router.use("/api/whoami", verifyToken, (req, res) => {

@@ -4,10 +4,13 @@ import Spinner from "../components/Spinner.jsx";
 import MessageContainer from "../components/MessageContainer.jsx";
 import IconContainer from "../components/IconContainer.jsx";
 import ReactionContainer from "../components/ReactionContainer.jsx";
+import NewConversation from "../components/NewConversation.jsx";
 import { toast } from "sonner";
 import Error from "./Error.jsx";
 import { ConversationContext } from "../context.jsx";
 import {
+  createConversation,
+  fetchConversationsPage,
   fetchConversations,
   fetchCurrentConversation,
   deleteConversation,
@@ -51,7 +54,7 @@ const Conversations = () => {
 
   const getAllConversationsQuery = useQuery({
     queryKey: ["conversations"],
-    queryFn: fetchConversations,
+    queryFn: fetchConversationsPage,
     staleTime: 1000 * 60 * 0.5,
   });
 
@@ -239,7 +242,7 @@ const Conversations = () => {
     return <Error />;
   }
 
-  return getAllConversationsQuery.data.length === 0 ? (
+  return getAllConversationsQuery.data.conversations.length === 0 ? (
     <main>
       <h1>You currently have no conversations.</h1>
       <p>You should start one.</p>
@@ -248,7 +251,8 @@ const Conversations = () => {
     <main id="conversationContainer">
       <div className="conversationLists">
         <h1>Conversations</h1>
-        {getAllConversationsQuery.data.map((conversation) => (
+        <NewConversation />
+        {getAllConversationsQuery.data.conversations.map((conversation) => (
           <button
             key={conversation.id}
             onClick={() => setCurrentConversation(conversation.id)}

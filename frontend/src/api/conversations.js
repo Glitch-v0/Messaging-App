@@ -1,3 +1,29 @@
+const createConversation = async (participants, message) => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/conversations`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ participants, message }),
+  });
+  return res.json();
+};
+
+const fetchConversationsPage = async () => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/pages/conversations`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+  return res.json();
+};
+
 const fetchConversations = async () => {
   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/conversations`, {
     method: "GET",
@@ -18,7 +44,7 @@ const fetchCurrentConversation = async (conversationId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    },
+    }
   );
   return res.json();
 };
@@ -32,9 +58,15 @@ const deleteConversation = async (conversationId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    },
+    }
   );
   return res.json();
 };
 
-export { fetchConversations, fetchCurrentConversation, deleteConversation };
+export {
+  createConversation,
+  fetchConversationsPage,
+  fetchConversations,
+  fetchCurrentConversation,
+  deleteConversation,
+};
