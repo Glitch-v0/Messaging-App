@@ -38,9 +38,6 @@ const NewConversation = ({ friends }) => {
       }}
     >
       <div>
-        <label>Message Recipients:</label>
-
-        {/* Selected friends displayed as little boxes */}
         <div id="selectedFriends">
           {selectedFriends.map((friend) => (
             <div key={friend.id} className="selectedFriendParticipant">
@@ -57,11 +54,15 @@ const NewConversation = ({ friends }) => {
         </div>
 
         {/* Input tied to a datalist */}
-        <input
-          list="friends-list"
-          onChange={handleSelectOption}
-          placeholder="Add a friend..."
-        />
+        {filteredFriends.length > 0 ? (
+          <input
+            list="friends-list"
+            onChange={handleSelectOption}
+            placeholder="Add recipients"
+          />
+        ) : (
+          <p>(You added all your friends)</p>
+        )}
         <datalist id="friends-list">
           {filteredFriends.map((friend) => (
             <option key={friend.id} value={friend.name} />
@@ -70,7 +71,6 @@ const NewConversation = ({ friends }) => {
       </div>
 
       <div className="newMessageInputContainer">
-        <label htmlFor="initialMessage">Initial Message:</label>
         <input
           type="text"
           id="initialMessage"

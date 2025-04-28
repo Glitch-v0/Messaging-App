@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import Error from "./Error.jsx";
 import { ConversationContext } from "../context.jsx";
 import {
-  createConversation,
   fetchConversationsPage,
   fetchCurrentConversation,
   deleteConversation,
@@ -298,22 +297,23 @@ const Conversations = () => {
         >
           <MessageContainer />
         </ConversationContext.Provider>
-
-        <div className="messageInputContainer">
-          <form
-            action=""
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessageMutation.mutate();
-            }}
-          >
-            <input
-              id="messageInput"
-              type="text"
-              placeholder="Type your message"
-            />
-          </form>
-        </div>
+        {currentConversation && (
+          <div className="messageInputContainer">
+            <form
+              action=""
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendMessageMutation.mutate();
+              }}
+            >
+              <input
+                id="messageInput"
+                type="text"
+                placeholder="Type your message"
+              />
+            </form>
+          </div>
+        )}
       </div>
       <IconContainer
         currentMessage={currentMessage}
