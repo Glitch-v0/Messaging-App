@@ -9,7 +9,7 @@ const SideNav = () => {
   const handleToggle = () => {
     setIsOpen(!isOpen);
     const root = document.querySelector(":root");
-    root.style.setProperty("--nav-width", !isOpen ? "200px" : "0px");
+    root.style.setProperty("--nav-width", !isOpen ? "6rem" : "0px");
   };
 
   const links = [
@@ -20,6 +20,7 @@ const SideNav = () => {
     { path: "/conversations", label: "Conversations", protected: true },
     { path: "/", label: "Register", protected: false },
     { path: "/login", label: "Login", protected: false },
+    { path: "", label: "          ", protected: false },
     { path: "/logout", label: "Logout", protected: true },
   ];
 

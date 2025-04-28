@@ -11,7 +11,6 @@ import { ConversationContext } from "../context.jsx";
 import {
   createConversation,
   fetchConversationsPage,
-  fetchConversations,
   fetchCurrentConversation,
   deleteConversation,
 } from "../api/conversations.js";
@@ -251,7 +250,9 @@ const Conversations = () => {
     <main id="conversationContainer">
       <div className="conversationLists">
         <h1>Conversations</h1>
-        <NewConversation />
+        <NewConversation
+          friends={getAllConversationsQuery.data.friends.friends}
+        />
         {getAllConversationsQuery.data.conversations.map((conversation) => (
           <button
             key={conversation.id}

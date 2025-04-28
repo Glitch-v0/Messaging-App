@@ -4,7 +4,7 @@
   --button-background-color: #2a1346;
   --font-color: #fde2ff;
 
-  --nav-width: 16vw;
+  --nav-width: 7rem;
   --border-radius: 1rem;
   font-size: 1.25rem;
   font-family: "Poppins", sans-serif;
@@ -16,9 +16,6 @@ body {
 }
 
 #root {
-  display: grid;
-  grid-template-areas: "nav main";
-  grid-template-columns: var(--nav-width) calc(100dvw - var(--nav-width));
   height: 100%;
   width: 100%;
 }
@@ -35,14 +32,14 @@ nav {
 }
 
 nav {
-  grid-area: nav;
   background-color: var(--nav-background-color);
   width: var(--nav-width);
   position: fixed;
+
   height: 100%;
+  font-size: 0.75rem;
 
   transition: width 0.85s ease-in-out;
-  z-index: 2;
 
   place-content: center;
 
@@ -51,11 +48,16 @@ nav {
     flex-direction: column;
     justify-content: space-around;
     list-style: none;
-    padding: 1rem;
+    margin: 0;
+    padding: 0.5rem;
     height: 100%;
 
     li {
       width: 100%;
+    }
+
+    li:hover {
+      text-decoration: underline;
     }
   }
 
@@ -77,8 +79,10 @@ nav {
 }
 
 main {
-  grid-area: main;
   height: 100dvh;
+  padding: 1rem;
+  padding-top: 0;
+  margin-left: var(--nav-width);
 
   p {
     text-wrap: wrap;
@@ -137,10 +141,8 @@ a {
 
 #conversationContainer {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 3fr;
   grid-template-rows: 1fr;
-  margin: 0;
-  padding: 0;
 
   .conversationLists,
   .currentConversation {
@@ -183,6 +185,56 @@ a {
 
     button:hover {
       opacity: 1;
+    }
+
+    #newConversationForm {
+      display: flex;
+      flex-direction: column;
+      place-items: center;
+      place-content: center;
+      text-align: center;
+      width: min-content;
+      margin: 0;
+      padding: 0.5rem;
+      border: 1px solid var(--font-color);
+      border-radius: var(--border-radius);
+
+      #selectedFriends {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.5rem;
+
+        .selectedFriendParticipant {
+          position: relative;
+          padding: 0.75rem;
+          border: 1px solid var(--font-color);
+          border-radius: var(--border-radius);
+          width: fit-content;
+          .removeFriendParticipantButton {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+          }
+        }
+      }
+
+      .newMessageInputContainer {
+        display: flex;
+        flex-direction: column;
+      }
+
+      input {
+        border-radius: var(--border-radius);
+        padding: 0.5rem;
+      }
+
+      #startConversationButton {
+        border-radius: var(--border-radius);
+        border: 1px solid var(--font-color);
+        padding: 1rem;
+      }
     }
   }
 

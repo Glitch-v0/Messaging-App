@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Error from "./pages/Error";
 import SideNav from "./components/SideNav";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import { Toaster } from "sonner";
 
 const routes = [
   {
@@ -19,6 +20,18 @@ const routes = [
       <>
         <SideNav />
         <Outlet />
+        <Toaster
+          toastOptions={{
+            style: {
+              border: "1px solid var(--font-color)",
+              color: "var(--font-color)",
+              background: "var(--nav-background-color)",
+              fontSize: "1rem",
+            },
+            closeButton: true,
+          }}
+          position="top-center"
+        />
       </>
     ),
     errorElement: <Error />,
