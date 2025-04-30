@@ -248,7 +248,7 @@ const Conversations = () => {
   ) : (
     <main id="conversationContainer">
       <div className="conversationLists">
-        <h1>Conversations</h1>
+        {/* <h1>Conversations</h1> */}
         <NewConversation
           friends={getAllConversationsQuery.data.friends.friends}
         />
