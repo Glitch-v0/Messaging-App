@@ -1,5 +1,6 @@
 import { useState } from "react";
 import propTypes from "prop-types";
+import { createConversation } from "../api/conversations.js";
 
 const NewConversation = ({ friends }) => {
   const [selectedFriends, setSelectedFriends] = useState([]);
@@ -30,59 +31,67 @@ const NewConversation = ({ friends }) => {
   };
 
   return (
-    <form
-      id="newConversationForm"
-      onSubmit={(e) => {
-        e.preventDefault();
-        // handle submission logic here
-      }}
-    >
-      <div>
-        <div id="selectedFriends">
-          {selectedFriends.map((friend) => (
-            <div key={friend.id} className="selectedFriendParticipant">
-              {friend.name}
-              <button
-                type="button"
-                onClick={() => removeFriend(friend.id)}
-                className="removeFriendParticipantButton"
-              >
-                X
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Input tied to a datalist */}
-        {filteredFriends.length > 0 ? (
-          <input
-            list="friends-list"
-            onChange={handleSelectOption}
-            placeholder="Add recipients"
-          />
-        ) : (
-          <p>(You added all your friends)</p>
-        )}
-        <datalist id="friends-list">
-          {filteredFriends.map((friend) => (
-            <option key={friend.id} value={friend.name} />
-          ))}
-        </datalist>
-      </div>
-
-      <div className="newMessageInputContainer">
-        <input
-          type="text"
-          id="initialMessage"
-          name="initialMessage"
-          placeholder="Type your message..."
-        />
-      </div>
-
-      <button id="startConversationButton" type="submit">
-        Start Conversation
+    <>
+      <button id="newConversationButton" onClick={() => setOpen(!open)}>
+        {open ? "x" : "+"}
       </button>
-    </form>
+      {open && (
+        <form
+          id="newConversationForm"
+          onSubmit={(e) => {
+            e.preventDefault();
+            createConversation(selectedFriends, e.target.initialMessage.value);
+            setOpen(false);
+          }}
+        >
+          <div>
+            <div id="selectedFriends">
+              {selectedFriends.map((friend) => (
+                <div key={friend.id} className="selectedFriendParticipant">
+                  {friend.name}
+                  <button
+                    type="button"
+                    onClick={() => removeFriend(friend.id)}
+                    className="removeFriendParticipantButton"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Input tied to a datalist */}
+            {filteredFriends.length > 0 ? (
+              <input
+                list="friends-list"
+                onChange={handleSelectOption}
+                placeholder="Add recipients"
+              />
+            ) : (
+              <p>(You added all your friends)</p>
+            )}
+            <datalist id="friends-list">
+              {filteredFriends.map((friend) => (
+                <option key={friend.id} value={friend.name} />
+              ))}
+            </datalist>
+          </div>
+
+          <div className="newMessageInputContainer">
+            <input
+              type="text"
+              id="initialMessage"
+              name="initialMessage"
+              placeholder="Type your message..."
+            />
+          </div>
+
+          <button id="startConversationButton" type="submit">
+            Start Conversation
+          </button>
+        </form>
+      )}
+    </>
   );
 };
 

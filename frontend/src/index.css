@@ -30,6 +30,7 @@ nav {
   text-align: center;
   background-color: var(--main-color);
   color: var(--font-color);
+  height: 100%;
 }
 
 nav {
@@ -37,12 +38,12 @@ nav {
   width: var(--nav-width);
   position: fixed;
 
-  height: 100%;
   font-size: 0.75rem;
 
   transition: width 0.85s ease-in-out;
 
   place-content: center;
+  z-index: 4;
 
   ul {
     display: flex;
@@ -80,7 +81,6 @@ nav {
 }
 
 main {
-  padding: 1rem;
   padding-top: 0;
   margin-left: var(--nav-width);
 
@@ -132,6 +132,8 @@ a {
 }
 
 .onlineUsers {
+  text-align: start;
+  text-overflow: clip;
   tr {
     td {
       padding: 0.5rem;
@@ -143,6 +145,12 @@ a {
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 1fr;
+
+  /* Separate grid for phone screens */
+  /* @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr;
+  } */
 
   .conversationLists,
   .currentConversation {
@@ -185,6 +193,12 @@ a {
 
     button:hover {
       opacity: 1;
+    }
+
+    #newConversationButton {
+      font-size: 2.5rem;
+      padding: 0;
+      margin: 0;
     }
 
     #newConversationForm {

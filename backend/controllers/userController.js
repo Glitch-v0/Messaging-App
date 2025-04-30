@@ -132,6 +132,7 @@ const userController = {
   },
 
   createConversation: async (req, res) => {
+    console.log(req.body.participants, req.body.message, req.userId);
     // Check if participants are on either's blocklist
     const friends = await userQueries.checkIfParticipantsAreFriends(
       req.body.participants
@@ -144,7 +145,7 @@ const userController = {
     }
     res.json(
       await userQueries.createConversation(
-        req.body.participants,
+        [...req.body.participants, req.userId],
         req.userId,
         req.body.message
       )

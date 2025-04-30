@@ -1,11 +1,14 @@
 const createConversation = async (participants, message) => {
+  const convertedParticipants = participants.map((participant) => {
+    return participant.id;
+  });
   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/conversations`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ participants, message }),
+    body: JSON.stringify({ participants: convertedParticipants, message }),
   });
   return res.json();
 };

@@ -258,9 +258,13 @@ const Conversations = () => {
             onClick={() => setCurrentConversation(conversation.id)}
           >
             <ul>
-              {conversation.participants.map((participant) => (
-                <li key={participant.name}>{participant.name}</li>
-              ))}
+              <div className="conversationParticipantsContainer">
+                {conversation.participants.map((participant) => (
+                  <li key={participant.name}>
+                    <b>{participant.name}</b>
+                  </li>
+                ))}
+              </div>
               <p>
                 &quot;{conversation.messages[0].content.substring(0, 10)}
                 ...&quot;

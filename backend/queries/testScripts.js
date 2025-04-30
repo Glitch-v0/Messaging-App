@@ -49,9 +49,16 @@ export const createScript = async () => {
       "njones@test.com",
       await createHash("test")
     );
+    //Add some bots friends and one bot request
     await userQueries.addFriend(me.id, bot1.id);
     await userQueries.addFriend(me.id, bot2.id);
     await requestQueries.sendFriendRequest(bot3.id, me.id);
+
+    //Bots are all friends
+    await userQueries.addFriend(bot1.id, bot2.id);
+    await userQueries.addFriend(bot1.id, bot3.id);
+    await userQueries.addFriend(bot2.id, bot3.id);
+
     const conv1 = await userQueries.createConversation(
       [me.id, bot1.id],
       bot1.id,
