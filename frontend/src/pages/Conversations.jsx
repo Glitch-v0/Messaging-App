@@ -247,7 +247,7 @@ const Conversations = () => {
     </main>
   ) : (
     <main id="conversationContainer">
-      <div className="conversationLists">
+      <div id="conversationLists">
         {/* <h1>Conversations</h1> */}
         <NewConversation
           friends={getAllConversationsQuery.data.friends.friends}
@@ -287,7 +287,7 @@ const Conversations = () => {
           </button>
         ))}
       </div>
-      <div className="currentConversation">
+      <div id="currentConversation">
         <ConversationContext.Provider
           value={{
             getSingleConversationQuery,
@@ -302,7 +302,7 @@ const Conversations = () => {
           <MessageContainer />
         </ConversationContext.Provider>
         {currentConversation && (
-          <div className="messageInputContainer">
+          <div id="messageInputContainer">
             <form
               action=""
               onSubmit={(e) => {

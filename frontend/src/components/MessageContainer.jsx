@@ -38,7 +38,7 @@ const MessageContainer = () => {
 
   if (getSingleConversationQuery.isLoading) {
     return (
-      <div className="messageContainer">
+      <div id="messageContainer">
         <Spinner />
       </div>
     );
@@ -46,14 +46,14 @@ const MessageContainer = () => {
 
   if (getSingleConversationQuery.isError) {
     return (
-      <div className="messageContainer">
+      <div id="messageContainer">
         {getSingleConversationQuery.error.message}
       </div>
     );
   }
 
   return (
-    <div className="messageContainer">
+    <div id="messageContainer">
       {getSingleConversationQuery?.data?.messages
         ? getSingleConversationQuery.data.messages.map((message) => (
             <Message key={message.id} {...{ message, handleMoreButton }} />
