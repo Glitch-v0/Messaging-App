@@ -620,6 +620,20 @@ a {
   border-radius: var(--border-radius) !important;
 }
 
+.selectedConversation,
+.selectedConversation:hover {
+  background-color: var(--main-color) !important;
+  color: color-mix(in hsl, var(--font-color) 92%, white) !important;
+  ul,
+  ul:hover {
+    background-color: color-mix(
+      in hsl,
+      var(--nav-background-color) 92%,
+      white
+    ) !important;
+  }
+}
+
 @media (max-width: 600px) {
   #conversationContainer {
     display: grid;

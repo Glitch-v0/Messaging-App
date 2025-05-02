@@ -1,4 +1,5 @@
 import conversationQueries from "../queries/conversationQueries.js";
+import userQueries from "../queries/userQueries.js";
 
 const conversationController = {
   getConversation: async (req, res) => {
@@ -39,7 +40,7 @@ const conversationController = {
       });
     }
     // Check if participants are on either's blocklist
-    const friends = await conversationQueries.checkIfParticipantsAreFriends(
+    const friends = await userQueries.checkIfParticipantsAreFriends(
       req.body.participants
     );
 

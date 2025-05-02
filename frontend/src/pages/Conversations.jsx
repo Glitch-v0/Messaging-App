@@ -71,6 +71,12 @@ const Conversations = () => {
       client.invalidateQueries(["conversations"]);
       setCurrentConversation(conversation.id);
       toast.success("Conversation created");
+      //scroll to current conversation after delay
+      setTimeout(() => {
+        const convoButton = document.querySelector(`#${conversation.id}`);
+        const conversationLists = document.querySelector("#conversationLists");
+        conversationLists.scrollTo(convoButton.offsetLeft, 0);
+      }, 1000);
     },
     onError: (error) => {
       toast.error("Error creating conversation");
@@ -269,8 +275,14 @@ const Conversations = () => {
         />
         {getAllConversationsQuery.data.conversations.map((conversation) => (
           <button
+            id={conversation.id}
             key={conversation.id}
             onClick={() => setCurrentConversation(conversation.id)}
+            className={
+              currentConversation === conversation.id
+                ? "selectedConversation"
+                : ""
+            }
           >
             <ul>
               <div className="conversationParticipantsContainer">
