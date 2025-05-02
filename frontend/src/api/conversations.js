@@ -1,4 +1,5 @@
 const createConversation = async (participants, message) => {
+  console.log({ participants, message });
   const convertedParticipants = participants.map((participant) => {
     return participant.id;
   });
@@ -8,7 +9,10 @@ const createConversation = async (participants, message) => {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ participants: convertedParticipants, message }),
+    body: JSON.stringify({
+      participants: convertedParticipants,
+      message: message,
+    }),
   });
   return res.json();
 };

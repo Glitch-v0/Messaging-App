@@ -12,6 +12,7 @@ import {
   fetchConversationsPage,
   fetchCurrentConversation,
   deleteConversation,
+  createConversation,
 } from "../api/conversations.js";
 import {
   deleteMessage,
@@ -61,6 +62,20 @@ const Conversations = () => {
     queryFn: () => fetchCurrentConversation(currentConversation),
     enabled: !!currentConversation,
     staleTime: 1000 * 60 * 0.5,
+  });
+
+  const newConversationMutation = useMutation({
+    mutationFn: ({ participants, message }) =>
+      createConversation(participants, message),
+    onSuccess: (conversation) => {
+      client.invalidateQueries(["conversations"]);
+      setCurrentConversation(conversation.id);
+      toast.success("Conversation created");
+    },
+    onError: (error) => {
+      toast.error("Error creating conversation");
+      console.error({ error });
+    },
   });
 
   const deleteConversationMutation = useMutation({
@@ -248,9 +263,9 @@ const Conversations = () => {
   ) : (
     <main id="conversationContainer">
       <div id="conversationLists">
-        {/* <h1>Conversations</h1> */}
         <NewConversation
           friends={getAllConversationsQuery.data.friends.friends}
+          newConversationMutation={newConversationMutation}
         />
         {getAllConversationsQuery.data.conversations.map((conversation) => (
           <button

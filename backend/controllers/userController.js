@@ -133,6 +133,17 @@ const userController = {
 
   createConversation: async (req, res) => {
     console.log(req.body.participants, req.body.message, req.userId);
+
+    if (
+      req.body.participants.length === 0 ||
+      !req.body.participants ||
+      !req.body.message
+    ) {
+      console.log("Missing something!");
+      return res.status(400).json({
+        error: "Missing required fields",
+      });
+    }
     // Check if participants are on either's blocklist
     const friends = await userQueries.checkIfParticipantsAreFriends(
       req.body.participants
@@ -142,6 +153,10 @@ const userController = {
       return res.status(403).json({
         error: "All users must be friends to create a group conversation",
       });
+    }
+
+    if (friends.error) {
+      return res.status(500).json({ error: friends.error });
     }
     res.json(
       await userQueries.createConversation(
