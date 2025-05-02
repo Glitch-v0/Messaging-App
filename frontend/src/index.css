@@ -647,6 +647,9 @@ a {
     }
 
     #newConversationForm {
+      .selectedFriendParticipant {
+        background-color: var(--main-color) !important;
+      }
       .removeFriendParticipantButton {
         position: relative !important;
         top: 0 !important;
