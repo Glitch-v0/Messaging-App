@@ -1,34 +1,34 @@
 import { Router } from "express";
-import userController from "../controllers/userController.js";
+import conversationController from "../controllers/conversationController.js";
 import { verifyToken } from "../utils/tokenUtils.js";
 
 const router = Router();
 
 router.get("/", verifyToken, async (req, res) => {
-  await userController.getConversations(req, res);
+  await conversationController.getConversations(req, res);
 });
 
 router.get("/:conversationId", verifyToken, async (req, res) => {
-  await userController.getConversation(req, res);
+  await conversationController.getConversation(req, res);
 });
 
 router.post("/", verifyToken, async (req, res) => {
-  await userController.createConversation(req, res);
+  await conversationController.createConversation(req, res);
 });
 
 router.delete("/:conversationId", verifyToken, async (req, res) => {
-  await userController.deleteConversation(req, res);
+  await conversationController.deleteConversation(req, res);
 });
 
 router.post("/:conversationId/messages", verifyToken, async (req, res) => {
-  await userController.sendMessage(req, res);
+  await conversationController.sendMessage(req, res);
 });
 
 router.put(
   "/:conversationId/messages/:messageId",
   verifyToken,
   async (req, res) => {
-    await userController.updateMessage(req, res);
+    await conversationController.updateMessage(req, res);
   }
 );
 
@@ -36,7 +36,7 @@ router.delete(
   "/:conversationId/messages/:messageId",
   verifyToken,
   async (req, res) => {
-    await userController.deleteMessage(req, res);
+    await conversationController.deleteMessage(req, res);
   }
 );
 
@@ -44,7 +44,7 @@ router.patch(
   "/:conversationId/messages/:messageId/reaction",
   verifyToken,
   async (req, res) => {
-    await userController.reactToMessage(req, res);
+    await conversationController.reactToMessage(req, res);
   }
 );
 
@@ -52,7 +52,7 @@ router.delete(
   "/:conversationId/messages/:messageId/reaction",
   verifyToken,
   async (req, res) => {
-    await userController.removeReaction(req, res);
+    await conversationController.removeReaction(req, res);
   }
 );
 
