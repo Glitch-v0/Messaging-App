@@ -2,6 +2,7 @@ import crypto from "crypto";
 import prisma from "../prisma/prisma.js";
 import { createHash } from "../hashFunctions.js";
 import userQueries from "./userQueries.js";
+import conversationQueries from "./conversationQueries.js";
 import requestQueries from "./requestQueries.js";
 
 export const deleteScript = async () => {
@@ -59,25 +60,25 @@ export const createScript = async () => {
     await userQueries.addFriend(bot1.id, bot3.id);
     await userQueries.addFriend(bot2.id, bot3.id);
 
-    const conv1 = await userQueries.createConversation(
+    const conv1 = await conversationQueries.createConversation(
       [me.id, bot1.id],
       bot1.id,
       "Hey there! So glad you decided to join." +
         "Feel free to talk to me, but I am unfortunately not programmed to respond back."
     );
-    const conv2 = await userQueries.createConversation(
+    const conv2 = await conversationQueries.createConversation(
       [me.id, bot2.id],
       bot1.id,
       "Hi there! I'm sending you these messages to show you features of your conversation. Your newest conversation is shown first." +
         " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages."
     );
-    const message = await userQueries.sendMessage(
+    const message = await conversationQueries.sendMessage(
       conv2.id,
       me.id,
       "Good to know. Thanks for the information."
     );
 
-    await userQueries.reactToMessage(bot1.id, message.id, "👍");
+    await conversationQueries.reactToMessage(bot1.id, message.id, "👍");
   });
 };
 

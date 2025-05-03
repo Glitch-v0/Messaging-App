@@ -19,7 +19,7 @@ const Register = () => {
             email: event.target.email.value,
             password: event.target.password.value,
           }),
-        },
+        }
       );
       const data = await response.json();
       console.log(data);
@@ -29,18 +29,25 @@ const Register = () => {
     }
   };
   return (
-    <main>
-      <h1>Messaging for champions</h1>
-      <p>Sign up today!</p>
-      <form onSubmit={handleSubmit}>
+    <main id="registerPage">
+      <h1>MessagePro</h1>
+      <div id="registerGreeting">
+        <span>Register below to get started</span>
+        <span>or use a guest account</span>
+      </div>
+      <form onSubmit={handleSubmit} id="registerForm">
         <label htmlFor="name">Name</label>
-        <input type="text" name="name" id="name" />
+        <input type="text" name="name" id="name" placeholder="John Doe" />
         <label htmlFor="email">Email</label>
         <input type="email" name="email" id="email" />
         <label htmlFor="password">Password</label>
         <input type="password" name="password" id="password" />
         <button type="submit">Register</button>
       </form>
+      <div id="guestAccount">
+        <h2>Guest Account</h2>
+        <button>Explore</button>
+      </div>
     </main>
   );
 };

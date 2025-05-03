@@ -39,27 +39,55 @@ const conversationController = {
         error: "Missing required fields",
       });
     }
+
     // Check if participants are on either's blocklist
-    const friends = await userQueries.checkIfParticipantsAreFriends(
-      req.body.participants
-    );
+    if (req.body.participants.length > 1) {
+      const friends = await userQueries.checkIfParticipantsAreFriends(
+        req.body.participants
+      );
 
-    if (!friends) {
-      return res.status(403).json({
-        error: "All users must be friends to create a group conversation",
-      });
+      console.log({ friends });
+
+      if (!friends) {
+        return res.status(403).json({
+          error: "All users must be friends to create a group conversation",
+        });
+      }
+
+      if (friends.error) {
+        return res.status(500).json({ error: friends.error });
+      }
     }
 
-    if (friends.error) {
-      return res.status(500).json({ error: friends.error });
-    }
-    res.json(
-      await conversationQueries.createConversation(
-        [...req.body.participants, req.userId],
+    // Find conversations with those participants, and filter by length
+
+    const conversationsWithParticipants =
+      await conversationQueries.getConversationsByParticipants([
+        ...req.body.participants,
         req.userId,
-        req.body.message
-      )
+      ]);
+
+    const conversationExists = conversationsWithParticipants.find(
+      (c) => c._count.participants === req.body.participants.length + 1
     );
+
+    if (conversationExists) {
+      res.json(
+        await conversationQueries.sendMessage(
+          conversationExists.id,
+          req.userId,
+          req.body.message
+        )
+      );
+    } else {
+      res.json(
+        await conversationQueries.createConversation(
+          [...req.body.participants, req.userId],
+          req.userId,
+          req.body.message
+        )
+      );
+    }
   },
 
   deleteConversation: async (req, res) => {

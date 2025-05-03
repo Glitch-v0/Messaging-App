@@ -51,6 +51,8 @@ const Conversations = () => {
   const [currentMessage, setCurrentMessage] = useState({});
   const [messageEditingMode, setMessageEditingMode] = useState(false);
 
+  const numberOfParticipantsToDisplay = 3;
+
   const getAllConversationsQuery = useQuery({
     queryKey: ["conversations"],
     queryFn: fetchConversationsPage,
@@ -67,16 +69,22 @@ const Conversations = () => {
   const newConversationMutation = useMutation({
     mutationFn: ({ participants, message }) =>
       createConversation(participants, message),
-    onSuccess: (conversation) => {
+    onSuccess: (response) => {
       client.invalidateQueries(["conversations"]);
-      setCurrentConversation(conversation.id);
-      toast.success("Conversation created");
-      //scroll to current conversation after delay
-      setTimeout(() => {
-        const convoButton = document.querySelector(`#${conversation.id}`);
-        const conversationLists = document.querySelector("#conversationLists");
-        conversationLists.scrollTo(convoButton.offsetLeft, 0);
-      }, 1000);
+      if (response?.content) {
+        toast.success("Conversation already exists. Message sent.");
+        setCurrentConversation(response.conversation.id);
+      } else {
+        setCurrentConversation(response.id);
+        toast.success("Conversation created");
+        //scroll to current conversation after delay
+        setTimeout(() => {
+          const convoButton = document.querySelector(`#${response.id}`);
+          const conversationLists =
+            document.querySelector("#conversationLists");
+          conversationLists.scrollTo(convoButton.offsetLeft, 0);
+        }, 1000);
+      }
     },
     onError: (error) => {
       toast.error("Error creating conversation");
@@ -286,11 +294,32 @@ const Conversations = () => {
           >
             <ul>
               <div className="conversationParticipantsContainer">
-                {conversation.participants.map((participant) => (
-                  <li key={participant.name}>
-                    <b>{participant.name}</b>
-                  </li>
-                ))}
+                {conversation.participants.length >
+                numberOfParticipantsToDisplay
+                  ? [
+                      // Limit number of participants shown
+                      ...conversation.participants
+                        .slice(0, numberOfParticipantsToDisplay)
+                        .map((participant) => (
+                          <li key={participant.name}>
+                            <b>{participant.name}</b>
+                          </li>
+                        )),
+                      <li key="others">
+                        <sub>
+                          {`and ${
+                            conversation.participants.length -
+                            numberOfParticipantsToDisplay
+                          } ${conversation.participants.length > 2 ? "others" : "other"}`}
+                        </sub>
+                      </li>,
+                    ]
+                  : // Or show all participants
+                    conversation.participants.map((participant) => (
+                      <li key={participant.name}>
+                        <b>{participant.name}</b>
+                      </li>
+                    ))}
               </div>
               <p>
                 &quot;{conversation.messages[0].content.substring(0, 10)}

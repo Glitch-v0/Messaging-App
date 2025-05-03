@@ -106,23 +106,33 @@ const Profile = () => {
 
   return (
     <main>
-      <h1>Profile Settings</h1>
-      <p className="profileSection">
-        Dark Mode: {String(data.darkMode)}
-        <button onClick={() => handleProfileUpdate("darkMode")}>Toggle</button>
-      </p>
-      <p className="profileSection">
-        Show Online: {String(data.showOnline)}
-        <button onClick={() => handleProfileUpdate("showOnline")}>
-          Toggle
-        </button>
-      </p>
-      <h2>Delete Account</h2>
-      <p>You may delete your account by clicking the button below.</p>
-      <p>This is permanent and cannot be undone!</p>
-      <p>Please re-enter your password to verify this destructive action.</p>
-      <input type="password" name="password" id="password" />
-      <button onClick={() => handleDeleteProfile()}>Delete Account</button>
+      <div id="profileSettings">
+        <h1>Profile Settings</h1>
+        <dl className="profileSection">
+          <dt htmlFor="darkModeStatus">Dark Mode:</dt>
+          <dd id="darkModeStatus">{String(data.darkMode)}</dd>
+          <button onClick={() => handleProfileUpdate("darkMode")}>
+            Toggle
+          </button>
+        </dl>
+        <dl className="profileSection">
+          <dt>Show Online:</dt>
+          <dd>{String(data.showOnline)}</dd>
+          <button onClick={() => handleProfileUpdate("showOnline")}>
+            Toggle
+          </button>
+        </dl>
+      </div>
+      <div id="deleteProfile">
+        <h2>Delete Account</h2>
+        <span>You may delete your account by clicking the button below.</span>
+        <span>This is permanent and cannot be undone!</span>
+        <span>
+          Please re-enter your password to verify this destructive action.
+        </span>
+        <input type="password" name="password" id="password" />
+        <button onClick={() => handleDeleteProfile()}>Delete Account</button>
+      </div>
     </main>
   );
 };

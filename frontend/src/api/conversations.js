@@ -1,5 +1,4 @@
 const createConversation = async (participants, message) => {
-  console.log({ participants, message });
   const convertedParticipants = participants.map((participant) => {
     return participant.id;
   });

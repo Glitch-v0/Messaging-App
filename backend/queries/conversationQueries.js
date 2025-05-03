@@ -76,6 +76,33 @@ const conversationQueries = {
     }
   },
 
+  getConversationsByParticipants: async (participantIds) => {
+    try {
+      return await prisma.conversation.findMany({
+        where: {
+          // All required participants must be in the conversation
+          participants: {
+            every: {
+              id: {
+                in: participantIds,
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          _count: {
+            select: {
+              participants: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      return { error: "Failed to retrieve conversations." };
+    }
+  },
+
   createConversation: async (participants, senderId, message) => {
     console.log("Calling createConversation!");
     try {
@@ -159,6 +186,11 @@ const conversationQueries = {
           sender: {
             select: {
               name: true,
+            },
+          },
+          conversation: {
+            select: {
+              id: true,
             },
           },
           timestamp: true,
