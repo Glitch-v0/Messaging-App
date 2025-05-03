@@ -64,7 +64,11 @@ const Requests = () => {
       <h1>Received Requests:</h1>
       {data.map((request) => (
         <div key={request.id} className="requestContainer">
-          <p>{request.sender.name}</p>
+          <p>
+            {request.sender.name.length > 18
+              ? `${request.sender.name.slice(0, 9)}...${request.sender.name.slice(-6)}`
+              : request.sender.name}
+          </p>
           <p>{formatRelativeTime(request.dateSent)}</p>
           <div className="requestButtons">
             <button onClick={() => acceptRequestMutation.mutate(request.id)}>

@@ -26,7 +26,7 @@ nav {
   display: flex;
   flex-direction: column;
   place-items: center;
-  place-content: center;
+  place-content: start;
   text-align: center;
   background-color: var(--main-color);
   color: var(--font-color);
@@ -329,6 +329,7 @@ a {
     font-size: 0.75rem;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
   }
   button {
     display: flex;

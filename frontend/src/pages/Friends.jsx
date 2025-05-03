@@ -77,7 +77,11 @@ const Friends = () => {
       <ul className="friendContainer">
         {data?.blocked?.map((friend) => (
           <div key={friend.id} className="friend">
-            <li>{friend.name}</li>
+            <li>
+              {friend.name.length > 18
+                ? `${friend.name.slice(0, 9)}...${friend.name.slice(-6)}`
+                : friend.name}
+            </li>
           </div>
         ))}
       </ul>

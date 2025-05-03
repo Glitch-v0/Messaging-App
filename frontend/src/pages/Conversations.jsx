@@ -301,8 +301,13 @@ const Conversations = () => {
                       ...conversation.participants
                         .slice(0, numberOfParticipantsToDisplay)
                         .map((participant) => (
-                          <li key={participant.name}>
-                            <b>{participant.name}</b>
+                          <li key={participant.name} title={participant.name}>
+                            <b>
+                              {" "}
+                              {participant.name.length > 15
+                                ? `${participant.name.slice(0, 9)}...${participant.name.slice(-6)}`
+                                : participant.name}
+                            </b>
                           </li>
                         )),
                       <li key="others">
@@ -317,7 +322,11 @@ const Conversations = () => {
                   : // Or show all participants
                     conversation.participants.map((participant) => (
                       <li key={participant.name}>
-                        <b>{participant.name}</b>
+                        <b>
+                          {participant.name.length > 14
+                            ? `${participant.name.slice(0, 7)}...${participant.name.slice(-6)}`
+                            : participant.name}
+                        </b>
                       </li>
                     ))}
               </div>

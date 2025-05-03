@@ -63,7 +63,11 @@ const Online = () => {
             data.length > 0 &&
             data.map((user) => (
               <tr key={user.id}>
-                <td>{user.name}</td>
+                <td title={user.name}>
+                  {user.name.length > 18
+                    ? `${user.name.slice(0, 9)}...${user.name.slice(-6)}`
+                    : user.name}
+                </td>
                 <td>{formatRelativeTime(user.lastSeen)}</td>
                 <td>
                   {/*Checks for pending request */}
