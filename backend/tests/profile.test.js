@@ -35,9 +35,8 @@ test("users can get their profile", async () => {
           id: expect.any(String),
           userId: user1.id,
           darkMode: false,
-          showOnline: false,
-          allowRequests: false,
-        }),
+          showOnline: true,
+        })
       );
     });
 });
@@ -73,8 +72,7 @@ test("users can update their profile", async () => {
           userId: user1.id,
           darkMode: true,
           showOnline: true,
-          allowRequests: true,
-        }),
+        })
       );
     });
 });

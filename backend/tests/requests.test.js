@@ -42,7 +42,7 @@ test("users can send friend requests", async () => {
           senderId: user1.id,
           receiverId: user2.id,
           dateSent: expect.any(String),
-        }),
+        })
       );
     });
 });
@@ -90,7 +90,7 @@ test("user can get friend requests", async () => {
             },
             dateSent: expect.any(String),
           }),
-        ]),
+        ])
       );
     });
 });
@@ -134,7 +134,7 @@ test("user can see all sent requests", async () => {
             receiverId: user3.id,
             dateSent: expect.any(String),
           }),
-        ]),
+        ])
       );
     });
 });
@@ -215,7 +215,7 @@ test("user can accept friend request", async () => {
     .expect(200);
 
   const response = await agent
-    .get(`/api/requests/${friendRequest.id}/accept`)
+    .post(`/api/requests/${friendRequest.id}/accept`)
     .expect("Content-Type", /json/)
     .expect(200);
   expect(response.body).toEqual({
@@ -253,7 +253,7 @@ test("user can reject friend request", async () => {
     .expect(200);
 
   await agent
-    .get(`/api/requests/${friendRequest.id}/reject`)
+    .post(`/api/requests/${friendRequest.id}/reject`)
     .expect("Content-Type", /json/)
     .expect(200);
   expect({

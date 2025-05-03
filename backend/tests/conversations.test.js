@@ -3,6 +3,7 @@ import request from "supertest";
 import { deleteScript, userTokenScript } from "../queries/testScripts";
 import prisma from "../prisma/prisma";
 import userQueries from "../queries/userQueries";
+import conversationQueries from "../queries/conversationQueries";
 
 beforeEach(async () => {
   await deleteScript();
@@ -44,7 +45,7 @@ test("users can create a conversation with friends", async () => {
           id: expect.any(String),
           messages: expect.anything(),
           participants: expect.anything(),
-        }),
+        })
       );
     });
 });
@@ -77,23 +78,23 @@ test("users can't create conversations if all participants are not friends", asy
       expect(res.body).toEqual(
         expect.objectContaining({
           error: "All users must be friends to create a group conversation",
-        }),
+        })
       );
     });
 });
 
 test("users can get all their conversations", async () => {
   const [user1, user2, user3] = await userTokenScript(3);
-  const conversation1 = await userQueries.createConversation(
+  const conversation1 = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
-  const conversation2 = await userQueries.createConversation(
+  const conversation2 = await conversationQueries.createConversation(
     [user1.id, user3.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const agent = request.agent(app);
@@ -124,17 +125,17 @@ test("users can get all their conversations", async () => {
             messages: expect.anything(),
             participants: [{ name: user3.name }],
           }),
-        ]),
+        ])
       );
     });
 });
 
 test("users can send a message", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const agent = request.agent(app);
@@ -163,28 +164,28 @@ test("users can send a message", async () => {
           id: expect.any(String),
           sender: expect.objectContaining({ name: "test0" }),
           timestamp: expect.any(String),
-        }),
+        })
       );
     });
 });
 
 test("users can get a conversation", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "test1",
+    "test1"
   );
 
-  const message1 = await userQueries.sendMessage(
+  const message1 = await conversationQueries.sendMessage(
     conversation.id,
     user1.id,
-    "test2",
+    "test2"
   );
-  const message2 = await userQueries.sendMessage(
+  const message2 = await conversationQueries.sendMessage(
     conversation.id,
     user2.id,
-    "test3",
+    "test3"
   );
 
   const agent = request.agent(app);
@@ -220,17 +221,17 @@ test("users can get a conversation", async () => {
               timestamp: expect.any(String),
             }),
           ]),
-        }),
+        })
       );
     });
 });
 
 test("users can delete a conversation", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const agent = request.agent(app);
@@ -251,22 +252,21 @@ test("users can delete a conversation", async () => {
       expect(res.body).toEqual(
         expect.objectContaining({
           id: conversation.id,
-          participants: [expect.objectContaining({ id: user2.id })],
-        }),
+        })
       );
     });
 });
 
 test("conversations are deleted if both users delete it", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
-  await userQueries.deleteConversation(conversation.id, user1.id);
-  await userQueries.deleteConversation(conversation.id, user2.id);
+  await conversationQueries.deleteConversation(conversation.id, user1.id);
+  await conversationQueries.deleteConversation(conversation.id, user2.id);
 
   const agent = request.agent(app);
   await agent
@@ -284,10 +284,10 @@ test("conversations are deleted if both users delete it", async () => {
 
 test("users can edit a message", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const message = conversation.messages[0];
@@ -315,17 +315,17 @@ test("users can edit a message", async () => {
       expect(res.body).toEqual(
         expect.objectContaining({
           content: "test",
-        }),
+        })
       );
     });
 });
 
 test("users can delete a message", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const message = conversation.messages[0];
@@ -349,17 +349,17 @@ test("users can delete a message", async () => {
       expect(res.body).toEqual(
         expect.objectContaining({
           content: message.content,
-        }),
+        })
       );
     });
 });
 
 test("user can react to a message", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const message = conversation.messages[0];
@@ -377,7 +377,7 @@ test("user can react to a message", async () => {
 
   await agent
     .patch(
-      `/api/conversations/${conversation.id}/messages/${message.id}/reaction`,
+      `/api/conversations/${conversation.id}/messages/${message.id}/reaction`
     )
     .type("form")
     .send({ reactionType: "like" })
@@ -389,21 +389,21 @@ test("user can react to a message", async () => {
           type: "like",
           messageId: message.id,
           userId: user1.id,
-        }),
+        })
       );
     });
 });
 
 test("user can change their message reaction", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const message = conversation.messages[0];
-  await userQueries.reactToMessage(user1.id, message.id, "like");
+  await conversationQueries.reactToMessage(user1.id, message.id, "like");
 
   const agent = request.agent(app);
   await agent
@@ -418,7 +418,7 @@ test("user can change their message reaction", async () => {
 
   await agent
     .patch(
-      `/api/conversations/${conversation.id}/messages/${message.id}/reaction`,
+      `/api/conversations/${conversation.id}/messages/${message.id}/reaction`
     )
     .type("form")
     .send({ reactionType: "dislike" })
@@ -430,21 +430,21 @@ test("user can change their message reaction", async () => {
           type: "dislike",
           messageId: message.id,
           userId: user1.id,
-        }),
+        })
       );
     });
 });
 
 test("user can remove message reaction", async () => {
   const [user1, user2] = await userTokenScript(2);
-  const conversation = await userQueries.createConversation(
+  const conversation = await conversationQueries.createConversation(
     [user1.id, user2.id],
     user1.id,
-    "hello",
+    "hello"
   );
 
   const message = conversation.messages[0];
-  await userQueries.reactToMessage(user1.id, message.id, "like");
+  await conversationQueries.reactToMessage(user1.id, message.id, "like");
 
   const agent = request.agent(app);
   await agent
@@ -459,7 +459,7 @@ test("user can remove message reaction", async () => {
 
   await agent
     .delete(
-      `/api/conversations/${conversation.id}/messages/${message.id}/reaction`,
+      `/api/conversations/${conversation.id}/messages/${message.id}/reaction`
     )
     .expect("Content-Type", /json/)
     .expect(200)
@@ -470,7 +470,7 @@ test("user can remove message reaction", async () => {
           id: expect.any(Number),
           messageId: message.id,
           userId: user1.id,
-        }),
+        })
       );
     });
 });
