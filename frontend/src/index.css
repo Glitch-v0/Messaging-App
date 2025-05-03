@@ -130,25 +130,25 @@ a {
   place-items: center;
   gap: 1rem;
 
-  #registerGreeting {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  #registerForm {
-    display: flex;
-    place-items: center;
-    text-align: start;
-    width: 75%;
+  form {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    place-self: center;
+    place-items: start;
+    text-align: start !important;
     gap: 0.5rem;
-
-    label {
-      margin-left: 0.2rem;
-    }
+    margin: 0;
+    padding: 0;
+    width: fit-content !important;
 
     button {
       margin-top: 0.5rem;
+      place-self: center;
+    }
+
+    label {
+      margin-left: 0.25rem;
     }
   }
 
@@ -157,7 +157,7 @@ a {
     border-radius: var(--border-radius);
     padding: 0.5rem;
     background-color: var(--button-background-color);
-    width: min(100%, 20rem);
+    width: min(100%, 15rem);
   }
 }
 

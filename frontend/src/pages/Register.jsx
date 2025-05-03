@@ -31,21 +31,28 @@ const Register = () => {
   return (
     <main id="registerPage">
       <h1>MessagePro</h1>
-      <div id="registerGreeting">
-        <span>Register below to get started</span>
-        <span>or use a guest account</span>
-      </div>
+      <h2>Register now</h2>
       <form onSubmit={handleSubmit} id="registerForm">
         <label htmlFor="name">Name</label>
         <input type="text" name="name" id="name" placeholder="John Doe" />
         <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="coolapp@example.com"
+        />
         <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="password"
+        />
         <button type="submit">Register</button>
       </form>
       <div id="guestAccount">
-        <h2>Guest Account</h2>
+        <h2>Try a guest account</h2>
         <button>Explore</button>
       </div>
     </main>
