@@ -104,7 +104,6 @@ const conversationQueries = {
   },
 
   createConversation: async (participants, senderId, message) => {
-    console.log("Calling createConversation!");
     try {
       return await prisma.conversation.create({
         data: {

@@ -111,7 +111,6 @@ const userQueries = {
         },
       });
     } catch (error) {
-      console.error(error);
       return { error: "Failed to retrieve users." };
     }
   },

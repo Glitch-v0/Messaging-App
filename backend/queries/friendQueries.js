@@ -83,7 +83,6 @@ const friendQueries = {
         }),
       ]);
     } catch (error) {
-      console.error({ error });
       return { error: "Failed to block user." };
     }
   },

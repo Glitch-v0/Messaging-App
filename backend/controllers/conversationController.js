@@ -27,14 +27,11 @@ const conversationController = {
   },
 
   createConversation: async (req, res) => {
-    console.log(req.body.participants, req.body.message, req.userId);
-
     if (
       req.body.participants.length === 0 ||
       !req.body.participants ||
       !req.body.message
     ) {
-      console.log("Missing something!");
       return res.status(400).json({
         error: "Missing required fields",
       });
@@ -45,8 +42,6 @@ const conversationController = {
       const friends = await userQueries.checkIfParticipantsAreFriends(
         req.body.participants
       );
-
-      console.log({ friends });
 
       if (!friends) {
         return res.status(403).json({
@@ -140,7 +135,6 @@ const conversationController = {
       req.params.messageId,
       req.body.reactionType
     );
-    console.log({ response });
     res.json(response);
   },
 
