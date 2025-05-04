@@ -1,7 +1,11 @@
 import app from "../app";
 import request from "supertest";
 import prisma from "../prisma/prisma";
-import { deleteScript, userTokenScript } from "../queries/testScripts";
+import {
+  createScript,
+  deleteScript,
+  userTokenScript,
+} from "../queries/testScripts";
 
 beforeEach(async () => {
   await deleteScript();
@@ -12,6 +16,7 @@ afterAll(async () => {
 });
 
 test("register creates a user receives the name back", async () => {
+  await createScript();
   await request(app)
     .post("/api/register")
     .type("form")
@@ -32,6 +37,7 @@ test("register creates a user receives the name back", async () => {
 
 test("login returns a cookie", async () => {
   await userTokenScript(1);
+
   await request
     .agent(app)
     .post("/api/login")

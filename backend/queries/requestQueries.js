@@ -19,16 +19,23 @@ const requestQueries = {
         });
 
         const blockedUserIds = blocked.flatMap((entry) =>
-          entry.blocked.map((user) => user.id),
+          entry.blocked.map((user) => user.id)
         );
 
         // Get requests from users not on block list
         return await prisma.request.findMany({
           where: {
-            receiverId: userId,
-            senderId: {
-              notIn: blockedUserIds,
-            },
+            OR: [
+              {
+                receiverId: userId,
+                senderId: {
+                  notIn: blockedUserIds,
+                },
+              },
+              {
+                senderId: userId,
+              },
+            ],
           },
           select: {
             id: true,

@@ -13,7 +13,6 @@ const userController = {
       req.body.email,
       password
     );
-    res.json({ name: user.name, id: user.id });
 
     //add bot friends
     const bot1 = await userQueries.getUserHashByEmail("robo1@test.com");
@@ -48,6 +47,7 @@ const userController = {
     );
 
     await conversationQueries.reactToMessage(bot1.id, message.id, "👍");
+    res.json({ name: user.name, id: user.id });
   },
 
   getUser: async (req, res) => {
