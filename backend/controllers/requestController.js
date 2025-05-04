@@ -4,12 +4,25 @@ import asyncHandler from "express-async-handler";
 const requestController = {
   sendFriendRequest: asyncHandler(async (req, res) => {
     res.json(
-      await requestQueries.sendFriendRequest(req.userId, req.body.receiverId),
+      await requestQueries.sendFriendRequest(req.userId, req.body.receiverId)
     );
   }),
 
   getAllRequests: asyncHandler(async (req, res) => {
-    res.json(await requestQueries.getAllRequests(req.userId));
+    const requests = await requestQueries.getAllRequests(req.userId);
+
+    //add owner property to each request based on req.userId
+    const filteredRequests = requests.map((request) => {
+      if (request.senderId === req.userId) {
+        request.fromUser = true;
+      } else {
+        request.fromUser = false;
+      }
+      return request;
+    });
+
+    //send filtered requests as separate object
+    res.json(filteredRequests);
   }),
 
   getSingleRequest: asyncHandler(async (req, res) => {
@@ -26,10 +39,7 @@ const requestController = {
 
   rejectFriendRequest: asyncHandler(async (req, res) => {
     res.json(
-      await requestQueries.rejectFriendRequest(
-        req.userId,
-        req.params.requestId,
-      ),
+      await requestQueries.rejectFriendRequest(req.userId, req.params.requestId)
     );
   }),
 };

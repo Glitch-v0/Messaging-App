@@ -640,16 +640,27 @@ a {
   opacity: 1;
 }
 
-.requestButtons {
-  display: flex;
-  gap: 1rem;
+.requestContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
 
-  button {
-    border-radius: var(--border-radius);
-  }
+  .requestButtons {
+    grid-column: span 2;
+    display: flex;
+    gap: 1rem;
 
-  button:hover {
-    scale: 1.02;
+    button {
+      border-radius: var(--border-radius);
+      background-color: var(--button-background-color);
+      font-size: 1rem;
+      padding: 0.5rem;
+      width: 100%;
+    }
+
+    button:hover {
+      scale: 1.02;
+    }
   }
 }
 
