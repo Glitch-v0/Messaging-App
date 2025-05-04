@@ -8,4 +8,8 @@ router.get("/conversations", verifyToken, async (req, res) => {
   await pageController.getConversationPageData(req, res);
 });
 
+router.get("/friends", verifyToken, async (req, res) => {
+  await pageController.getFriendPageData(req, res);
+});
+
 export default router;

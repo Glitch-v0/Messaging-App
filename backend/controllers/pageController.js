@@ -8,6 +8,13 @@ const pageController = {
       res.json(error);
     }
   },
+  getFriendPageData: async (req, res) => {
+    try {
+      res.json(await pageQueries.getFriendPageData(req.userId));
+    } catch (error) {
+      res.json(error);
+    }
+  },
 };
 
 export default pageController;

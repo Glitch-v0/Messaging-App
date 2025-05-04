@@ -1,4 +1,18 @@
 const friendsAPI = {
+  fetchFriendsPage: async () => {
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/pages/friends`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+    const data = await res.json();
+    return data;
+  },
   getFriends: async () => {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/friends`, {
       method: "GET",

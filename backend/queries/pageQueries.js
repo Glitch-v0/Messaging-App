@@ -47,6 +47,29 @@ const pageQueries = {
       return { error: "Failed to retrieve user." };
     }
   },
+
+  getFriendPageData: async (userId) => {
+    //get friendlist and blocklist
+    try {
+      return await prisma.friendList.findUnique({
+        where: { ownerId: userId },
+        select: {
+          friends: {
+            select: {
+              name: true,
+            },
+          },
+          blocked: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      return { error: "Failed to retrieve info." };
+    }
+  },
 };
 
 export default pageQueries;

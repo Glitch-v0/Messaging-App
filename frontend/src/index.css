@@ -693,6 +693,9 @@ a {
     gap: 1rem;
 
     button {
+      background-color: var(--button-background-color);
+      padding: 0.5rem;
+      font-size: 1rem;
       border-radius: var(--border-radius);
       width: 100%;
     }

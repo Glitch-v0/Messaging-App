@@ -7,7 +7,7 @@ import { friendsAPI } from "../api/friends.js";
 const Friends = () => {
   const { isPending, isPaused, isError, data, refetch } = useQuery({
     queryKey: ["friends"],
-    queryFn: friendsAPI.getFriends,
+    queryFn: friendsAPI.fetchFriendsPage,
     staleTime: 1000 * 5 * 1,
   });
 
