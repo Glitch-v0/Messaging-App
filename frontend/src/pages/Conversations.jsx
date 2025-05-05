@@ -275,7 +275,7 @@ const Conversations = () => {
       <p>You should start one.</p>
     </main>
   ) : (
-    <main id="conversationPage">
+    <main id="conversationsPage">
       <div id="conversationLists">
         <NewConversation
           friends={getAllConversationsQuery.data.friends.friends}

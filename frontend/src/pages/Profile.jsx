@@ -105,7 +105,7 @@ const Profile = () => {
   }
 
   return (
-    <main>
+    <main id="profilePage">
       <div id="profileSettings">
         <h1>Profile Settings</h1>
         <dl className="profileSection">

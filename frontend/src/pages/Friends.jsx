@@ -53,11 +53,11 @@ const Friends = () => {
   }
 
   return data?.length === 0 ? (
-    <main>
+    <main id="friendsPage">
       <h1>You currently have no friends.</h1>
     </main>
   ) : (
-    <main>
+    <main id="friendsPage">
       <h1>Friends</h1>
       <ul className="friendContainer">
         {data.friends.map((friend) => (

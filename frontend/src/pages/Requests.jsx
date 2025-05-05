@@ -56,11 +56,11 @@ const Requests = () => {
   }
 
   return data.length === 0 ? (
-    <main>
+    <main id="requestsPage">
       <h1>You currently have no friend requests!</h1>
     </main>
   ) : (
-    <main>
+    <main id="requestsPage">
       <h1>Received Requests:</h1>
       {data.map(
         (request) =>

@@ -47,7 +47,7 @@ const Online = () => {
   }
 
   return (
-    <main>
+    <main id="onlinePage">
       <h1>Online</h1>
       <table>
         <thead>

@@ -34,7 +34,12 @@ const routes = [
         />
       </>
     ),
-    errorElement: <Error />,
+    errorElement: (
+      <>
+        <SideNav />
+        <Error />
+      </>
+    ),
     children: [
       {
         index: true,

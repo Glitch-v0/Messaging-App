@@ -53,7 +53,7 @@ const Logout = () => {
   ]);
 
   return (
-    <main>
+    <main id="logoutPage">
       <h1>Logout successful.</h1>
       <p>Redirecting to login page in {countdown} seconds...</p>
     </main>
