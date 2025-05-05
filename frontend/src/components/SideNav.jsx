@@ -12,6 +12,17 @@ const SideNav = () => {
     root.style.setProperty("--nav-width", !isOpen ? "6rem" : "0px");
   };
 
+  const handleNavigation = () => {
+    //check if device is mobile
+    const mobile = window.innerWidth < 600;
+    if (mobile) {
+      //if mobile, close nav
+      setIsOpen(false);
+      const root = document.querySelector(":root");
+      root.style.setProperty("--nav-width", "0px");
+    }
+  };
+
   const links = [
     { path: "/profile", label: "Profile", protected: true },
     { path: "/online", label: "Online", protected: true },
@@ -33,7 +44,9 @@ const SideNav = () => {
               .filter((link) => (hasToken ? link.protected : !link.protected))
               .map((link) => (
                 <li key={link.path}>
-                  <Link to={link.path}>{link.label}</Link>
+                  <Link to={link.path} onClick={handleNavigation}>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
           </ul>
