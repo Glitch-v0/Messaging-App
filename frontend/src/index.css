@@ -99,15 +99,17 @@ form {
 }
 
 button {
-  /* background-color: var(--button-background-color); */
-  background-color: transparent;
+  border-radius: var(--border-radius);
+  background-color: var(--button-background-color);
+  padding: 0.5rem;
   color: var(--font-color);
-  font-size: 0.75rem;
+  font-size: 1rem;
   border: 1px solid transparent;
 }
 
 input {
   background-color: var(--nav-background-color);
+  border-radius: var(--border-radius);
   color: var(--font-color);
   border-color: transparent;
   padding: 0.33rem;
@@ -146,14 +148,6 @@ a {
       margin-left: 0.25rem;
     }
   }
-
-  input,
-  button {
-    border-radius: var(--border-radius);
-    padding: 0.5rem;
-    background-color: var(--button-background-color);
-    width: min(100%, 15rem);
-  }
 }
 
 #profileSettings {
@@ -174,10 +168,7 @@ a {
     text-align: start;
 
     button {
-      background-color: var(--button-background-color);
-      border-radius: var(--border-radius);
       padding: 0.25rem;
-      font-size: 1rem;
     }
   }
 }
@@ -190,13 +181,10 @@ a {
   place-items: center;
 
   input {
-    border-radius: var(--border-radius);
     width: 85%;
   }
 
   button {
-    background-color: var(--button-background-color);
-    border-radius: var(--border-radius);
     padding: 0.25rem;
     font-size: 1.25rem;
   }
@@ -330,6 +318,7 @@ a {
     display: flex;
     place-items: center;
     place-content: center;
+    background-color: transparent;
     margin: 0;
     padding: 0;
     opacity: 0.8;
@@ -413,7 +402,6 @@ a {
     }
 
     input {
-      border-radius: var(--border-radius);
       padding: 0.5rem;
     }
 
@@ -425,7 +413,6 @@ a {
     }
 
     #startConversationButton {
-      border-radius: var(--border-radius);
       background: var(--nav-background-color);
       padding: 1rem;
     }
@@ -524,7 +511,6 @@ a {
 }
 
 .errorButton {
-  background-color: var(--nav-background-color);
   color: var(--font-color);
   border-color: transparent;
   font-size: 1rem;
@@ -646,10 +632,6 @@ a {
     gap: 1rem;
 
     button {
-      border-radius: var(--border-radius);
-      background-color: var(--button-background-color);
-      font-size: 1rem;
-      padding: 0.5rem;
       width: 100%;
     }
 
@@ -688,10 +670,6 @@ a {
     gap: 1rem;
 
     button {
-      background-color: var(--button-background-color);
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: var(--border-radius);
       width: 100%;
     }
   }

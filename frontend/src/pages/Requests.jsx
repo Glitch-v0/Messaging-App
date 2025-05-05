@@ -64,7 +64,7 @@ const Requests = () => {
       <h1>Received Requests:</h1>
       {data.map(
         (request) =>
-          request.fromUser && (
+          !request.fromUser && (
             <div key={request.id} className="requestContainer">
               <p>
                 {request.sender.name.length > 18
@@ -90,7 +90,7 @@ const Requests = () => {
       <h2>Sent Requests:</h2>
       {data.map(
         (request) =>
-          !request.fromUser && (
+          request.fromUser && (
             <div key={request.id} className="requestContainer">
               <p>
                 {request.sender.name.length > 18
