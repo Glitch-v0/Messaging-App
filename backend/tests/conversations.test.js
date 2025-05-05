@@ -118,12 +118,12 @@ test("users can get all their conversations", async () => {
           expect.objectContaining({
             id: conversation1.id,
             messages: expect.anything(),
-            participants: [{ name: user2.name }],
+            participants: [expect.objectContaining({ name: user2.name })],
           }),
           expect.objectContaining({
             id: conversation2.id,
             messages: expect.anything(),
-            participants: [{ name: user3.name }],
+            participants: [expect.objectContaining({ name: user3.name })],
           }),
         ])
       );
@@ -143,7 +143,7 @@ test("users can send a message", async () => {
     .post("/api/login")
     .type("form")
     .send({
-      email: "test0@gmail.com",
+      email: user1.email,
       password: "test0",
     })
     .expect("set-cookie", /token=.*/)
@@ -167,6 +167,35 @@ test("users can send a message", async () => {
         })
       );
     });
+});
+
+test("user can't send a message if not in conversation", async () => {
+  const [user1, user2, user3] = await userTokenScript(3);
+  const conversation = await conversationQueries.createConversation(
+    [user2.id, user3.id],
+    user2.id,
+    "hello"
+  );
+
+  const agent = request.agent(app);
+  await agent
+    .post("/api/login")
+    .type("form")
+    .send({
+      email: user1.email,
+      password: "test0",
+    })
+    .expect("set-cookie", /token=.*/)
+    .expect(200);
+
+  await agent
+    .post(`/api/conversations/${conversation.id}/messages`)
+    .type("form")
+    .send({
+      message: "test",
+    })
+    .expect("Content-Type", /json/)
+    .expect(404);
 });
 
 test("users can get a conversation", async () => {

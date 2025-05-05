@@ -22,7 +22,7 @@ const Login = () => {
             password: event.target.password.value,
           }),
           credentials: "include",
-        },
+        }
       );
       const data = await response.json();
 
@@ -36,7 +36,7 @@ const Login = () => {
   };
 
   return (
-    <main>
+    <main id="loginPage">
       <form onSubmit={handleSubmit}>
         <h1>Login</h1>
         <label htmlFor="email">Email</label>

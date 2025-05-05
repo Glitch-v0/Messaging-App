@@ -95,6 +95,20 @@ const conversationController = {
   },
 
   sendMessage: async (req, res) => {
+    //Make sure sender is in the conversation
+    const conversation = await conversationQueries.getConversation(
+      req.params.conversationId
+    );
+    if (
+      !conversation ||
+      !conversation.participants.some(
+        (participant) => participant.id === req.userId
+      )
+    ) {
+      return res.status(404).json({ error: "Conversation not found" });
+    }
+
+    //Send message
     res.json(
       await conversationQueries.sendMessage(
         req.params.conversationId,

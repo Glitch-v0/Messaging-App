@@ -35,7 +35,7 @@ const userController = {
 
     const conv2 = await conversationQueries.createConversation(
       [user.id, bot2.id],
-      bot1.id,
+      bot2.id,
       "Hi there! I'm sending you these messages to show you features of your conversation. Your newest conversation is shown first." +
         " When you click on a conversation from the left, the messages for it will load on the right. You can also react to and edit messages."
     );

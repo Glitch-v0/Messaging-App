@@ -19,6 +19,7 @@ const conversationQueries = {
               id: { not: userId },
             },
             select: {
+              id: true,
               name: true,
             },
           },
@@ -67,6 +68,7 @@ const conversationQueries = {
           participants: {
             select: {
               name: true,
+              id: true,
             },
           },
         },
