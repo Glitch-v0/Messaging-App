@@ -77,6 +77,19 @@ const friendsAPI = {
     );
     return res.json();
   },
+  unblockFriend: async (friendId) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/friends/${friendId}/unblock`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+    return res.json();
+  },
 };
 
 export { friendsAPI };

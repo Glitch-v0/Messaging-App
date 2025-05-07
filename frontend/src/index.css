@@ -107,6 +107,10 @@ button {
   border: 1px solid transparent;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 input {
   background-color: var(--nav-background-color);
   border-radius: var(--border-radius);
@@ -660,18 +664,25 @@ a {
   margin: 0;
   padding: 0;
   gap: 1rem;
-  .friend {
-    width: 100%;
+
+  .friend,
+  .blocked {
     display: grid;
     list-style: none;
     place-content: center;
     place-items: center;
-    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
     gap: 1rem;
 
     button {
       width: 100%;
     }
+  }
+  .friend {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .blocked {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

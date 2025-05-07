@@ -20,4 +20,8 @@ router.delete("/:friendId/block", verifyToken, async (req, res) => {
   await friendController.removeAndBlockFriend(req, res);
 });
 
+router.delete("/:friendId/unblock", verifyToken, async (req, res) => {
+  await friendController.removeBlockedUser(req, res);
+});
+
 export default router;

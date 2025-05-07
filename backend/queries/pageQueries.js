@@ -57,11 +57,13 @@ const pageQueries = {
           friends: {
             select: {
               name: true,
+              id: true,
             },
           },
           blocked: {
             select: {
               name: true,
+              id: true,
             },
           },
         },

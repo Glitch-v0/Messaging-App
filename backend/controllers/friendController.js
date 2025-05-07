@@ -24,7 +24,22 @@ const friendController = {
     if (query.error) {
       res.status(404).json(query);
     } else {
-      res.status(200).json(query);
+      res.status(200).json({
+        message: `${req.params.friendId} was successfully blocked.`,
+        blockedId: req.params.friendId,
+      });
+    }
+  }),
+
+  removeBlockedUser: asyncHandler(async (req, res) => {
+    const query = await friendQueries.unblock(req.userId, req.params.friendId);
+    if (query.error) {
+      res.status(404).json(query);
+    } else {
+      res.status(200).json({
+        message: `${req.params.friendId} was successfully unblocked.`,
+        id: req.params.friendId,
+      });
     }
   }),
 };
