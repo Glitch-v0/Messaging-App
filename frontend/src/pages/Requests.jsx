@@ -93,9 +93,9 @@ const Requests = () => {
           request.fromUser && (
             <div key={request.id} className="requestContainer">
               <p>
-                {request.sender.name.length > 18
-                  ? `${request.sender.name.slice(0, 9)}...${request.sender.name.slice(-6)}`
-                  : request.sender.name}
+                {request.receiver.name.length > 18
+                  ? `${request.receiver.name.slice(0, 9)}...${request.receiver.name.slice(-6)}`
+                  : request.receiver.name}
               </p>
               <p>{formatRelativeTime(request.dateSent)}</p>
             </div>

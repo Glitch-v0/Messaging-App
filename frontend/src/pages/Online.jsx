@@ -1,23 +1,13 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { friendsAPI } from "../api/friends.js";
 import { formatRelativeTime } from "../utils/time.js";
 import { toast } from "sonner";
 import Spinner from "../components/Spinner.jsx";
 import Error from "./Error.jsx";
-
-const handleAddFriend = (e, id) => {
-  friendsAPI
-    .addFriend(id)
-    .then(() => {
-      toast.success("Friend request sent");
-      e.target.disabled = true;
-    })
-    .catch(() => {
-      toast.error("Error sending friend request");
-    });
-};
+import { Link } from "react-router-dom";
 
 const Online = () => {
+  const client = useQueryClient();
   const { isPending, isPaused, isError, data } = useQuery({
     queryKey: ["online"],
     queryFn: () =>
@@ -29,6 +19,30 @@ const Online = () => {
         credentials: "include",
       }).then((res) => res.json()),
     staleTime: 1000 * 5 * 1,
+  });
+
+  const addFriendMutation = useMutation({
+    mutationFn: (friendId) => friendsAPI.addFriend(friendId),
+    onSuccess: (response) => {
+      const userToUpdate = response?.receiverId;
+      client.setQueryData(["online"], (old) => {
+        //find old data with that user
+        return old.map((user) => {
+          if (user.id === userToUpdate) {
+            return {
+              ...user,
+              sentRequests: true,
+            };
+          }
+          return user;
+        });
+      });
+      client.invalidateQueries(["requests"]);
+      toast.success("Friend request sent");
+    },
+    onError: () => {
+      toast.error("Error sending friend request");
+    },
   });
 
   if (isPaused)
@@ -72,15 +86,12 @@ const Online = () => {
                 <td>
                   {/*Checks for pending request */}
                   {user.receivedRequests || user.sentRequests ? (
-                    <button
-                      onClick={(e) => handleAddFriend(e, user.id)}
-                      disabled
-                    >
+                    <Link className="pendingRequest" to="/requests">
                       Friend Request Pending
-                    </button>
+                    </Link>
                   ) : /*Checks if already friend or is user */
                   !user.friends && !user?.isUser ? (
-                    <button onClick={(e) => handleAddFriend(e, user.id)}>
+                    <button onClick={() => addFriendMutation.mutate(user.id)}>
                       Add Friend
                     </button>
                   ) : user.friends ? (

@@ -45,6 +45,11 @@ const requestQueries = {
                 name: true,
               },
             },
+            receiver: {
+              select: {
+                name: true,
+              },
+            },
             dateSent: true,
           },
         });
