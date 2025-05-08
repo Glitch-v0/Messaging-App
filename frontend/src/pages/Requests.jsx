@@ -92,7 +92,7 @@ const Requests = () => {
         (request) =>
           request.fromUser && (
             <div key={request.id} className="requestContainer">
-              <p>
+              <p title={request.receiver.name}>
                 {request.receiver.name.length > 18
                   ? `${request.receiver.name.slice(0, 9)}...${request.receiver.name.slice(-6)}`
                   : request.receiver.name}

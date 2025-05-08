@@ -67,7 +67,8 @@ const Online = () => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Last Seen</th>
+            <th className="lastSeen">Last Seen</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody className="onlineUsers">
@@ -82,7 +83,9 @@ const Online = () => {
                     ? `${user.name.slice(0, 9)}...${user.name.slice(-6)}`
                     : user.name}
                 </td>
-                <td>{formatRelativeTime(user.lastSeen)}</td>
+                <td className="lastSeen">
+                  {formatRelativeTime(user.lastSeen)}
+                </td>
                 <td>
                   {/*Checks for pending request */}
                   {user.receivedRequests || user.sentRequests ? (

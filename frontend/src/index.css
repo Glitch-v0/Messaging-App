@@ -194,18 +194,30 @@ a {
   }
 }
 
-.onlineUsers {
+table {
+  padding: 0.5rem;
   text-align: start;
-  text-overflow: clip;
-  tr {
-    td {
-      padding: 0.5rem;
-    }
+
+  th {
+    text-align: start;
+    padding-left: 0.25rem;
   }
 
-  .pendingRequest {
-    opacity: 0.6;
-    text-decoration: underline;
+  .onlineUsers {
+    text-align: start;
+    text-overflow: clip;
+    tr {
+      td {
+        padding: 0.5rem;
+        padding-left: 0.25rem;
+      }
+    }
+
+    .pendingRequest,
+    .pendingRequest:visited {
+      opacity: 0.6;
+      text-decoration: underline;
+    }
   }
 }
 
@@ -777,6 +789,17 @@ a {
 
     #messageInputContainer {
       height: fit-content;
+    }
+  }
+
+  table {
+    font-size: 0.85rem;
+    .lastSeen {
+      display: none;
+    }
+
+    button {
+      font-size: 0.85rem;
     }
   }
 }
