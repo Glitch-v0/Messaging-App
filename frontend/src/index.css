@@ -197,19 +197,35 @@ a {
 table {
   padding: 0.5rem;
   text-align: start;
+  table-layout: auto;
 
   th {
     text-align: start;
-    padding-left: 0.25rem;
+    padding-left: 0.5rem;
   }
 
-  .onlineUsers {
+  tbody {
     text-align: start;
     text-overflow: clip;
+
     tr {
+      height: 100px;
+
       td {
         padding: 0.5rem;
-        padding-left: 0.25rem;
+        border-bottom: 2px solid var(--font-color);
+
+        .status {
+          background-color: var(--button-background-color);
+          border-radius: var(--border-radius);
+          padding: 0.5rem;
+          margin: 0.5rem;
+          margin-left: 0rem;
+          margin-top: 0;
+          text-align: start;
+          font-size: 0.85rem;
+          width: fit-content;
+        }
       }
     }
 
@@ -642,22 +658,38 @@ table {
   opacity: 1;
 }
 
-.requestContainer {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+#requestsPage {
+  height: fit-content;
   place-items: center;
+  place-content: center;
+  gap: 1.5rem;
 
-  .requestButtons {
-    grid-column: span 2;
-    display: flex;
-    gap: 1rem;
+  .requestContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: var(--nav-background-color);
+    border-radius: var(--border-radius);
+    place-items: center;
+    padding: 0.5rem;
+    width: 350px;
 
-    button {
-      width: 100%;
+    .requestButtons {
+      grid-column: span 1;
+      display: flex;
+      gap: 1rem;
+      background-color: var(--button-background-color);
+
+      button {
+        width: 100%;
+      }
+
+      button:hover {
+        scale: 1.02;
+      }
     }
 
-    button:hover {
-      scale: 1.02;
+    .dateSent {
+      opacity: 0.8;
     }
   }
 }

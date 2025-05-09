@@ -67,9 +67,12 @@ const Requests = () => {
           !request.fromUser && (
             <div key={request.id} className="requestContainer">
               <p>
-                {request.sender.name.length > 18
-                  ? `${request.sender.name.slice(0, 9)}...${request.sender.name.slice(-6)}`
-                  : request.sender.name}
+                <b>
+                  {" "}
+                  {request.sender.name.length > 18
+                    ? `${request.sender.name.slice(0, 9)}...${request.sender.name.slice(-6)}`
+                    : request.sender.name}
+                </b>
               </p>
               <p>{formatRelativeTime(request.dateSent)}</p>
               <div className="requestButtons">
@@ -87,17 +90,26 @@ const Requests = () => {
             </div>
           )
       )}
-      <h2>Sent Requests:</h2>
+      <h1>Sent Requests:</h1>
       {data.map(
         (request) =>
           request.fromUser && (
             <div key={request.id} className="requestContainer">
               <p title={request.receiver.name}>
-                {request.receiver.name.length > 18
-                  ? `${request.receiver.name.slice(0, 9)}...${request.receiver.name.slice(-6)}`
-                  : request.receiver.name}
+                <b>
+                  {" "}
+                  {request.receiver.name.length > 18
+                    ? `${request.receiver.name.slice(0, 9)}...${request.receiver.name.slice(-6)}`
+                    : request.receiver.name}
+                </b>
               </p>
-              <p>{formatRelativeTime(request.dateSent)}</p>
+              <p className="dateSent">{formatRelativeTime(request.dateSent)}</p>
+              <button
+                className="requestButtons"
+                onClick={() => console.log("bla")}
+              >
+                Cancel
+              </button>
             </div>
           )
       )}

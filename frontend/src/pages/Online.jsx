@@ -89,18 +89,21 @@ const Online = () => {
                 <td>
                   {/*Checks for pending request */}
                   {user.receivedRequests || user.sentRequests ? (
-                    <Link className="pendingRequest" to="/requests">
-                      Friend Request Pending
+                    <Link className="status" to="/requests">
+                      Pending
                     </Link>
                   ) : /*Checks if already friend or is user */
                   !user.friends && !user?.isUser ? (
-                    <button onClick={() => addFriendMutation.mutate(user.id)}>
+                    <button
+                      className="status"
+                      onClick={() => addFriendMutation.mutate(user.id)}
+                    >
                       Add Friend
                     </button>
                   ) : user.friends ? (
-                    <p>Friend</p>
+                    <p className="status">Friend</p>
                   ) : user?.isUser ? (
-                    <p>You</p>
+                    <p className="status">You</p>
                   ) : null}
                 </td>
               </tr>

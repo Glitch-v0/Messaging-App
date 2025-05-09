@@ -19,7 +19,7 @@ const acceptRequest = async (requestId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    },
+    }
   );
   const data = await res.json();
   return data;
@@ -34,7 +34,22 @@ const rejectFriendRequest = async (requestId) => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    },
+    }
+  );
+  const data = await res.json();
+  return data;
+};
+
+const cancelRequest = async (requestId) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/requests/${requestId}/cancel`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
   );
   const data = await res.json();
   return data;

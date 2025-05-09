@@ -55,7 +55,11 @@ const Conversations = () => {
 
   const getAllConversationsQuery = useQuery({
     queryKey: ["conversations"],
-    queryFn: fetchConversationsPage,
+    queryFn: async () => {
+      const loadPage = await fetchConversationsPage();
+      setCurrentConversation(loadPage?.conversations[0]?.id);
+      return loadPage;
+    },
     staleTime: 1000 * 60 * 0.5,
   });
 
