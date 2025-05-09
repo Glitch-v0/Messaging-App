@@ -42,6 +42,10 @@ const requestController = {
       await requestQueries.rejectFriendRequest(req.userId, req.params.requestId)
     );
   }),
+
+  cancelRequest: asyncHandler(async (req, res) => {
+    res.json(await requestQueries.deleteFriendRequest(req.params.requestId));
+  }),
 };
 
 export default requestController;

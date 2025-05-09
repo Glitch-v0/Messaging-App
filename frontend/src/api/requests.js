@@ -55,4 +55,4 @@ const cancelRequest = async (requestId) => {
   return data;
 };
 
-export { fetchRequests, acceptRequest, rejectFriendRequest };
+export { fetchRequests, acceptRequest, rejectFriendRequest, cancelRequest };

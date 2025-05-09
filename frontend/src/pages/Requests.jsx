@@ -7,6 +7,7 @@ import {
   fetchRequests,
   acceptRequest,
   rejectFriendRequest,
+  cancelRequest,
 } from "../api/requests.js";
 
 const Requests = () => {
@@ -36,6 +37,18 @@ const Requests = () => {
     },
     onError: (error) => {
       toast.error("Error rejecting friend request");
+      console.error({ error });
+    },
+  });
+
+  const cancelRequestMutation = useMutation({
+    mutationFn: cancelRequest,
+    onSuccess: () => {
+      toast.success("Friend request canceled!");
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Error canceling friend request");
       console.error({ error });
     },
   });
@@ -106,7 +119,7 @@ const Requests = () => {
               <p className="dateSent">{formatRelativeTime(request.dateSent)}</p>
               <button
                 className="requestButtons"
-                onClick={() => console.log("bla")}
+                onClick={() => cancelRequestMutation.mutate(request.id)}
               >
                 Cancel
               </button>

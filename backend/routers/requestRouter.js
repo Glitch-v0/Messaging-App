@@ -28,4 +28,8 @@ router.post("/:requestId/reject", verifyToken, async (req, res) => {
   await requestController.rejectFriendRequest(req, res);
 });
 
+router.delete("/:requestId/cancel", verifyToken, async (req, res) => {
+  await requestController.cancelRequest(req, res);
+});
+
 export default router;
