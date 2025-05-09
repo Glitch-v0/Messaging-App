@@ -677,7 +677,8 @@ table {
       grid-column: span 1;
       display: flex;
       gap: 1rem;
-      background-color: var(--button-background-color);
+      background-color: var(--font-color);
+      color: var(--nav-background-color);
 
       button {
         width: 100%;
