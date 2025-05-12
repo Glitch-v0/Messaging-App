@@ -107,10 +107,16 @@ const Friends = () => {
         {data.friends.map((friend) => (
           <div key={friend.id} className="friend">
             <li>{friend.name}</li>
-            <button onClick={() => removeFriendMutation.mutate(friend.id)}>
+            <button
+              onClick={() => removeFriendMutation.mutate(friend.id)}
+              className="cautionButton"
+            >
               Unfriend
             </button>
-            <button onClick={() => blockFriendMutation.mutate(friend.id)}>
+            <button
+              onClick={() => blockFriendMutation.mutate(friend.id)}
+              className="negativeButton"
+            >
               Block
             </button>
           </div>
@@ -126,7 +132,10 @@ const Friends = () => {
                 ? `${friend.name.slice(0, 9)}...${friend.name.slice(-6)}`
                 : friend.name}
             </li>
-            <button onClick={() => unblockFriendMutation.mutate(friend.id)}>
+            <button
+              onClick={() => unblockFriendMutation.mutate(friend.id)}
+              className="positiveButton"
+            >
               Unblock
             </button>
           </div>

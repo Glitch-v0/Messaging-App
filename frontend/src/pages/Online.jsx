@@ -89,7 +89,7 @@ const Online = () => {
                 <td>
                   {/*Checks for pending request */}
                   {user.receivedRequests || user.sentRequests ? (
-                    <Link className="status" to="/requests">
+                    <Link className="status cautionButton" to="/requests">
                       Pending
                     </Link>
                   ) : /*Checks if already friend or is user */
@@ -101,9 +101,11 @@ const Online = () => {
                       Add Friend
                     </button>
                   ) : user.friends ? (
-                    <p className="status">Friend</p>
+                    <p className="status positiveButton">Friend</p>
                   ) : user?.isUser ? (
-                    <p className="status">You</p>
+                    <Link className="status youButton" to="/profile">
+                      You
+                    </Link>
                   ) : null}
                 </td>
               </tr>

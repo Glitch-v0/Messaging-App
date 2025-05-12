@@ -91,11 +91,13 @@ const Requests = () => {
               <div className="requestButtons">
                 <button
                   onClick={() => acceptRequestMutation.mutate(request.id)}
+                  className="positiveButton"
                 >
                   Accept
                 </button>
                 <button
                   onClick={() => rejectRequestMutation.mutate(request.id)}
+                  className="negativeButton"
                 >
                   Decline
                 </button>
@@ -118,7 +120,7 @@ const Requests = () => {
               </p>
               <p className="dateSent">{formatRelativeTime(request.dateSent)}</p>
               <button
-                className="requestButtons"
+                className="requestButtons negativeButton"
                 onClick={() => cancelRequestMutation.mutate(request.id)}
               >
                 Cancel

@@ -110,17 +110,25 @@ const Profile = () => {
         <h1>Profile Settings</h1>
         <dl className="profileSection">
           <dt htmlFor="darkModeStatus">Dark Mode:</dt>
-          <dd id="darkModeStatus">{String(data.darkMode)}</dd>
-          <button onClick={() => handleProfileUpdate("darkMode")}>
-            Toggle
-          </button>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={data.darkMode}
+              onChange={() => handleProfileUpdate("darkMode")}
+            />
+            <span className="slider round"></span>
+          </label>
         </dl>
         <dl className="profileSection">
           <dt>Show Online:</dt>
-          <dd>{String(data.showOnline)}</dd>
-          <button onClick={() => handleProfileUpdate("showOnline")}>
-            Toggle
-          </button>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={data.showOnline}
+              onChange={() => handleProfileUpdate("showOnline")}
+            />
+            <span className="slider round"></span>
+          </label>
         </dl>
       </div>
       <div id="deleteProfile">
@@ -131,7 +139,12 @@ const Profile = () => {
           Please re-enter your password to verify this destructive action.
         </span>
         <input type="password" name="password" id="password" />
-        <button onClick={() => handleDeleteProfile()}>Delete Account</button>
+        <button
+          onClick={() => handleDeleteProfile()}
+          className="negativeButton"
+        >
+          Delete Account
+        </button>
       </div>
     </main>
   );

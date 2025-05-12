@@ -1,13 +1,32 @@
 :root {
-  --main-color: #38195e;
-  --nav-background-color: #2a1346;
-  --button-background-color: #2a1346;
-  --font-color: #fde2ff;
+  --positive-color: #9ade9a;
+  --negative-color: #de9a9a;
+  --caution-color: #dedc9a;
+  --you-color: #9aa3de;
 
   --nav-width: 7rem;
   --border-radius: 1rem;
   font-size: 1.25rem;
   font-family: "Poppins", sans-serif;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --main-color: #38195e;
+    --nav-background-color: #2a1346;
+    --button-background-color: #2a1346;
+    --font-color: #fde2ff;
+  }
+}
+
+/* Dark theme variables */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-color: #000000;
+    --nav-background-color: #0d0d0d;
+    --button-background-color: #252525;
+    --font-color: #c5c5c5;
+  }
 }
 
 body {
@@ -164,7 +183,7 @@ a {
 
   .profileSection {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 0.5rem;
     place-items: center;
@@ -219,9 +238,6 @@ table {
           background-color: var(--button-background-color);
           border-radius: var(--border-radius);
           padding: 0.5rem;
-          margin: 0.5rem;
-          margin-left: 0rem;
-          margin-top: 0;
           text-align: start;
           font-size: 0.85rem;
           width: fit-content;
@@ -682,10 +698,11 @@ table {
       grid-column: span 1;
       display: flex;
       gap: 1rem;
-      background-color: var(--font-color);
-      color: var(--nav-background-color);
+      background-color: var(--nav-background-color);
 
       button {
+        background-color: var(--font-color);
+        color: var(--main-color);
         width: 100%;
       }
 
@@ -762,6 +779,89 @@ table {
       white
     ) !important;
   }
+}
+
+.positiveButton {
+  background-color: var(--positive-color) !important;
+  color: var(--nav-background-color) !important;
+}
+
+.negativeButton {
+  background-color: var(--negative-color) !important;
+  color: var(--nav-background-color) !important;
+}
+
+.cautionButton {
+  background-color: var(--caution-color) !important;
+  color: var(--nav-background-color) !important;
+}
+
+.youButton {
+  background-color: var(--you-color) !important;
+  color: var(--nav-background-color) !important;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 
 @media (max-width: 600px) {
