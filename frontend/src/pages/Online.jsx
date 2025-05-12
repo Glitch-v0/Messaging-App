@@ -101,7 +101,9 @@ const Online = () => {
                       Add Friend
                     </button>
                   ) : user.friends ? (
-                    <p className="status positiveButton">Friend</p>
+                    <Link className="status positiveButton" to="/friends">
+                      Friend
+                    </Link>
                   ) : user?.isUser ? (
                     <Link className="status youButton" to="/profile">
                       You

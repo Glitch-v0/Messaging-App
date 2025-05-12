@@ -374,6 +374,14 @@ table {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+
+    button {
+      font-size: 0.75rem;
+    }
+
+    #newConversationButton {
+      font-size: 2.5rem;
+    }
   }
   button {
     display: flex;
@@ -435,6 +443,13 @@ table {
     padding: 0.5rem;
     border: 1px solid var(--font-color);
     border-radius: var(--border-radius);
+    position: absolute;
+    z-index: 5 !important;
+    background-color: var(--nav-background-color);
+    /* place in center by height and width */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     #selectedFriends {
       display: flex;
@@ -754,7 +769,7 @@ table {
     }
   }
   .friend {
-    grid-template-columns: 3fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
   }
   .blocked {
     grid-template-columns: repeat(2, 1fr);
@@ -778,7 +793,7 @@ table {
   ul:hover {
     background-color: color-mix(
       in hsl,
-      var(--nav-background-color) 92%,
+      var(--nav-background-color) 99%,
       white
     ) !important;
   }
