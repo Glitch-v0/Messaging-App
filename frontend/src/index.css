@@ -1,9 +1,4 @@
 :root {
-  --positive-color: #9ade9a;
-  --negative-color: #de9a9a;
-  --caution-color: #dedc9a;
-  --you-color: #9aa3de;
-
   --nav-width: 7rem;
   --border-radius: 1rem;
   font-size: 1.25rem;
@@ -16,6 +11,10 @@
     --nav-background-color: #2a1346;
     --button-background-color: #2a1346;
     --font-color: #fde2ff;
+    --positive-color: #7fdd7f;
+    --negative-color: #dd7f7f;
+    --caution-color: #ddd77f;
+    --you-color: #7f8cdd;
   }
 }
 
@@ -26,6 +25,10 @@
     --nav-background-color: #0d0d0d;
     --button-background-color: #252525;
     --font-color: #c5c5c5;
+    --positive-color: #9ade9a;
+    --negative-color: #de9a9a;
+    --caution-color: #dedc9a;
+    --you-color: #9aa3de;
   }
 }
 
@@ -751,7 +754,7 @@ table {
     }
   }
   .friend {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 3fr 1fr 1fr;
   }
   .blocked {
     grid-template-columns: repeat(2, 1fr);
@@ -824,7 +827,7 @@ table {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--font-color);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -836,17 +839,17 @@ table {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--main-color);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--positive-color);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 2px var(--positive-color);
 }
 
 input:checked + .slider:before {

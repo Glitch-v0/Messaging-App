@@ -29,7 +29,7 @@ function App() {
   const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
-    // handleDarkMode();
+    handleDarkMode();
     fetch(`${import.meta.env.VITE_BACKEND_URL}/whoami`, {
       method: "GET",
       credentials: "include",
