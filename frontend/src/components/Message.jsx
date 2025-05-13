@@ -78,7 +78,11 @@ const Message = ({ message, handleMoreButton }) => {
         </sub>
 
         {/* More button available to message owner */}
-        <sub className="messageSender">{message.sender.name}</sub>
+        <sub className="messageSender" title={message.sender.name}>
+          {message.sender.name.length > 15
+            ? `${message.sender.name.slice(0, 9)}...${message.sender.name.slice(-6)}`
+            : message.sender.name}
+        </sub>
         {message.owner ? (
           <button
             onClick={(e) => {

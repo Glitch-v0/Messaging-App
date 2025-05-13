@@ -94,6 +94,15 @@ const conversationController = {
     );
   },
 
+  getOlderMessages: async (req, res) => {
+    res.json(
+      await conversationQueries.getOlderMessages(
+        req.params.conversationId,
+        req.query.timestamp
+      )
+    );
+  },
+
   sendMessage: async (req, res) => {
     //Make sure sender is in the conversation
     const conversation = await conversationQueries.getConversation(

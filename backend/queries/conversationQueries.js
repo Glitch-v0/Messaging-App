@@ -42,7 +42,7 @@ const conversationQueries = {
 
   getConversation: async (conversationId) => {
     try {
-      return await prisma.conversation.findUnique({
+      let query = await prisma.conversation.findUnique({
         where: {
           id: conversationId,
         },
@@ -62,8 +62,9 @@ const conversationQueries = {
               reactions: true,
             },
             orderBy: {
-              timestamp: "asc",
+              timestamp: "desc",
             },
+            // take: 10,
           },
           participants: {
             select: {
@@ -73,6 +74,8 @@ const conversationQueries = {
           },
         },
       });
+      query.messages.reverse();
+      return query;
     } catch (error) {
       return { error: "Failed to retrieve conversation." };
     }
@@ -170,6 +173,24 @@ const conversationQueries = {
       return conversation;
     } catch (error) {
       return { error: "Failed to delete conversation." };
+    }
+  },
+
+  getOlderMessages: async (conversationId, timestamp) => {
+    try {
+      let query = await prisma.message.findMany({
+        where: {
+          conversationId: conversationId,
+          timestamp: { lt: timestamp },
+        },
+        orderBy: {
+          timestamp: "desc",
+        },
+        take: 10,
+      });
+      return query.reverse();
+    } catch (error) {
+      return { error: "Failed to retrieve older messages." };
     }
   },
 

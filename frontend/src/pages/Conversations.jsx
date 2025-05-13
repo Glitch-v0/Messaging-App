@@ -319,7 +319,15 @@ const Conversations = () => {
           <button
             id={conversation.id}
             key={conversation.id}
-            onClick={() => setCurrentConversation(conversation.id)}
+            onClick={() => {
+              setCurrentConversation(conversation.id);
+              setTimeout(() => {
+                const container = document.querySelector("#messageContainer");
+                if (container) {
+                  container.scrollTop = container.scrollHeight;
+                }
+              }, 100);
+            }}
             className={
               currentConversation === conversation.id
                 ? "selectedConversation"

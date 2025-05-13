@@ -12,6 +12,10 @@ router.get("/:conversationId", verifyToken, async (req, res) => {
   await conversationController.getConversation(req, res);
 });
 
+router.get("/:conversationId/messages", verifyToken, async (req, res) => {
+  await conversationController.getOlderMessages(req, res);
+});
+
 router.post("/", verifyToken, async (req, res) => {
   await conversationController.createConversation(req, res);
 });
