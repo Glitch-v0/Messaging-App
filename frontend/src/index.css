@@ -427,7 +427,7 @@ table {
   #cancelConversationButton {
     position: absolute;
     font-size: 1.5rem;
-    top: -1.5rem;
+    top: -0;
     right: 0.5rem;
     width: fit-content;
   }

@@ -1,9 +1,13 @@
 import { useState } from "react";
 import propTypes from "prop-types";
 
-const NewConversation = ({ friends, newConversationMutation }) => {
+const NewConversation = ({
+  friends,
+  newConversationMutation,
+  anyConversations,
+}) => {
   const [selectedFriends, setSelectedFriends] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!anyConversations);
 
   const filteredFriends = friends.filter(
     (friend) => !selectedFriends.find((f) => f.id === friend.id)
@@ -22,7 +26,6 @@ const NewConversation = ({ friends, newConversationMutation }) => {
       setSelectedFriends([...selectedFriends, selectedFriend]);
       //Clear input
       e.target.value = "";
-      console.log({ selectedFriends });
     }
   };
 
@@ -32,18 +35,17 @@ const NewConversation = ({ friends, newConversationMutation }) => {
 
   return (
     <>
-      <button id="newConversationButton" onClick={() => setOpen(!open)}>
-        {open ? "x" : "+"}
-      </button>
+      {anyConversations && (
+        <button id="newConversationButton" onClick={() => setOpen(!open)}>
+          {open ? "x" : "+"}
+        </button>
+      )}
       {open && (
         <form
           id="newConversationForm"
           onSubmit={async (e) => {
             e.preventDefault();
             const initialMessage = e.target.initialMessage.value;
-            console.log(
-              `Preparing to call newConversationMutation with message:${initialMessage}`
-            );
             await newConversationMutation.mutate({
               participants: selectedFriends,
               message: initialMessage,
@@ -103,15 +105,17 @@ const NewConversation = ({ friends, newConversationMutation }) => {
             Start Conversation
           </button>
 
-          <button
-            id="cancelConversationButton"
-            onClick={() => {
-              setSelectedFriends([]);
-              setOpen(false);
-            }}
-          >
-            X
-          </button>
+          {anyConversations && (
+            <button
+              id="cancelConversationButton"
+              onClick={() => {
+                setSelectedFriends([]);
+                setOpen(false);
+              }}
+            >
+              X
+            </button>
+          )}
         </form>
       )}
     </>
@@ -121,6 +125,7 @@ const NewConversation = ({ friends, newConversationMutation }) => {
 NewConversation.propTypes = {
   friends: propTypes.array.isRequired,
   newConversationMutation: propTypes.object.isRequired,
+  anyConversations: propTypes.bool.isRequired,
 };
 
 export default NewConversation;

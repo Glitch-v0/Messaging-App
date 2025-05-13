@@ -74,11 +74,22 @@ const Conversations = () => {
     mutationFn: ({ participants, message }) =>
       createConversation(participants, message),
     onSuccess: (response) => {
-      client.invalidateQueries(["conversations"]);
+      //Steps for existing convo
       if (response?.content) {
         toast.success("Conversation already exists. Message sent.");
         setCurrentConversation(response.conversation.id);
+        client.setQueryData(["currentConversation", response.conversation.id], {
+          ...response.conversation,
+          messages: [...response.conversation.messages, response.content],
+        });
       } else {
+        //Steps for new convo
+        client.setQueryData(["conversations"], (old) => {
+          return {
+            ...old,
+            conversations: [...old.conversations, response],
+          };
+        });
         setCurrentConversation(response.id);
         toast.success("Conversation created");
         //scroll to current conversation after delay
@@ -98,9 +109,21 @@ const Conversations = () => {
 
   const deleteConversationMutation = useMutation({
     mutationFn: () => deleteConversation(currentConversation),
-    onSuccess: () => {
-      client.invalidateQueries(["conversations"]);
+    onSuccess: (response) => {
       setCurrentConversation(null);
+      // This order matters for some reason. Calling removeQueries first causes an error
+      client.setQueryData(["conversations"], (old) => {
+        return {
+          ...old,
+          conversations: old.conversations.filter(
+            (conversation) => conversation.id !== response.id
+          ),
+        };
+      });
+      client.removeQueries({
+        queryKey: ["currentConversation", response.id],
+        exact: true,
+      });
       toast.success("Conversation deleted");
     },
     onError: (error) => {
@@ -112,7 +135,6 @@ const Conversations = () => {
   const deleteMessageMutation = useMutation({
     mutationFn: () => deleteMessage(currentConversation, currentMessage.id),
     onSuccess: () => {
-      // client.invalidateQueries(["currentConversation", currentConversation]);
       client.setQueryData(
         ["currentConversation", currentConversation],
         (old) => {
@@ -274,9 +296,16 @@ const Conversations = () => {
   }
 
   return getAllConversationsQuery.data.conversations.length === 0 ? (
-    <main>
-      <h1>You currently have no conversations.</h1>
-      <p>You should start one.</p>
+    <main id="conversationsPage">
+      <div id="conversationLists">
+        <h1>You have no conversations</h1>
+        <span>You should start one!</span>
+        <NewConversation
+          friends={getAllConversationsQuery.data.friends.friends}
+          newConversationMutation={newConversationMutation}
+          anyConversations={false}
+        />
+      </div>
     </main>
   ) : (
     <main id="conversationsPage">
@@ -284,6 +313,7 @@ const Conversations = () => {
         <NewConversation
           friends={getAllConversationsQuery.data.friends.friends}
           newConversationMutation={newConversationMutation}
+          anyConversations={true}
         />
         {getAllConversationsQuery.data.conversations.map((conversation) => (
           <button

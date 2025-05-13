@@ -46,9 +46,9 @@ const Friends = () => {
         return;
       }
 
+      toast.success("Friend blocked");
       // filter out the blocked friend
       client.setQueryData(["friends"], (old) => {
-        toast.success("Friend blocked");
         return {
           ...old,
           friends: old.friends.filter(
@@ -68,12 +68,12 @@ const Friends = () => {
     mutationFn: (id) => friendsAPI.unblockFriend(id),
     onSuccess: (response) => {
       client.setQueryData(["friends"], (old) => {
-        toast.success("Friend unblocked");
         return {
           ...old,
           blocked: old.blocked.filter((friend) => friend.id !== response.id),
         };
       });
+      toast.success("Friend unblocked");
     },
     onError: (error) => {
       toast.error("Error unblocking friend");
