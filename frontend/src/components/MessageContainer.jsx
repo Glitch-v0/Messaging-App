@@ -17,13 +17,24 @@ const MessageContainer = () => {
     // create vertical icon container
     const button = e.target;
     const buttonRect = button.getBoundingClientRect();
+    console.log({ buttonRect });
 
     const iconContainer = document.getElementById("iconContainer");
     iconContainer.style.display = "flex";
     const iconContainerHeight = iconContainer.offsetHeight;
     const iconContainerWidth = iconContainer.offsetWidth;
     iconContainer.style.zIndex = "2";
-    iconContainer.style.top = buttonRect.top - iconContainerHeight * 0.5 + "px";
+
+    // Check top position
+    if (buttonRect.y < 50) {
+      console.log("Less than 50!");
+      iconContainer.style.top = "1rem";
+      console.log({ iconContainer });
+    } else {
+      iconContainer.style.top =
+        buttonRect.top - iconContainerHeight * 0.5 + "px";
+    }
+    // iconContainer.style.top = buttonRect.top - iconContainerHeight * 0.5 + "px";
     iconContainer.style.left =
       buttonRect.left - iconContainerWidth * 0.25 + "px";
     iconContainer.focus();
