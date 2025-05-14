@@ -581,8 +581,26 @@ table {
   background-color: var(--nav-background-color);
   border-radius: var(--border-radius);
 
-  form {
+  #messageInputForm {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    #messageInput {
+      width: 100%;
+    }
+
+    #imageInput {
+      width: 25px;
+      opacity: 0.8;
+      place-self: center;
+    }
+
+    #imageInput:hover {
+      cursor: pointer;
+      scale: 1.04;
+      opacity: 1;
+    }
   }
 }
 
