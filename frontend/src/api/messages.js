@@ -31,20 +31,37 @@ const editMessage = async (conversationId, messageId, message) => {
   return res.json();
 };
 
-const sendMessage = async (conversationId, message) => {
-  const res = await fetch(
-    `${
-      import.meta.env.VITE_BACKEND_URL
-    }/conversations/${conversationId}/messages`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ message }),
-    }
-  );
+const sendMessage = async (conversationId, message, imageFile) => {
+  let res;
+  if (imageFile) {
+    const formData = new FormData();
+    formData.append("message", message);
+    formData.append("image", imageFile);
+    res = await fetch(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/conversations/${conversationId}/messages`,
+      {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      }
+    );
+  } else {
+    res = await fetch(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/conversations/${conversationId}/messages`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ message }),
+      }
+    );
+  }
   return res.json();
 };
 

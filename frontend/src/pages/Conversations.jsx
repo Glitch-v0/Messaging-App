@@ -49,6 +49,7 @@ const Conversations = () => {
   const client = useQueryClient();
   const [currentConversation, setCurrentConversation] = useState(null);
   const [currentMessage, setCurrentMessage] = useState({});
+  const [selectedImage, setSelectedImage] = useState(null);
   const [messageEditingMode, setMessageEditingMode] = useState(false);
 
   const numberOfParticipantsToDisplay = 3;
@@ -188,7 +189,8 @@ const Conversations = () => {
     mutationFn: () =>
       sendMessage(
         currentConversation,
-        document.getElementById("messageInput").value
+        document.getElementById("messageInput").value,
+        document.getElementById("imagePreview").src
       ),
     onSuccess: (newMessage) => {
       client.setQueryData(
@@ -423,27 +425,53 @@ const Conversations = () => {
                 type="text"
                 placeholder="Type your message"
               />
+              {selectedImage && (
+                <>
+                  <img
+                    src={selectedImage}
+                    alt="Image preview."
+                    id="imagePreview"
+                  />
+                  <button
+                    id="imageInputCancel"
+                    onClick={() => {
+                      setSelectedImage();
+                      document.getElementById("hiddenImageInput").value = "";
+                    }}
+                  >
+                    X
+                  </button>
+                </>
+              )}
               <input
                 type="file"
                 accept="image/*"
                 id="hiddenImageInput"
                 hidden
-              />
-              <svg
-                id="imageInput"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                onClick={() => {
-                  document.getElementById("hiddenImageInput").click();
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  setSelectedImage(
+                    file ? URL.createObjectURL(file) : undefined
+                  );
                 }}
-              >
-                <path
-                  fill="currentColor"
-                  d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm2-4h10q.3 0 .45-.275t-.05-.525l-2.75-3.675q-.15-.2-.4-.2t-.4.2L11.25 16L9.4 13.525q-.15-.2-.4-.2t-.4.2l-2 2.675q-.2.25-.05.525T7 17"
-                />
-              </svg>
+              />
+              {!selectedImage && (
+                <svg
+                  id="imageInput"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  onClick={() => {
+                    document.getElementById("hiddenImageInput").click();
+                  }}
+                >
+                  <path
+                    fill="currentColor"
+                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm2-4h10q.3 0 .45-.275t-.05-.525l-2.75-3.675q-.15-.2-.4-.2t-.4.2L11.25 16L9.4 13.525q-.15-.2-.4-.2t-.4.2l-2 2.675q-.2.25-.05.525T7 17"
+                  />
+                </svg>
+              )}
             </form>
           </div>
         )}

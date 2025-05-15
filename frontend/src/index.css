@@ -587,11 +587,11 @@ table {
     flex-direction: row;
 
     #messageInput {
-      width: 100%;
+      width: 80%;
     }
 
     #imageInput {
-      width: 25px;
+      width: 50px;
       opacity: 0.8;
       place-self: center;
     }
@@ -600,6 +600,11 @@ table {
       cursor: pointer;
       scale: 1.04;
       opacity: 1;
+    }
+
+    #imagePreview {
+      width: 200px;
+      height: 200px;
     }
   }
 }
@@ -963,6 +968,11 @@ input:checked + .slider:before {
 
     #messageInputContainer {
       height: fit-content;
+    }
+
+    #imagePreview {
+      width: 100px !important;
+      height: 100px !important;
     }
   }
 
